@@ -41,18 +41,59 @@ nav a {
   transition: all 0.3s ease;
 }
 
-nav a:hover{
+nav a:hover {
   transform: translateY(-1px);
   color: black;
 }
 
-nav .active{
+nav .active {
   color: #f87898;
   font-weight: 600;
   padding-bottom: 1px;
   border-bottom: 2px solid #f87898;
 }
 
-.navbar{
-box-shadow: 0 4px 10px rgb(230, 230, 230);
+.navbar {
+  box-shadow: 0 4px 10px rgb(230, 230, 230);
+}
+
+/* SweetAlert2 Global Styles */
+.swal2-popup {
+  font-family: "Inter", sans-serif;
+  border-radius: 1rem;
+  padding: 2rem;
+  background: #ffffffc3;
+  backdrop-filter: blur(20px);
+  width: fit-content;
+  border: 1px solid rgb(240, 240, 240);
+}
+
+.swal2-confirm {
+  background-color: #db2777 !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 0.5rem !important;
+  padding: 0.6rem 1.2rem !important;
+  transition: all 0.3s ease;
+}
+
+.swal2-confirm:hover {
+  background-color: #be185d !important;
+}
+
+.swal2-cancel {
+  color: #444 !important;
+  background-color: #f0f0f0 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.6rem 1.2rem !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #db2777 !important;
+  color: #db2777 !important;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: #f43f5e !important;
+  color: #f43f5e !important;
 }

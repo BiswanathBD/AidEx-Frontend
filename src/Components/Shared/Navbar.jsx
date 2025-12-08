@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import Logo from "./Logo";
 import Container from "./Container";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../Auth/AuthContext";
 
 const Navbar = () => {
+  const { user, loading } = useContext(AuthContext);
+
   return (
-      <Container>
-        <div className="navbar my-4 flex justify-between items-center py-3 px-4 rounded-lg bg-white">
-          <Logo />
-          <div className="flex gap-12 lg:gap-24 items-center">
-            <nav className="hidden lg:flex gap-2">
-              <NavLink to={"/"}>Home</NavLink>
-              <NavLink to={"/requests"}>Donation Requests</NavLink>
-              <NavLink to={"/search"}>Search Donors</NavLink>
-            </nav>
+    <Container>
+      <div className="navbar my-4 flex justify-between items-center py-3 px-4 rounded-lg bg-white">
+        <Logo />
+        <div className="flex gap-12 xl:gap-24 items-center">
+          <nav className="hidden lg:flex gap-2">
+            <NavLink to={"/"}>Home</NavLink>
+            <NavLink to={"/requests"}>Donation Requests</NavLink>
+            <NavLink to={"/search"}>Search Donors</NavLink>
+          </nav>
+
+          {user ? (
+            <div>{user.email}</div>
+          ) : (
             <div className="flex gap-2 items-center">
               <Link to={"/login"}>
                 <button className="btn-primary">Login</button>
@@ -22,9 +29,10 @@ const Navbar = () => {
                 <button className="btn-secondary">Register</button>
               </Link>
             </div>
-          </div>
+          )}
         </div>
-      </Container>
+      </div>
+    </Container>
   );
 };
 

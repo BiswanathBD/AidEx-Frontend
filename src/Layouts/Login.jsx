@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Container from "../Components/Shared/Container";
 import Logo from "../Components/Shared/Logo";
 import loginImg from "../assets/login-banner.jpg";
+import { AuthContext } from "../Auth/AuthContext";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const { user, setUser, passwordSignin } = useContext(AuthContext);
+
+  console.log(user);
+
   const {
     register,
     handleSubmit,
@@ -15,8 +21,23 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    console.log("Login Data:", data);
+    const { email, password } = data;
+    passwordSignin(email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((err) => {
+        console.log("error", err);
+
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Credential",
+          confirmButtonText: "Try Again",
+        });
+      });
   };
+
+  if (user) return <Navigate to={"/"} />;
 
   return (
     <Container>
