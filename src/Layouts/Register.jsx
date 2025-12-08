@@ -13,14 +13,15 @@ import toast from "react-hot-toast";
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 const Register = () => {
-  const { user, passwordSignUp, loading } = useContext(AuthContext);
+  const { user, setUser, passwordSignUp, loading } = useContext(AuthContext);
   const axiosInstance = useAxios();
-  console.log(user);
 
   const [districtData, setDistrictData] = useState([]);
   const [upazilaData, setUpazilaData] = useState([]);
 
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState(
+    "https://i.ibb.co.com/7JCHTwfV/default-profile.png"
+  );
   const [selectedDistrictID, setSelectedDistrictID] = useState("");
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
 
@@ -69,11 +70,13 @@ const Register = () => {
     data.role = "Donner";
     data.avatar = avatarUrl;
 
-    const { password, ...userData } = data;
+    const { password, confirmPassword, ...userData } = data;
 
-    const registerPromise = passwordSignUp(data.email, password).then(() =>
-      axiosInstance.post("/user", userData)
-    );
+    const registerPromise = passwordSignUp(data.email, password).then((res) => {
+      if (res.user) {
+        axiosInstance.post("/user", userData).then((res) => setUser(res.data));
+      }
+    });
 
     toast.promise(registerPromise, {
       loading: "Processing...",

@@ -2,17 +2,22 @@ import React from "react";
 import bannerImg from "../assets/banner.svg";
 import bgImg from "../assets/hero-bg.png";
 import { Link } from "react-router";
+import { motion } from "framer-motion";
+motion
 
 const Hero = () => {
   return (
-    <div className="bg-white rounded-lg mt-4 overflow-hidden">
-      <div className="grid lg:grid-cols-3 items-center gap-8 p-8">
+    <motion.div
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 20, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }} className="bg-white rounded-lg overflow-hidden">
+      <div className="grid lg:grid-cols-3 items-center p-8">
         <img
           src={bannerImg}
           alt="banner"
-          className="col-span-2 w-4/5 mx-auto"
+          className="col-span-2 w-5/6 mx-auto"
         />
-        <div>
+        <div className="w-5/6">
           <h1 className="text-4xl xl:text-6xl font-bold mx-auto text-neutral-600 md:mt-8">
             Blood Donation
           </h1>
@@ -27,7 +32,7 @@ const Hero = () => {
         </div>
       </div>
       <img className="w-full" src={bgImg} alt="" />
-    </div>
+    </motion.div>
   );
 };
 
