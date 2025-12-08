@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+body {
+  background-color: rgb(240, 240, 240);
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn-primary {
+  padding: 6px 12px;
+  font-weight: 600;
+  background: linear-gradient(to right, #db2777, #dd5d5d);
+  color: white;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  padding: 5px 12px;
+  font-weight: 600;
+  border: 1px solid #db2777;
+  color: #db2777;
+  background: transparent;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-1px);
+}
+
+nav a {
+  padding: 6px 12px;
+  color: gray;
+  transition: all 0.3s ease;
+}
+
+nav a:hover{
+  transform: translateY(-1px);
+  color: black;
+}
+
+nav .active{
+  color: #db2777;
+  font-weight: 600;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #db2777;
+}
