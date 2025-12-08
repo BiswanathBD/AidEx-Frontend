@@ -11,7 +11,7 @@ button {
 .btn-primary {
   padding: 6px 12px;
   font-weight: 600;
-  background: linear-gradient(to right, #db2777, #dd5d5d);
+  background: linear-gradient(to right, #f87898, #fc636b);
   color: white;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -24,8 +24,8 @@ button {
 .btn-secondary {
   padding: 5px 12px;
   font-weight: 600;
-  border: 1px solid #db2777;
-  color: #db2777;
+  border: 1px solid #f87898;
+  color: #f87898;
   background: transparent;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -47,10 +47,10 @@ nav a:hover{
 }
 
 nav .active{
-  color: #db2777;
+  color: #f87898;
   font-weight: 600;
   padding-bottom: 1px;
-  border-bottom: 2px solid #db2777;
+  border-bottom: 2px solid #f87898;
 }
 
 .navbar{
