@@ -52,3 +52,7 @@ nav .active{
   padding-bottom: 1px;
   border-bottom: 2px solid #db2777;
 }
+
+.navbar{
+box-shadow: 0 4px 10px rgb(230, 230, 230);
+}
