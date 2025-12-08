@@ -3,9 +3,25 @@ import Logo from "./Logo";
 import Container from "./Container";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../Auth/AuthContext";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { user, setUser, loading, userSignOut } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    const signOutPromise = userSignOut();
+
+    toast.promise(signOutPromise, {
+      loading: "Signing out...",
+      success: () => {
+        setUser(null);
+        return "Signed out successfully!";
+      },
+      error: "Failed to sign out.",
+    });
+  };
+
+  if (loading) return;
 
   return (
     <Container>
@@ -19,7 +35,9 @@ const Navbar = () => {
           </nav>
 
           {user ? (
-            <div>{user.email}</div>
+            <button onClick={handleSignOut} className="btn-primary">
+              Sign Out
+            </button>
           ) : (
             <div className="flex gap-2 items-center">
               <Link to={"/login"}>

@@ -6,6 +6,8 @@ import Logo from "../Components/Shared/Logo";
 import loginImg from "../assets/login-banner.jpg";
 import { AuthContext } from "../Auth/AuthContext";
 import Swal from "sweetalert2";
+import { Navigate } from "react-router";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { user, setUser, passwordSignin } = useContext(AuthContext);
@@ -22,19 +24,18 @@ const Login = () => {
 
   const onSubmit = (data) => {
     const { email, password } = data;
-    passwordSignin(email, password)
-      .then((result) => {
-        console.log(result.user);
-      })
-      .catch((err) => {
-        console.log("error", err);
 
-        Swal.fire({
-          icon: "error",
-          title: "Invalid Credential",
-          confirmButtonText: "Try Again",
-        });
-      });
+    toast.promise(passwordSignin(email, password), {
+      loading: "Signing in...",
+      success: (res) => {
+        console.log(res.user);
+        return "Login Successful!";
+      },
+      error: (err) => {
+        console.log("error", err);
+        return "Invalid Credentials";
+      },
+    });
   };
 
   if (user) return <Navigate to={"/"} />;

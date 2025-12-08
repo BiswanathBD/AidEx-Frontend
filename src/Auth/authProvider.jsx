@@ -11,12 +11,19 @@ import { auth } from "../../firebase.config";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  console.log(user);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      if (currentUser?.email) {
+        fetch(`http://localhost:3000/user?email=${currentUser.email}`)
+          .then((res) => res.json())
+          .then((data) => setUser(data));
+      }
       setLoading(false);
     });
+
     return () => {
       unsubscribe();
     };
