@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Auth/AuthContext";
 import toast from "react-hot-toast";
+import { Navigate, useNavigate } from "react-router";
+import useAxios from "../../Hooks/useAxios";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -11,6 +13,8 @@ const CreateDonationRequest = () => {
   const [upazilaData, setUpazilaData] = useState([]);
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
   const [selectedDistrictID, setSelectedDistrictID] = useState("");
+  const axiosInstance = useAxios();
+  const navigate = useNavigate();
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -18,7 +22,6 @@ const CreateDonationRequest = () => {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
   } = useForm();
 
@@ -58,12 +61,21 @@ const CreateDonationRequest = () => {
       requested_at: new Date().toISOString(),
     };
 
-    console.log(request);
-    toast.success("Donation request submitted!");
+    toast.promise(axiosInstance.post("/donation-request", request), {
+      loading: "Submitting request...",
+      success: () => {
+        navigate("/dashboard/my-donation-requests");
+        return "Request submitted!";
+      },
+      error: "Failed to submit request.",
+    });
   };
 
+  if (user.role !== "Donor" && user.role !== "Volunteer")
+    return <Navigate to={"/dashboard"} />;
+
   return (
-    <div className="bg-white p-4 mt-4 rounded-xl shadow-sm">
+    <div className="bg-white p-4 mt-4 rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         Create Donation Request
       </h2>
