@@ -18,7 +18,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard flex">
       {/* side ber */}
-      <div className="bg-white w-fit h-screen px-6 py-4 text-nowrap">
+      <div className="bg-white w-fit min-h-screen px-6 py-4 text-nowrap">
         {/* Logo */}
         <Link to={"/"}>
           <div className="flex items-center w-fit mx-auto">

@@ -18,7 +18,10 @@ const AuthProvider = ({ children }) => {
       if (currentUser?.email) {
         fetch(`${import.meta.env.VITE_DOMAIN}/user?email=${currentUser.email}`)
           .then((res) => res.json())
-          .then((data) => setUser(data));
+          .then((data) => {
+            data.accessToken = currentUser.accessToken;
+            setUser(data);
+          });
       }
       setLoading(false);
     });
