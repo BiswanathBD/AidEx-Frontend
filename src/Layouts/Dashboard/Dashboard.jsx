@@ -87,20 +87,19 @@ const Dashboard = () => {
 
       {/* welcome note header */}
       <div className="p-4 w-full">
-        <div className="font-bold text-neutral-500 pb-4 border-b border-white flex items-center gap-2 justify-end">
+        <div className="font-semibold text-neutral-500 pb-4 border-b border-white flex items-center gap-2 justify-end">
           <h2>
-            Welcome{" "}
-            <span className="text-[#f87898] md:text-xl">{user.name}</span>
+            <span className="text-neutral-500 md:text-lg">{user.name}</span>
           </h2>
           <img
             src={user?.avatar}
             alt={user?.name}
-            className="w-8 aspect-square object-cover rounded-full p-0.5 border-2 border-[#f87898] hidden sm:block"
+            className="w-8 aspect-square object-cover rounded-full p-0.5 border-2 border-[#f87898]"
           />
         </div>
 
         {/* dashboard content */}
-        <div className="p-4">
+        <div className="md:p-4">
           <Outlet />
         </div>
       </div>
