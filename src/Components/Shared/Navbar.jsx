@@ -39,9 +39,11 @@ const Navbar = () => {
         <div className="flex gap-8 xl:gap-16 items-center">
           <nav className="hidden lg:flex gap-2 text-sm">
             <NavLink to={"/"}>Home</NavLink>
-            <NavLink to={"/requests"}>Requests</NavLink>
+            <NavLink to={"/requests"}>Donation Requests</NavLink>
             <NavLink to={"/search"}>Search Donors</NavLink>
-            <NavLink to={"/dashboard"}>Dashboard</NavLink>
+            {
+              user && <NavLink to={"/funding"}>Funding</NavLink>
+            }
           </nav>
 
           {user ? (
@@ -72,8 +74,15 @@ const Navbar = () => {
                   <Link to={"/requests"}>Requests</Link>
                   <Link to={"/search"}>Search Donors</Link>
                   <Link to={"/dashboard"}>Dashboard</Link>
+                  <Link to={"/funding"}>Funding</Link>
                 </div>
 
+                <Link
+                  className="hidden lg:block text-white border-b border-white/20 px-2 pb-2 font-semibold mb-4"
+                  to={"/dashboard"}
+                >
+                  Dashboard
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="bg-white text-[#f87898] rounded-sm px-2 py-1 font-semibold"

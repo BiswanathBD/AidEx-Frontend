@@ -5,8 +5,7 @@ import Logo from "../Components/Shared/Logo";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import loginImg from "../assets/login-banner.jpg";
 import { AuthContext } from "../Auth/AuthContext";
-import { Navigate } from "react-router";
-import Swal from "sweetalert2";
+import { Link, Navigate, useLocation } from "react-router";
 import useAxios from "../Hooks/useAxios";
 import toast from "react-hot-toast";
 
@@ -15,6 +14,7 @@ const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const Register = () => {
   const { user, setUser, passwordSignUp, loading } = useContext(AuthContext);
   const axiosInstance = useAxios();
+  const location = useLocation();
 
   const [districtData, setDistrictData] = useState([]);
   const [upazilaData, setUpazilaData] = useState([]);
@@ -109,7 +109,7 @@ const Register = () => {
   return (
     <Container>
       {user ? (
-        <Navigate to={"/"} />
+        <Navigate to={location.state || "/"} />
       ) : (
         <div className="my-8">
           <Logo />
@@ -316,12 +316,13 @@ const Register = () => {
 
                 <p className="text-center text-gray-500 mt-3">
                   Already have an account?{" "}
-                  <a
-                    href="/login"
+                  <Link
+                    to={"/login"}
+                    state={location.state}
                     className="text-pink-600 font-medium hover:underline"
                   >
                     Login
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>

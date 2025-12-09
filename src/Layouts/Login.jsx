@@ -6,13 +6,12 @@ import Logo from "../Components/Shared/Logo";
 import loginImg from "../assets/login-banner.jpg";
 import { AuthContext } from "../Auth/AuthContext";
 import Swal from "sweetalert2";
-import { Navigate } from "react-router";
+import { Link, Navigate, useLocation } from "react-router";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { user, setUser, passwordSignin } = useContext(AuthContext);
-
-  console.log(user);
+  const { user, passwordSignin } = useContext(AuthContext);
+  const location = useLocation();
 
   const {
     register,
@@ -27,18 +26,16 @@ const Login = () => {
 
     toast.promise(passwordSignin(email, password), {
       loading: "Signing in...",
-      success: (res) => {
-        console.log(res.user);
+      success: () => {
         return "Login Successful!";
       },
-      error: (err) => {
-        console.log("error", err);
+      error: () => {
         return "Invalid Credentials";
       },
     });
   };
 
-  if (user) return <Navigate to={"/"} />;
+  if (user) return <Navigate to={location?.state || "/"} />;
 
   return (
     <Container>
@@ -114,12 +111,13 @@ const Login = () => {
 
               <p className="text-center text-gray-500">
                 Don’t have an account?{" "}
-                <a
-                  href="/register"
+                <Link
+                  to={"/register"}
+                  state={location.state}
                   className="text-pink-600 font-medium hover:underline"
                 >
                   Register
-                </a>
+                </Link>
               </p>
             </form>
           </div>
