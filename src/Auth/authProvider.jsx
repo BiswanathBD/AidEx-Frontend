@@ -12,12 +12,11 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   console.log(user);
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser?.email) {
-        fetch(`http://localhost:3000/user?email=${currentUser.email}`)
+        fetch(`${import.meta.env.VITE_DOMAIN}/user?email=${currentUser.email}`)
           .then((res) => res.json())
           .then((data) => setUser(data));
       }

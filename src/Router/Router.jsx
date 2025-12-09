@@ -6,6 +6,9 @@ import Register from "../Layouts/Register";
 import Dashboard from "../Layouts/Dashboard/Dashboard";
 import Private from "../Private/Private";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import CreateRequest from "../Pages/Dashboard/CreateRequest";
+import MyProfile from "../Pages/Dashboard/MyProfile";
+import MyRequest from "../Pages/Dashboard/MyRequest";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +21,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  
+
   {
     path: "/login",
     element: <Login />,
@@ -37,12 +40,20 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard",
-        element: (
-          <Private>
-            <DashboardHome />
-          </Private>
-        ),
+        index: true,
+        element: <DashboardHome />,
+      },
+      {
+        path: "/dashboard/profile",
+        element: <MyProfile />,
+      },
+      {
+        path: "/dashboard/my-donation-requests",
+        element: <MyRequest/>
+      },
+      {
+        path: "/dashboard/create-donation-request",
+        element: <CreateRequest />,
       },
     ],
   },

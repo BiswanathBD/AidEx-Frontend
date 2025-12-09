@@ -67,7 +67,7 @@ const Register = () => {
   // Submit form
   const onSubmit = (data) => {
     data.status = "Active";
-    data.role = "Donner";
+    data.role = "Donor";
     data.avatar = avatarUrl;
 
     const { password, confirmPassword, ...userData } = data;

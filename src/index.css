@@ -64,3 +64,7 @@ nav .active {
 .dash-nav a:hover {
   color: black;
 }
+
+.input {
+  @apply w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-pink-600 outline-none;
+}
