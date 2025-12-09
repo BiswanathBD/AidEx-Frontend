@@ -10,10 +10,14 @@ const DonorDashboard = () => {
   const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
 
-  useEffect(() => {
+  const fetchRequests = () => {
     axiosInstance.get(`/donation-request?email=${user.email}`).then((res) => {
       setRequests(res.data.slice(0, 3));
     });
+  };
+
+  useEffect(() => {
+    fetchRequests();
   }, [user, axiosInstance]);
 
   const formatTime = (time) => {
@@ -37,30 +41,20 @@ const DonorDashboard = () => {
     });
 
     if (result.isConfirmed) {
-      try {
-        await axiosInstance.delete(`/donation-request/${id}`);
-        setRequests((prev) => prev.filter((r) => r._id !== id));
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "Request has been deleted.",
-          timer: 1500,
-          showConfirmButton: false,
-          width: "fit-content",
-        });
-      } catch {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Failed to delete request!",
-          width: "fit-content",
-        });
-      }
+      await axiosInstance.delete(`/donation-request/${id}`);
+      fetchRequests();
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Request has been deleted.",
+        timer: 1500,
+        showConfirmButton: false,
+        width: "fit-content",
+      });
     }
   };
 
   if (!user) return null;
-  if (!requests) return null;
 
   return (
     <div className="p-4 mt-4 bg-white rounded-xl">
@@ -89,20 +83,13 @@ const DonorDashboard = () => {
                   key={r._id}
                   className="hover:bg-gray-50 text-sm text-gray-700"
                 >
-                  <td className="p-4 border-b border-gray-100">
-                    {r.recipientName}
-                  </td>
+                  <td className="p-4 border-b border-gray-100">{r.recipientName}</td>
                   <td className="p-4 border-b border-gray-100">{r.district}</td>
                   <td className="p-4 border-b border-gray-100">{r.upazila}</td>
-                  <td className="p-4 border-b border-gray-100 text-center">
-                    {r.bloodGroup}
-                  </td>
-                  <td className="p-4 border-b border-gray-100 text-center">
-                    {r.donationDate}
-                  </td>
-                  <td className="p-4 border-b border-gray-100 text-center">
-                    {formatTime(r.donationTime)}
-                  </td>
+                  <td className="p-4 border-b border-gray-100 text-red-600 font-semibold text-center">{r.bloodGroup}</td>
+                  <td className="p-4 border-b border-gray-100 text-center">{r.donationDate}</td>
+                  <td className="p-4 border-b border-gray-100 text-center">{formatTime(r.donationTime)}</td>
+
                   <td
                     className={`p-4 border-b border-gray-100 text-center ${
                       r.status.toLowerCase() === "pending"
@@ -116,19 +103,16 @@ const DonorDashboard = () => {
                   >
                     {r.status.charAt(0).toUpperCase() + r.status.slice(1)}
                   </td>
-                  <td className="p-4 border-b border-gray-100 flex justify-center gap-2 flex-wrap font-semibold">
+
+                  <td className="p-4 border-b border-gray-100 flex justify-between gap-2 flex-wrap font-semibold">
                     <button
-                      onClick={() =>
-                        navigate(`/donation-request/view/${r._id}`)
-                      }
+                      onClick={() => navigate(`/dashboard/donation-request/view/${r._id}`)}
                       className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
                     >
                       View
                     </button>
                     <button
-                      onClick={() =>
-                        navigate(`/donation-request/edit/${r._id}`)
-                      }
+                      onClick={() => navigate(`/donation-request/edit/${r._id}`)}
                       className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
                     >
                       Edit

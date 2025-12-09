@@ -9,11 +9,25 @@ import { AiTwotoneHome } from "react-icons/ai";
 import LogoImg from "../../assets/logo.png";
 import { Outlet } from "react-router";
 import { AuthContext } from "../../Auth/AuthContext";
+import { FiLogOut } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
-  const { user, loading } = useContext(AuthContext);
-
+  const { user, setUser, userSignOut, loading } = useContext(AuthContext);
   if (loading) return;
+
+  const handleSignOut = () => {
+    const signOutPromise = userSignOut();
+
+    toast.promise(signOutPromise, {
+      loading: "Signing out...",
+      success: () => {
+        setUser(null);
+        return "Signed out successfully!";
+      },
+      error: "Failed to sign out.",
+    });
+  };
 
   return (
     <div className="dashboard flex">
@@ -88,14 +102,18 @@ const Dashboard = () => {
       {/* welcome note header */}
       <div className="p-4 w-full">
         <div className="font-semibold text-neutral-500 pb-4 border-b border-white flex items-center gap-2 justify-end">
-          <h2>
-            <span className="text-neutral-500 md:text-lg">{user.name}</span>
-          </h2>
           <img
             src={user?.avatar}
             alt={user?.name}
-            className="w-8 aspect-square object-cover rounded-full p-0.5 border-2 border-[#f87898]"
+            className="w-10 aspect-square object-cover rounded-full p-0.5 border-2 border-[#f87898]"
           />
+          <button
+            onClick={handleSignOut}
+            title="Sign Out"
+            className="text-gray-500 hover:text-[#f87898] mr-4"
+          >
+            <FiLogOut size={20} />
+          </button>
         </div>
 
         {/* dashboard content */}

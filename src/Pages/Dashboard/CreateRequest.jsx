@@ -59,6 +59,8 @@ const CreateDonationRequest = () => {
       ...data,
       status: "Pending",
       requested_at: new Date().toISOString(),
+      donorName: "",
+      donorEmail: "",
     };
 
     toast.promise(axiosInstance.post("/donation-request", request), {
