@@ -11,7 +11,7 @@ const MyRequest = () => {
   const [userRequests, setUserRequests] = useState([]);
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [requestsPerPage] = useState(5);
+  const [requestsPerPage] = useState(6);
   const axiosInstance = useAxios();
 
   useEffect(() => {
