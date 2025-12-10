@@ -50,52 +50,58 @@ const Dashboard = () => {
             <span className="hidden md:block">Home</span>
           </NavLink>
 
-          {/* profile */}
-          <NavLink
-            to={"/dashboard/profile"}
-            className="flex items-center gap-2"
-          >
-            <PiUserDuotone size={24} />{" "}
-            <span className="hidden md:block">My Profile</span>
-          </NavLink>
+          {user.role === "Donor" && (
+            <>
+              {/* profile */}
+              <NavLink
+                to={"/dashboard/profile"}
+                className="flex items-center gap-2"
+              >
+                <PiUserDuotone size={24} />{" "}
+                <span className="hidden md:block">My Profile</span>
+              </NavLink>
 
-          {/* donor nav */}
-          {/* donation request */}
-          <NavLink
-            to={"/dashboard/my-donation-requests"}
-            className="flex items-center gap-2"
-          >
-            <PiDropDuotone size={24} />{" "}
-            <span className="hidden md:block">My Requests</span>
-          </NavLink>
+              {/* donation request */}
+              <NavLink
+                to={"/dashboard/my-donation-requests"}
+                className="flex items-center gap-2"
+              >
+                <PiDropDuotone size={24} />{" "}
+                <span className="hidden md:block">My Requests</span>
+              </NavLink>
 
-          {/* create donation request */}
-          <NavLink
-            to={"/dashboard/create-donation-request"}
-            className="flex items-center gap-2"
-          >
-            <PiPlusCircleDuotone size={24} />{" "}
-            <span className="hidden md:block">Create Request</span>
-          </NavLink>
+              {/* create donation request */}
+              <NavLink
+                to={"/dashboard/create-donation-request"}
+                className="flex items-center gap-2"
+              >
+                <PiPlusCircleDuotone size={24} />{" "}
+                <span className="hidden md:block">Create Request</span>
+              </NavLink>
+            </>
+          )}
 
-          {/* admin nav */}
           {/* all users */}
-          <NavLink
-            to={"/dashboard/all-users"}
-            className="flex items-center gap-2"
-          >
-            <PiUserDuotone size={24} />{" "}
-            <span className="hidden md:block">All Users</span>
-          </NavLink>
+          {user.role === "Admin" && (
+            <NavLink
+              to={"/dashboard/all-users"}
+              className="flex items-center gap-2"
+            >
+              <PiUserDuotone size={24} />{" "}
+              <span className="hidden md:block">All Users</span>
+            </NavLink>
+          )}
 
           {/* all request */}
-          <NavLink
-            to={"/dashboard/all-blood-donation-request"}
-            className="flex items-center gap-2"
-          >
-            <PiDropDuotone size={24} />{" "}
-            <span className="hidden md:block">All Request</span>
-          </NavLink>
+          {(user.role === "Admin" || user.role === "Volunteer") && (
+            <NavLink
+              to={"/dashboard/all-blood-donation-request"}
+              className="flex items-center gap-2"
+            >
+              <PiDropDuotone size={24} />
+              <span className="hidden md:block">All Request</span>
+            </NavLink>
+          )}
         </div>
       </div>
 
