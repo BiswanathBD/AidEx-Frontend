@@ -17,7 +17,7 @@ const AdminVolunteerDashboard = () => {
   });
 
   useEffect(() => {
-    axiosInstance.get("/dashboard-stats").then((res) => {
+    axiosInstance.get("/statics").then((res) => {
       setStats(res.data);
     });
   }, [axiosInstance]);
@@ -64,7 +64,7 @@ const AdminVolunteerDashboard = () => {
           </div>
         </div>
 
-        {/* Total Blood Requests */}
+        {/* Total Requests */}
         <div className="p-4 sm:p-6 lg:p-10 rounded-2xl bg-linear-to-br from-red-50/50 to-red-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.02] transition shadow-md">
           <div className="text-gray-500 shrink-0">
             <IoWaterSharp className="text-4xl sm:text-5xl lg:text-6xl" />
