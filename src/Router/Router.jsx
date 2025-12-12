@@ -11,6 +11,7 @@ import MyProfile from "../Pages/Dashboard/MyProfile";
 import MyRequest from "../Pages/Dashboard/MyRequest";
 import RequestDetails from "../Pages/Dashboard/RequestDetails";
 import AllUsers from "../Pages/Dashboard/AllUsers";
+import AllRequests from "../Pages/Dashboard/AllRequests";
 
 const router = createBrowserRouter([
   {
@@ -63,7 +64,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard/all-users",
-        element: <AllUsers/>
+        element: <AllUsers />,
+      },
+      {
+        path: "/dashboard/all-blood-donation-request",
+        element: <AllRequests />,
       },
     ],
   },

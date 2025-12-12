@@ -112,7 +112,7 @@ const DonorDashboard = () => {
                     {r.status.charAt(0).toUpperCase() + r.status.slice(1)}
                   </td>
 
-                  <td className="p-4 border-b border-gray-100 flex justify-between gap-2 flex-wrap font-semibold">
+                  <td className="p-4 border-b border-gray-100 flex justify-end gap-2 flex-wrap font-semibold">
                     <button
                       onClick={() =>
                         navigate(`/dashboard/donation-request/view/${r._id}`)

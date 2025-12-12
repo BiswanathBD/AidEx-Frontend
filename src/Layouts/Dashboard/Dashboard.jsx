@@ -50,17 +50,17 @@ const Dashboard = () => {
             <span className="hidden md:block">Home</span>
           </NavLink>
 
+          {/* profile */}
+          <NavLink
+            to={"/dashboard/profile"}
+            className="flex items-center gap-2"
+          >
+            <PiUserDuotone size={24} />{" "}
+            <span className="hidden md:block">My Profile</span>
+          </NavLink>
+
           {user.role === "Donor" && (
             <>
-              {/* profile */}
-              <NavLink
-                to={"/dashboard/profile"}
-                className="flex items-center gap-2"
-              >
-                <PiUserDuotone size={24} />{" "}
-                <span className="hidden md:block">My Profile</span>
-              </NavLink>
-
               {/* donation request */}
               <NavLink
                 to={"/dashboard/my-donation-requests"}
@@ -107,9 +107,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* welcome note header */}
-      <div className="p-4 w-full">
-        <div className="font-semibold text-neutral-500 pb-4 border-b border-white flex items-center gap-2 justify-end">
+      {/* header */}
+      <div className="p-3  w-full">
+        <div className="font-semibold text-neutral-500 pb-3 border-b border-white flex items-center gap-2 justify-end">
           <img
             src={user?.avatar}
             alt={user?.name}

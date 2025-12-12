@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import toast from "react-hot-toast";
-import { AiTwotoneDelete } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
+import { Navigate, Link } from "react-router";
 
 const MyRequest = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const [userRequests, setUserRequests] = useState([]);
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,13 +16,10 @@ const MyRequest = () => {
 
   useEffect(() => {
     if (!user?.email) return;
-    const fetchRequests = async () => {
-      const res = await axiosInstance.get(
-        `/donation-request?email=${user.email}`
-      );
-      setUserRequests(res.data);
-    };
-    fetchRequests();
+    axiosInstance
+      .get(`/donation-request?email=${user.email}`)
+      .then((res) => setUserRequests(res.data || []))
+      .catch(() => setUserRequests([]));
   }, [user, axiosInstance]);
 
   const filteredRequests =
@@ -35,9 +32,7 @@ const MyRequest = () => {
   const currentRequests = filteredRequests.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
 
-  const handlePageChange = (pageNum) => {
-    setCurrentPage(pageNum);
-  };
+  const handlePageChange = (pageNum) => setCurrentPage(pageNum);
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -51,33 +46,45 @@ const MyRequest = () => {
       width: "fit-content",
     });
 
-    if (result.isConfirmed) {
-      try {
-        const res = await axiosInstance.delete(`/donation-request/${id}`);
-        if (res.status === 200) {
-          setUserRequests((prev) => prev.filter((req) => req._id !== id));
-          Swal.fire({
-            icon: "success",
-            title: "Deleted!",
-            text: "Request has been deleted.",
-            timer: 1500,
-            showConfirmButton: false,
-            width: "fit-content",
-          });
-        }
-      } catch (err) {
+    if (!result.isConfirmed) return;
+
+    const toastId = toast.loading("Deleting...");
+    axiosInstance
+      .delete(`/donation-request/${id}`)
+      .then(() => {
+        setUserRequests((prev) => prev.filter((req) => req._id !== id));
+        toast.success("Deleted successfully", { id: toastId });
+
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Request has been deleted.",
+          timer: 1400,
+          showConfirmButton: false,
+          width: "fit-content",
+        });
+
+        const newFiltered = filteredRequests.filter((r) => r._id !== id);
+        const newTotalPages = Math.ceil(newFiltered.length / requestsPerPage) || 1;
+        if (currentPage > newTotalPages) setCurrentPage(newTotalPages);
+      })
+      .catch(() => {
+        toast.error("Delete failed", { id: toastId });
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "Failed to delete request!",
           width: "fit-content",
         });
-      }
-    }
+      });
   };
 
+  if (loading) return null;
+  if (!user) return null;
+  if (user.role !== "Donor") return <Navigate to={"/dashboard"} />;
+
   return (
-    <div className="p-4 mt-4 bg-white rounded-xl shadow-sm">
+    <div className="p-4 mt-4 bg-white rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         My Donation Request
       </h2>
@@ -116,19 +123,23 @@ const MyRequest = () => {
               <th className="p-4 rounded-r-2xl">Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {currentRequests.length === 0 ? (
               <tr>
                 <td
-                  colSpan={8}
+                  colSpan={9}
                   className="p-4 text-center text-gray-500 border-b border-gray-200"
                 >
                   No donation requests found.
                 </td>
               </tr>
             ) : (
-              currentRequests.map((req, i) => (
-                <tr key={i} className="hover:bg-gray-50 text-sm text-gray-700">
+              currentRequests.map((req) => (
+                <tr
+                  key={req._id}
+                  className="hover:bg-gray-50 text-sm text-gray-700"
+                >
                   <td className="p-4 border-b border-gray-100">
                     {req.recipientName}
                   </td>
@@ -150,27 +161,46 @@ const MyRequest = () => {
                   <td className="p-4 border-b border-gray-100">
                     {req.donationTime}
                   </td>
+
                   <td
-                    className={`p-4 border-b border-gray-100 text-center
-                    ${
-                      (req.status === "Pending" && "text-yellow-600") ||
-                      (req.status === "Inprogress" && "text-green-600") ||
-                      (req.status === "Done" && "text-blue-600") ||
-                      (req.status === "Canceled" && "text-red-600")
-                    }
-                    `}
+                    className={`p-4 border-b border-gray-100 text-center ${
+                      req.status.toLowerCase() === "pending"
+                        ? "text-yellow-600"
+                        : req.status.toLowerCase() === "inprogress"
+                        ? "text-green-600"
+                        : req.status.toLowerCase() === "done"
+                        ? "text-blue-600"
+                        : "text-red-600"
+                    }`}
                   >
                     {req.status}
                   </td>
+
                   <td className="p-4 border-b border-gray-100">
-                    <button className="w-full cursor-default!">
-                      <GoTrash
+                    <div className="flex gap-2 justify-end">
+
+                      <Link
+                        to={`/dashboard/donation-request/view/${req._id}`}
+                        className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
+                      >
+                        View
+                      </Link>
+
+                      <Link
+                        to={`/donation-request/edit/${req._id}`}
+                        className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
+                      >
+                        Edit
+                      </Link>
+
+                      <button
                         onClick={() => handleDelete(req._id)}
-                        size={20}
-                        color="red"
-                        className="mx-auto cursor-pointer!"
-                      />
-                    </button>
+                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                      >
+                        <GoTrash size={16} />
+                      </button>
+
+                    </div>
                   </td>
                 </tr>
               ))
@@ -179,7 +209,6 @@ const MyRequest = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-end mr-4 mt-4 gap-4 flex-wrap">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
