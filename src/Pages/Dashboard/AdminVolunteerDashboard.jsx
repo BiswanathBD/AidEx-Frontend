@@ -26,14 +26,14 @@ const AdminVolunteerDashboard = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 mt-4 bg-white rounded-xl">
-      <h2 className="text-xl sm:text-2xl font-bold mb-6 px-2 text-[#f87898]">
+      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         Welcome, {user.name} ❤️
       </h2>
 
       <div className="grid xl:grid-cols-3 gap-5 sm:gap-8 mt-6">
 
         {/* Total Donors */}
-        <div className="p-4 sm:p-6 lg:p-10 rounded-2xl bg-linear-to-br from-blue-50/50 to-blue-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.02] transition shadow-md">
+        <div className="p-4 sm:p-6 lg:p-10 rounded-lg bg-linear-to-br from-blue-50/50 to-blue-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.01] transition">
           <div className="text-gray-500 shrink-0">
             <FaUsers className="text-4xl sm:text-5xl lg:text-6xl" />
           </div>
@@ -49,7 +49,7 @@ const AdminVolunteerDashboard = () => {
         </div>
 
         {/* Total Funding */}
-        <div className="p-4 sm:p-6 lg:p-10 rounded-2xl bg-linear-to-br from-green-50/50 to-green-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.02] transition shadow-md">
+        <div className="p-4 sm:p-6 lg:p-10 rounded-lg bg-linear-to-br from-green-50/50 to-green-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.01] transition">
           <div className="text-gray-500 shrink-0">
             <FaHandHoldingHeart className="text-4xl sm:text-5xl lg:text-6xl" />
           </div>
@@ -65,7 +65,7 @@ const AdminVolunteerDashboard = () => {
         </div>
 
         {/* Total Requests */}
-        <div className="p-4 sm:p-6 lg:p-10 rounded-2xl bg-linear-to-br from-red-50/50 to-red-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.02] transition shadow-md">
+        <div className="p-4 sm:p-6 lg:p-10 rounded-lg bg-linear-to-br from-red-50/50 to-red-100 flex items-center gap-4 sm:gap-8 hover:scale-[1.01] transition">
           <div className="text-gray-500 shrink-0">
             <IoWaterSharp className="text-4xl sm:text-5xl lg:text-6xl" />
           </div>
