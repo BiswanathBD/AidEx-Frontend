@@ -32,6 +32,14 @@ const MyRequest = () => {
   const currentRequests = filteredRequests.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
 
+  const formatTime = (time) => {
+    if (!time) return "";
+    const [h, m] = time.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hour = h % 12 === 0 ? 12 : h % 12;
+    return `${hour}:${m.toString().padStart(2, "0")} ${ampm}`;
+  };
+
   const handlePageChange = (pageNum) => setCurrentPage(pageNum);
 
   const handleDelete = async (id) => {
@@ -65,7 +73,8 @@ const MyRequest = () => {
         });
 
         const newFiltered = filteredRequests.filter((r) => r._id !== id);
-        const newTotalPages = Math.ceil(newFiltered.length / requestsPerPage) || 1;
+        const newTotalPages =
+          Math.ceil(newFiltered.length / requestsPerPage) || 1;
         if (currentPage > newTotalPages) setCurrentPage(newTotalPages);
       })
       .catch(() => {
@@ -159,7 +168,7 @@ const MyRequest = () => {
                     {req.donationDate}
                   </td>
                   <td className="p-4 border-b border-gray-100">
-                    {req.donationTime}
+                    {formatTime(req.donationTime)}
                   </td>
 
                   <td
@@ -178,7 +187,6 @@ const MyRequest = () => {
 
                   <td className="p-4 border-b border-gray-100">
                     <div className="flex gap-2 justify-end">
-
                       <Link
                         to={`/dashboard/donation-request/view/${req._id}`}
                         className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
@@ -188,18 +196,26 @@ const MyRequest = () => {
 
                       <Link
                         to={`/donation-request/edit/${req._id}`}
-                        className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
+                        className={`px-2 py-1 rounded text-xs ${
+                          req.status.toLowerCase() === "pending"
+                            ? "bg-blue-400 text-white cursor-pointer"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none"
+                        }`}
                       >
                         Edit
                       </Link>
 
                       <button
                         onClick={() => handleDelete(req._id)}
-                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                        disabled={req.status.toLowerCase() !== "pending"}
+                        className={`px-2 py-1 rounded text-xs ${
+                          req.status.toLowerCase() === "pending"
+                            ? "bg-red-400 text-white cursor-pointer"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                       >
                         <GoTrash size={16} />
                       </button>
-
                     </div>
                   </td>
                 </tr>

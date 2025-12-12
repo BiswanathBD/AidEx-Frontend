@@ -3,6 +3,7 @@ import { AuthContext } from "../Auth/AuthContext";
 import useAxios from "../Hooks/useAxios";
 import { useNavigate, Link } from "react-router";
 import Swal from "sweetalert2";
+import { GoTrash } from "react-icons/go";
 
 const DonorDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -125,15 +126,25 @@ const DonorDashboard = () => {
                       onClick={() =>
                         navigate(`/donation-request/edit/${r._id}`)
                       }
-                      className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
+                      disabled={r.status.toLowerCase() !== "pending"}
+                      className={`px-2 py-1 rounded text-xs ${
+                        r.status.toLowerCase() === "pending"
+                          ? "bg-blue-400 text-white cursor-pointer"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      }`}
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(r._id)}
-                      className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                      disabled={r.status.toLowerCase() !== "pending"}
+                      className={`px-2 py-1 rounded text-xs ${
+                        r.status.toLowerCase() === "pending"
+                          ? "bg-red-400 text-white cursor-pointer"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      }`}
                     >
-                      Delete
+                      <GoTrash size={16} />
                     </button>
                   </td>
                 </tr>
