@@ -76,6 +76,8 @@ const CreateDonationRequest = () => {
   if (user.role !== "Donor" && user.role !== "Volunteer")
     return <Navigate to={"/dashboard"} />;
 
+  if (user.status === "Block") return <Navigate to={"/dashboard"} />;
+
   return (
     <div className="bg-white p-4 mt-4 rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">

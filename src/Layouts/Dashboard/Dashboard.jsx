@@ -73,7 +73,9 @@ const Dashboard = () => {
               {/* create donation request */}
               <NavLink
                 to={"/dashboard/create-donation-request"}
-                className="flex items-center gap-2"
+                className={`items-center gap-2 ${
+                  user.status !== "Active" ? "hidden" : "flex"
+                }`}
               >
                 <PiPlusCircleDuotone size={24} />{" "}
                 <span className="hidden md:block">Create Request</span>

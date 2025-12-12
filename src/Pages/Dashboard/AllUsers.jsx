@@ -16,7 +16,6 @@ const AllUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 8;
 
-  // Fetch all users
   useEffect(() => {
     axiosInstance.get("/allUsers").then((res) => setAllUsers(res.data));
   }, [axiosInstance]);
@@ -24,13 +23,12 @@ const AllUsers = () => {
   if (loading) return null;
   if (user.role !== "Admin") return <Navigate to={"/dashboard"} />;
 
-  // Filtering
   const filteredUsers =
     filter === "all"
       ? allUsers
       : allUsers.filter((u) => u.status.toLowerCase() === filter);
 
-  // Pagination
+  // pagination
   const indexOfLast = currentPage * usersPerPage;
   const indexOfFirst = indexOfLast - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
