@@ -124,7 +124,7 @@ const DonorDashboard = () => {
                     </button>
                     <button
                       onClick={() =>
-                        navigate(`/donation-request/edit/${r._id}`)
+                        navigate(`/dashboard/donation-request/edit/${r._id}`)
                       }
                       disabled={r.status.toLowerCase() !== "pending"}
                       className={`px-2 py-1 rounded text-xs ${

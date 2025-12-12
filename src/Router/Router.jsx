@@ -12,6 +12,7 @@ import MyRequest from "../Pages/Dashboard/MyRequest";
 import RequestDetails from "../Pages/Dashboard/RequestDetails";
 import AllUsers from "../Pages/Dashboard/AllUsers";
 import AllRequests from "../Pages/Dashboard/AllRequests";
+import EditRequest from "../Pages/Dashboard/EditRequest";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/donation-request/view/:id",
         element: <RequestDetails />,
+      },
+      {
+        path: "/dashboard/donation-request/edit/:id",
+        element: <EditRequest />,
       },
       {
         path: "/dashboard/all-users",

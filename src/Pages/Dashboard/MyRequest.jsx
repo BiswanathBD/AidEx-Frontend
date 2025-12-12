@@ -195,7 +195,7 @@ const MyRequest = () => {
                       </Link>
 
                       <Link
-                        to={`/donation-request/edit/${req._id}`}
+                        to={`/dashboard/donation-request/edit/${req._id}`}
                         className={`px-2 py-1 rounded text-xs ${
                           req.status.toLowerCase() === "pending"
                             ? "bg-blue-400 text-white cursor-pointer"
