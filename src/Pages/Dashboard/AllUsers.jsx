@@ -3,7 +3,7 @@ import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import { Navigate } from "react-router";
 import { FiMoreVertical } from "react-icons/fi";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const AllUsers = () => {
   const { user, loading } = useContext(AuthContext);
@@ -16,7 +16,7 @@ const AllUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 8;
 
-  // Fetch users
+  // Fetch all users
   useEffect(() => {
     axiosInstance.get("/allUsers").then((res) => setAllUsers(res.data));
   }, [axiosInstance]);
@@ -24,7 +24,7 @@ const AllUsers = () => {
   if (loading) return null;
   if (user.role !== "Admin") return <Navigate to={"/dashboard"} />;
 
-  // Filter Users
+  // Filtering
   const filteredUsers =
     filter === "all"
       ? allUsers
@@ -38,31 +38,30 @@ const AllUsers = () => {
 
   const handlePageChange = (n) => setCurrentPage(n);
 
-  // ACTION HANDLER (block / unblock / make volunteer/admin)
-  const handleUserAction = async (id, action) => {
-    try {
-      const res = await axiosInstance.put(`/user-action/${id}`, { action });
+  // user update
+  const handleUserAction = async (id, action, user) => {
+    let updateData = { user };
 
+    if (action === "block") {
+      updateData = { status: "Blocked" };
+    } else if (action === "unblock") {
+      updateData = { status: "Active" };
+    } else if (action === "make-volunteer") {
+      updateData = { role: "Volunteer" };
+    } else if (action === "make-admin") {
+      updateData = { role: "Admin" };
+    }
+
+    const t = toast.loading("Updating user...");
+    const res = await axiosInstance.put(`/update-user/${id}`, updateData);
+
+    if (res.data.modifiedCount) {
       setAllUsers((prev) =>
-        prev.map((u) => (u._id === id ? { ...u, ...res.data.updated } : u))
+        prev.map((u) => (u._id === id ? { ...u, ...updateData } : u))
       );
 
       setOpenMenu(null);
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "User updated successfully.",
-        timer: 1400,
-        showConfirmButton: false,
-        width: "fit-content",
-      });
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Failed!",
-        text: "Something went wrong.",
-        width: "fit-content",
-      });
+      toast.success("User updated successfully!", { id: t });
     }
   };
 
@@ -70,7 +69,6 @@ const AllUsers = () => {
     <div className="p-4 mt-4 bg-white rounded-xl shadow-sm">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">All Users</h2>
 
-      {/* Filters */}
       <div className="flex gap-2 mb-4 flex-wrap">
         {["all", "active", "blocked"].map((status) => (
           <button
@@ -97,7 +95,7 @@ const AllUsers = () => {
               <th className="p-4 rounded-l-2xl">Avatar</th>
               <th className="p-4">Name</th>
               <th className="p-4">Email</th>
-              <th className="p-4">Role</th>
+              <th className="p-4 text-center">Role</th>
               <th className="p-4">Status</th>
               <th className="p-4 rounded-r-2xl">Actions</th>
             </tr>
@@ -130,8 +128,19 @@ const AllUsers = () => {
                   <td className="p-4 border-b border-gray-100">{u.name}</td>
                   <td className="p-4 border-b border-gray-100">{u.email}</td>
 
-                  <td className="p-4 border-b border-gray-100 font-semibold text-blue-600">
-                    {u.role}
+                  {/* role */}
+                  <td className="p-4 border-b text-center border-gray-100">
+                    <button
+                      className={`px-3 py-1 rounded-sm text-white font-semibold ${
+                        u.role === "Admin"
+                          ? "bg-blue-600"
+                          : u.role === "Volunteer"
+                          ? "bg-yellow-500"
+                          : "bg-green-600"
+                      }`}
+                    >
+                      {u.role}
+                    </button>
                   </td>
 
                   <td
@@ -153,11 +162,12 @@ const AllUsers = () => {
                       <FiMoreVertical size={18} />
                     </button>
 
+                    {/* dropdown */}
                     {openMenu === u._id && (
                       <div className="absolute right-4 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg/10 text-sm font-semibold z-10 overflow-hidden p-2 w-fit">
                         {u.status === "Active" ? (
                           <button
-                            onClick={() => handleUserAction(u._id, "block")}
+                            onClick={() => handleUserAction(u._id, "block", u)}
                             className="w-full mb-2 text-left px-4 py-2 bg-red-600 text-white rounded"
                           >
                             Block User
@@ -187,7 +197,7 @@ const AllUsers = () => {
                             onClick={() =>
                               handleUserAction(u._id, "make-admin")
                             }
-                            className="w-full text-left px-4 py-2  bg-blue-600 text-white rounded"
+                            className="w-full text-left px-4 py-2 bg-blue-600 text-white rounded"
                           >
                             Make Admin
                           </button>
