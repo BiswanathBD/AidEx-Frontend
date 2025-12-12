@@ -38,7 +38,7 @@ const RequestDetails = () => {
   const handleAcceptDonate = async (request) => {
     const updatedRequest = {
       ...request,
-      status: "inprogress",
+      status: "Inprogress",
       donorName: user.name,
       donorEmail: user.email,
     };
@@ -175,7 +175,7 @@ const RequestDetails = () => {
           )}
         </div>
 
-        {request.status === "Pending" && (
+        {request.status === "Pending" && user.role === "Donor" && (
           <button
             onClick={() => handleAcceptDonate(request)}
             className="mt-8 w-full py-3 bg-[#f87898] text-white font-semibold rounded-lg hover:bg-[#f66086] transition"

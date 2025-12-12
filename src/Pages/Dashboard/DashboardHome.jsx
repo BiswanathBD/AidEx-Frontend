@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import DonorDashboard from "../../Components/DonorDashboard";
+import DonorDashboard from "./DonorDashboard";
 import AdminVolunteerDashboard from "./AdminVolunteerDashboard";
 import { AuthContext } from "../../Auth/AuthContext";
 

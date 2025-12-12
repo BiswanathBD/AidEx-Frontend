@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import useAxios from "../../Hooks/useAxios";
+import { AuthContext } from "../../Auth/AuthContext";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 const EditDonationRequest = () => {
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosInstance = useAxios();
@@ -27,7 +29,6 @@ const EditDonationRequest = () => {
     formState: { errors },
   } = useForm();
 
-  // Fetch district and upazila data
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/nuhil/bangladesh-geocode/refs/heads/master/districts/districts.json"
@@ -42,89 +43,82 @@ const EditDonationRequest = () => {
       .then((data) => setUpazilaData(data[2].data));
   }, []);
 
-  // Fetch request data
   useEffect(() => {
-    axiosInstance
-      .get(`/donation-request/${id}`)
-      .then((res) => {
-        if (res.data.status !== "Pending") {
-          toast.error("Only pending requests can be edited");
-          navigate("/dashboard/my-donation-requests");
-          return;
-        }
-        setRequestData(res.data);
-
-        // Set form fields
-        const fields = [
-          "recipientName",
-          "district",
-          "upazila",
-          "hospital",
-          "address",
-          "bloodGroup",
-          "donationDate",
-          "donationTime",
-          "message",
-        ];
-        fields.forEach((field) => setValue(field, res.data[field]));
-
-        // Set district ID for upazila filtering
-        const districtObj = districtData.find(
-          (d) => d.name === res.data.district
-        );
-        if (districtObj) {
-          setSelectedDistrictID(districtObj.id);
-
-          // Filter upazilas and set selected upazila
-          const matchedUpazilas = upazilaData.filter(
-            (u) => u.district_id === districtObj.id
-          );
-          setFilteredUpazilas(matchedUpazilas);
-          setValue("upazila", res.data.upazila);
-        }
-      })
-      .catch(() => {
-        toast.error("Failed to fetch request");
+    axiosInstance.get(`/donation-request/${id}`).then((res) => {
+      if (res.data.status !== "Pending") {
+        toast.error("Only pending requests can be edited");
         navigate("/dashboard/my-donation-requests");
-      });
-  }, [id, axiosInstance, navigate, setValue, districtData, upazilaData]);
+        return;
+      }
+      setRequestData(res.data);
 
-  // Filter upazilas when district changes
+      const fields = [
+        "recipientName",
+        "hospital",
+        "address",
+        "bloodGroup",
+        "donationDate",
+        "donationTime",
+        "message",
+      ];
+      fields.forEach((field) => setValue(field, res.data[field]));
+    });
+  }, [id, axiosInstance, navigate, setValue]);
+
   useEffect(() => {
-    if (selectedDistrictID) {
-      const matched = upazilaData.filter(
-        (u) => u.district_id === selectedDistrictID
+    if (requestData && districtData.length > 0 && upazilaData.length > 0) {
+      const districtObj = districtData.find(
+        (d) => d.name === requestData.district
       );
-      setFilteredUpazilas(matched);
-    } else {
-      setFilteredUpazilas([]);
+      if (districtObj) {
+        setSelectedDistrictID(districtObj.id);
+        setValue("district", districtObj.name);
+
+        const matchedUpazilas = upazilaData.filter(
+          (u) => u.district_id === districtObj.id
+        );
+        setFilteredUpazilas(matchedUpazilas);
+        setValue("upazila", requestData.upazila);
+      }
     }
-  }, [selectedDistrictID, upazilaData]);
+  }, [requestData, districtData, upazilaData, setValue]);
+
+  useEffect(() => {
+    if (!selectedDistrictID) return;
+    const matched = upazilaData.filter(
+      (u) => u.district_id === selectedDistrictID
+    );
+    setFilteredUpazilas(matched);
+    setValue("upazila", "");
+  }, [selectedDistrictID, upazilaData, setValue]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    
     toast
       .promise(axiosInstance.put(`/edit-donation-request/${id}`, data), {
         loading: "Updating request...",
         success: "Request updated successfully!",
         error: "Failed to update request",
       })
-      .then(() => navigate("/dashboard/my-donation-requests"));
+      .then(() => {
+        if (user.role === "Donor") {
+          navigate("/dashboard/my-donation-requests");
+        } else {
+          navigate("/dashboard/all-blood-donation-request");
+        }
+      });
   };
 
-  if (!requestData) return <div>Loading...</div>;
+  if (!requestData || districtData.length === 0 || upazilaData.length === 0)
+    return null;
 
   return (
-    <div className="bg-white p-4 mt-4 rounded-xl max-w-4xl mx-auto">
+    <div className="bg-white p-4 mt-4 rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         Edit Donation Request
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-          {/* recipient name */}
           <div className="flex flex-col">
             <input
               type="text"
@@ -148,13 +142,11 @@ const EditDonationRequest = () => {
               className="input"
               value={watch("district")}
               onChange={(e) => {
-                const selectedName = e.target.value;
                 const districtObj = districtData.find(
-                  (d) => d.name === selectedName
+                  (d) => d.name === e.target.value
                 );
                 setSelectedDistrictID(districtObj?.id);
-                setValue("district", selectedName);
-                setValue("upazila", "");
+                setValue("district", e.target.value);
               }}
             >
               <option value="">Select District</option>
@@ -197,7 +189,9 @@ const EditDonationRequest = () => {
             <input
               type="text"
               placeholder="Enter hospital name"
-              {...register("hospital", { required: "Hospital name is required" })}
+              {...register("hospital", {
+                required: "Hospital name is required",
+              })}
               className="input"
             />
             {errors.hospital && (
@@ -207,7 +201,6 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          {/* address */}
           <div className="flex flex-col md:col-span-2">
             <input
               type="text"
@@ -216,14 +209,16 @@ const EditDonationRequest = () => {
               className="input"
             />
             {errors.address && (
-              <span className="text-red-500 text-sm">{errors.address.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.address.message}
+              </span>
             )}
           </div>
-
-          {/* blood group */}
           <div className="flex flex-col">
             <select
-              {...register("bloodGroup", { required: "Blood group is required" })}
+              {...register("bloodGroup", {
+                required: "Blood group is required",
+              })}
               className="input"
               value={watch("bloodGroup")}
             >
@@ -235,7 +230,9 @@ const EditDonationRequest = () => {
               ))}
             </select>
             {errors.bloodGroup && (
-              <span className="text-red-500 text-sm">{errors.bloodGroup.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.bloodGroup.message}
+              </span>
             )}
           </div>
 
@@ -246,12 +243,15 @@ const EditDonationRequest = () => {
               placeholder="Select donation date"
               {...register("donationDate", {
                 required: "Donation date is required",
-                validate: (value) => value >= today || "Cannot select past date",
+                validate: (value) =>
+                  value >= today || "Cannot select past date",
               })}
               className="input"
             />
             {errors.donationDate && (
-              <span className="text-red-500 text-sm">{errors.donationDate.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.donationDate.message}
+              </span>
             )}
           </div>
 
@@ -275,12 +275,13 @@ const EditDonationRequest = () => {
               className="input"
             />
             {errors.donationTime && (
-              <span className="text-red-500 text-sm">{errors.donationTime.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.donationTime.message}
+              </span>
             )}
           </div>
         </div>
 
-        {/* message */}
         <div className="flex flex-col">
           <textarea
             {...register("message", { required: "Message is required" })}
@@ -289,7 +290,9 @@ const EditDonationRequest = () => {
             className="input w-full"
           ></textarea>
           {errors.message && (
-            <span className="text-red-500 text-sm">{errors.message.message}</span>
+            <span className="text-red-500 text-sm">
+              {errors.message.message}
+            </span>
           )}
         </div>
 

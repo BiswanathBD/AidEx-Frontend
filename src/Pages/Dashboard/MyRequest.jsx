@@ -1,31 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
-import toast from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
-import { Navigate, Link } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 
 const MyRequest = () => {
   const { user, loading } = useContext(AuthContext);
   const [userRequests, setUserRequests] = useState([]);
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [requestsPerPage] = useState(6);
+  const requestsPerPage = 6;
   const axiosInstance = useAxios();
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchRequests = () => {
     if (!user?.email) return;
     axiosInstance
       .get(`/donation-request?email=${user.email}`)
       .then((res) => setUserRequests(res.data || []))
       .catch(() => setUserRequests([]));
+  };
+
+  useEffect(() => {
+    fetchRequests();
   }, [user, axiosInstance]);
 
   const filteredRequests =
     filter === "all"
       ? userRequests
-      : userRequests.filter((r) => r.status.toLowerCase() === filter);
+      : userRequests.filter((r) => r.status === filter);
 
   const indexOfLast = currentPage * requestsPerPage;
   const indexOfFirst = indexOfLast - requestsPerPage;
@@ -40,57 +44,61 @@ const MyRequest = () => {
     return `${hour}:${m.toString().padStart(2, "0")} ${ampm}`;
   };
 
-  const handlePageChange = (pageNum) => setCurrentPage(pageNum);
-
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#f43f5e",
       cancelButtonColor: "#6b7280",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes",
       width: "fit-content",
     });
 
     if (!result.isConfirmed) return;
 
-    const toastId = toast.loading("Deleting...");
-    axiosInstance
-      .delete(`/donation-request/${id}`)
-      .then(() => {
-        setUserRequests((prev) => prev.filter((req) => req._id !== id));
-        toast.success("Deleted successfully", { id: toastId });
+    await axiosInstance.delete(`/donation-request/${id}`);
+    fetchRequests();
 
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "Request has been deleted.",
-          timer: 1400,
-          showConfirmButton: false,
-          width: "fit-content",
-        });
+    Swal.fire({
+      icon: "success",
+      title: "Deleted",
+      timer: 1200,
+      showConfirmButton: false,
+      width: "fit-content",
+    });
+  };
 
-        const newFiltered = filteredRequests.filter((r) => r._id !== id);
-        const newTotalPages =
-          Math.ceil(newFiltered.length / requestsPerPage) || 1;
-        if (currentPage > newTotalPages) setCurrentPage(newTotalPages);
-      })
-      .catch(() => {
-        toast.error("Delete failed", { id: toastId });
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Failed to delete request!",
-          width: "fit-content",
-        });
-      });
+  const handleStatusChange = async (id, newStatus) => {
+    const confirm = await Swal.fire({
+      title: `Mark as ${newStatus}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: newStatus === "Done" ? "#22c55e" : "#f43f5e",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes",
+      width: "fit-content",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    await axiosInstance.put(`/update-request-status/${id}`, {
+      status: newStatus,
+    });
+    fetchRequests();
+
+    Swal.fire({
+      icon: "success",
+      title: newStatus,
+      timer: 1200,
+      showConfirmButton: false,
+      width: "fit-content",
+    });
   };
 
   if (loading) return null;
   if (!user) return null;
-  if (user.role !== "Donor") return <Navigate to={"/dashboard"} />;
+  if (user.role !== "Donor") return <Navigate to="/dashboard" />;
 
   return (
     <div className="p-4 mt-4 bg-white rounded-xl">
@@ -99,20 +107,20 @@ const MyRequest = () => {
       </h2>
 
       <div className="flex gap-2 mb-4 flex-wrap">
-        {["all", "pending", "inprogress", "done", "canceled"].map((status) => (
+        {["all", "Pending", "Inprogress", "Done", "Canceled"].map((s) => (
           <button
-            key={status}
+            key={s}
             onClick={() => {
-              setFilter(status);
+              setFilter(s);
               setCurrentPage(1);
             }}
             className={`px-3 py-1 rounded-full text-sm border ${
-              filter === status
+              filter === s
                 ? "bg-[#f87898] text-white border-[#f87898]"
                 : "bg-white text-gray-600 border-gray-300"
             }`}
           >
-            {status.charAt(0).toUpperCase() + status.slice(1)}
+            {s}
           </button>
         ))}
       </div>
@@ -120,128 +128,114 @@ const MyRequest = () => {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-left text-sm text-gray-600">
-              <th className="p-4 rounded-l-2xl">Recipient</th>
+            <tr className="bg-gray-100 text-sm text-gray-600">
+              <th className="p-4">Recipient</th>
               <th className="p-4">District</th>
               <th className="p-4">Upazila</th>
-              <th className="p-4">Hospital</th>
-              <th className="p-4">Blood Group</th>
+              <th className="p-4">Blood</th>
               <th className="p-4">Date</th>
               <th className="p-4">Time</th>
               <th className="p-4 text-center">Status</th>
-              <th className="p-4 rounded-r-2xl">Actions</th>
+              <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {currentRequests.length === 0 ? (
-              <tr>
+            {currentRequests.map((req) => (
+              <tr key={req._id} className="text-sm text-gray-700">
+                <td className="p-4">{req.recipientName}</td>
+                <td className="p-4">{req.district}</td>
+                <td className="p-4">{req.upazila}</td>
+                <td className="p-4">{req.bloodGroup}</td>
+                <td className="p-4">{req.donationDate}</td>
+                <td className="p-4">{formatTime(req.donationTime)}</td>
+
                 <td
-                  colSpan={9}
-                  className="p-4 text-center text-gray-500 border-b border-gray-200"
+                  className={`p-4 border-b border-gray-100 text-center ${
+                    req.status === "Pending"
+                      ? "text-yellow-600"
+                      : req.status === "Inprogress"
+                      ? "text-green-600"
+                      : req.status === "Done"
+                      ? "text-blue-600"
+                      : "text-red-600"
+                  }`}
                 >
-                  No donation requests found.
+                  {req.status}
                 </td>
-              </tr>
-            ) : (
-              currentRequests.map((req) => (
-                <tr
-                  key={req._id}
-                  className="hover:bg-gray-50 text-sm text-gray-700"
-                >
-                  <td className="p-4 border-b border-gray-100">
-                    {req.recipientName}
-                  </td>
-                  <td className="p-4 border-b border-gray-100">
-                    {req.district}
-                  </td>
-                  <td className="p-4 border-b border-gray-100">
-                    {req.upazila}
-                  </td>
-                  <td className="p-4 border-b border-gray-100">
-                    {req.hospital}
-                  </td>
-                  <td className="p-4 border-b border-gray-100">
-                    {req.bloodGroup}
-                  </td>
-                  <td className="p-4 border-b border-gray-100">
-                    {req.donationDate}
-                  </td>
-                  <td className="p-4 border-b border-gray-100">
-                    {formatTime(req.donationTime)}
-                  </td>
 
-                  <td
-                    className={`p-4 border-b border-gray-100 text-center ${
-                      req.status.toLowerCase() === "pending"
-                        ? "text-yellow-600"
-                        : req.status.toLowerCase() === "inprogress"
-                        ? "text-green-600"
-                        : req.status.toLowerCase() === "done"
-                        ? "text-blue-600"
-                        : "text-red-600"
-                    }`}
+                <td className="p-4 flex justify-end gap-2">
+                  <button
+                    onClick={() =>
+                      navigate(`/dashboard/donation-request/view/${req._id}`)
+                    }
+                    className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
                   >
-                    {req.status}
-                  </td>
+                    View
+                  </button>
 
-                  <td className="p-4 border-b border-gray-100">
-                    <div className="flex gap-2 justify-end">
-                      <Link
-                        to={`/dashboard/donation-request/view/${req._id}`}
-                        className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
-                      >
-                        View
-                      </Link>
-
-                      <Link
-                        to={`/dashboard/donation-request/edit/${req._id}`}
-                        className={`px-2 py-1 rounded text-xs ${
-                          req.status.toLowerCase() === "pending"
-                            ? "bg-blue-400 text-white cursor-pointer"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none"
-                        }`}
+                  {req.status === "Pending" && (
+                    <>
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/donation-request/edit/${req._id}`
+                          )
+                        }
+                        className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
                       >
                         Edit
-                      </Link>
+                      </button>
 
                       <button
                         onClick={() => handleDelete(req._id)}
-                        disabled={req.status.toLowerCase() !== "pending"}
-                        className={`px-2 py-1 rounded text-xs ${
-                          req.status.toLowerCase() === "pending"
-                            ? "bg-red-400 text-white cursor-pointer"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
+                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
                       >
                         <GoTrash size={16} />
                       </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
+                    </>
+                  )}
+
+                  {req.status === "Inprogress" && (
+                    <>
+                      <button
+                        onClick={() => handleStatusChange(req._id, "Done")}
+                        className="px-2 py-1 bg-green-500 text-white rounded text-xs"
+                      >
+                        Done
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(req._id, "Canceled")}
+                        className="px-2 py-1 bg-red-500 text-white rounded text-xs"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div>
 
-      {totalPages > 1 && (
-        <div className="flex justify-end mr-4 mt-4 gap-4 flex-wrap">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-            <button
-              key={num}
-              onClick={() => handlePageChange(num)}
-              className={`px-3 py-1 rounded-full text-sm border ${
-                currentPage === num
-                  ? "bg-[#f87898] text-white border-[#f87898]"
-                  : "bg-white text-gray-600 border-gray-300"
-              }`}
-            >
-              {num}
-            </button>
-          ))}
-        </div>
-      )}
+        {totalPages > 1 && (
+          <div className="flex justify-end mt-6 gap-2 flex-wrap">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-3 py-1 rounded-full text-sm border ${
+                  currentPage === page
+                    ? "bg-[#f87898] text-white border-[#f87898]"
+                    : "bg-white text-gray-600 border-gray-300"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

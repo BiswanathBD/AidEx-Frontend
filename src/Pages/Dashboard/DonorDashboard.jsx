@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../Auth/AuthContext";
-import useAxios from "../Hooks/useAxios";
 import { useNavigate, Link } from "react-router";
 import Swal from "sweetalert2";
 import { GoTrash } from "react-icons/go";
+import { AuthContext } from "../../Auth/AuthContext";
+import useAxios from "../../Hooks/useAxios";
 
 const DonorDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -48,6 +48,32 @@ const DonorDashboard = () => {
         icon: "success",
         title: "Deleted!",
         text: "Request has been deleted.",
+        timer: 1500,
+        showConfirmButton: false,
+        width: "fit-content",
+      });
+    }
+  };
+
+  const handleStatusChange = async (id, newStatus) => {
+    const confirm = await Swal.fire({
+      title: `Change status to ${newStatus}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: newStatus === "done" ? "#22c55e" : "#f43f5e",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes",
+      width: "fit-content",
+    });
+
+    if (confirm.isConfirmed) {
+      await axiosInstance.put(`/update-request-status/${id}`, {
+        status: newStatus,
+      });
+      fetchRequests();
+      Swal.fire({
+        icon: "success",
+        title: `Request marked as ${newStatus}`,
         timer: 1500,
         showConfirmButton: false,
         width: "fit-content",
@@ -110,9 +136,10 @@ const DonorDashboard = () => {
                         : "text-red-600"
                     }`}
                   >
-                    {r.status.charAt(0).toUpperCase() + r.status.slice(1)}
+                    {r.status}
                   </td>
 
+                  {/* action btns */}
                   <td className="p-4 border-b border-gray-100 flex justify-end gap-2 flex-wrap font-semibold">
                     <button
                       onClick={() =>
@@ -122,30 +149,43 @@ const DonorDashboard = () => {
                     >
                       View
                     </button>
-                    <button
-                      onClick={() =>
-                        navigate(`/dashboard/donation-request/edit/${r._id}`)
-                      }
-                      disabled={r.status.toLowerCase() !== "pending"}
-                      className={`px-2 py-1 rounded text-xs ${
-                        r.status.toLowerCase() === "pending"
-                          ? "bg-blue-400 text-white cursor-pointer"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(r._id)}
-                      disabled={r.status.toLowerCase() !== "pending"}
-                      className={`px-2 py-1 rounded text-xs ${
-                        r.status.toLowerCase() === "pending"
-                          ? "bg-red-400 text-white cursor-pointer"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      <GoTrash size={16} />
-                    </button>
+
+                    {r.status === "Pending" && (
+                      <button
+                        onClick={() =>
+                          navigate(`/dashboard/donation-request/edit/${r._id}`)
+                        }
+                        className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
+                      >
+                        Edit
+                      </button>
+                    )}
+
+                    {r.status === "Pending" && (
+                      <button
+                        onClick={() => handleDelete(r._id)}
+                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                      >
+                        <GoTrash size={16} />
+                      </button>
+                    )}
+
+                    {r.status === "Inprogress" && (
+                      <>
+                        <button
+                          onClick={() => handleStatusChange(r._id, "Done")}
+                          className="px-2 py-1 bg-green-500 text-white rounded text-xs"
+                        >
+                          Done
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(r._id, "Canceled")}
+                          className="px-2 py-1 bg-red-500 text-white rounded text-xs"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
