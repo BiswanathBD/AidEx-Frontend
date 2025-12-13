@@ -10,7 +10,7 @@ const Root = () => {
       <div className="fixed w-full z-100">
         <Navbar />
       </div>
-      <div className="grow mt-20">
+      <div className="grow mt-28">
         <Container>
           <Outlet />
         </Container>

@@ -38,7 +38,6 @@ button {
 nav a {
   padding: 6px 8px;
   color: gray;
-  transition: all 0.3s ease;
 }
 
 nav a:hover {
@@ -48,7 +47,6 @@ nav a:hover {
 
 nav .active {
   color: #f87898;
-  font-weight: 600;
   padding-bottom: 1px !important;
   border-bottom: 2px solid #f87898;
 }

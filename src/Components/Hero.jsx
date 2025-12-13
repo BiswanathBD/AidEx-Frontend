@@ -8,8 +8,8 @@ motion
 const Hero = () => {
   return (
     <motion.div
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 20, opacity: 1 }}
+        initial={{ y: -28, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }} className="bg-white rounded-lg overflow-hidden">
       <div className="grid lg:grid-cols-3 items-center p-8">
         <img
@@ -26,7 +26,7 @@ const Hero = () => {
             only helps those in urgent need but also brings hope to families.
             Your contribution today can create a brighter tomorrow.
           </p>
-          <Link to={"/request"}>
+          <Link to={"/requests"}>
             <button className="btn-primary mt-4">Donate Now</button>
           </Link>
         </div>

@@ -44,7 +44,7 @@ const Footer = () => {
 
               <li>
                 <Link
-                  to="/dashboard/my-donation-requests"
+                  to="/requests"
                   className="flex items-center gap-2 hover:text-[#f87898]"
                 >
                   <PiDropDuotone size={18} /> Donation Requests

@@ -13,6 +13,7 @@ import RequestDetails from "../Pages/Dashboard/RequestDetails";
 import AllUsers from "../Pages/Dashboard/AllUsers";
 import AllRequests from "../Pages/Dashboard/AllRequests";
 import EditRequest from "../Pages/Dashboard/EditRequest";
+import DonationRequests from "../Pages/DonationRequests";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,18 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: "/requests",
+        element: <DonationRequests />,
+      },
+      {
+        path: "/request/view/:id",
+        element: (
+          <Private>
+            <RequestDetails />
+          </Private>
+        ),
       },
     ],
   },
