@@ -11,7 +11,7 @@ button {
 .btn-primary {
   padding: 6px 12px;
   font-weight: 600;
-  background: linear-gradient(to right, #f87898, #fc636b);
+  background: #f87898;
   color: white;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -79,7 +79,7 @@ nav .active {
   animation: rotation 1s linear infinite;
 }
 .loader::after {
-  content: '';  
+  content: "";
   box-sizing: border-box;
   position: absolute;
   left: 0;
@@ -97,4 +97,4 @@ nav .active {
   100% {
     transform: rotate(360deg);
   }
-} 
+}

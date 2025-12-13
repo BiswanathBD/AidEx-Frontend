@@ -35,6 +35,14 @@ const DonationRequests = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const formatTime = (time) => {
+    if (!time) return "";
+    const [h, m] = time.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hour = h % 12 === 0 ? 12 : h % 12;
+    return `${hour}:${m.toString().padStart(2, "0")} ${ampm}`;
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
@@ -116,14 +124,6 @@ const DonationRequests = () => {
       )}
     </div>
   );
-};
-
-const formatTime = (time) => {
-  if (!time) return "";
-  const [h, m] = time.split(":").map(Number);
-  const ampm = h >= 12 ? "PM" : "AM";
-  const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}:${m.toString().padStart(2, "0")} ${ampm}`;
 };
 
 export default DonationRequests;
