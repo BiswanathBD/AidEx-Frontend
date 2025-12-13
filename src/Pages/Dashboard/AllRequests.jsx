@@ -3,7 +3,8 @@ import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
+import Loader from "../../Components/Shared/Loader";
 
 const AllRequests = () => {
   const { user, loading } = useContext(AuthContext);
@@ -12,12 +13,15 @@ const AllRequests = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 6;
   const axiosInstance = useAxios();
-  const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
 
   const fetchRequests = () => {
     axiosInstance
       .get("/allRequest")
-      .then((res) => setUserRequests(res.data || []))
+      .then((res) => {
+        setUserRequests(res.data);
+        setLoader(false);
+      })
       .catch(() => setUserRequests([]));
   };
 
@@ -130,92 +134,62 @@ const AllRequests = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100 text-sm text-gray-600">
-              <th className="p-4">Recipient</th>
+              <th className="p-4 rounded-l-2xl">Recipient</th>
               <th className="p-4">District</th>
               <th className="p-4">Upazila</th>
               <th className="p-4">Blood</th>
               <th className="p-4">Date</th>
               <th className="p-4">Time</th>
               <th className="p-4 text-center">Status</th>
-              <th className="p-4 text-right">Actions</th>
+              <th className="p-4 text-right rounded-r-2xl">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {currentRequests.map((req) => (
-              <tr key={req._id} className="text-sm text-gray-700">
-                <td className="p-4">{req.recipientName}</td>
-                <td className="p-4">{req.district}</td>
-                <td className="p-4">{req.upazila}</td>
-                <td className="p-4">{req.bloodGroup}</td>
-                <td className="p-4">{req.donationDate}</td>
-                <td className="p-4">{formatTime(req.donationTime)}</td>
-
-                <td
-                  className={`p-4 text-center ${
-                    req.status === "Pending"
-                      ? "text-yellow-600"
-                      : req.status === "Inprogress"
-                      ? "text-green-600"
-                      : req.status === "Done"
-                      ? "text-blue-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {req.status}
-                </td>
-
-                <td className="p-4 flex justify-end gap-2">
-                  <button
-                    onClick={() =>
-                      navigate(`/dashboard/donation-request/view/${req._id}`)
-                    }
-                    className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
-                  >
-                    View
-                  </button>
-
-                  {req.status === "Pending" && user.role !== "Volunteer" && (
-                    <button
-                      onClick={() =>
-                        navigate(`/dashboard/donation-request/edit/${req._id}`)
-                      }
-                      className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
-                    >
-                      Edit
-                    </button>
-                  )}
-
-                  {user.role === "Admin" && (
-                    <>
-                      <button
-                        onClick={() => handleDelete(req._id)}
-                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
-                      >
-                        <GoTrash size={16} />
-                      </button>
-                    </>
-                  )}
-
-                  {req.status === "Inprogress" && (
-                    <>
-                      <button
-                        onClick={() => handleStatusChange(req._id, "Done")}
-                        className="px-2 py-1 bg-green-500 text-white rounded text-xs"
-                      >
-                        Done
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(req._id, "Canceled")}
-                        className="px-2 py-1 bg-red-500 text-white rounded text-xs"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
+            {loader ? (
+              <tr>
+                <td colSpan={8}>
+                  <div className="flex justify-center items-center">
+                    <Loader />
+                  </div>
                 </td>
               </tr>
-            ))}
+            ) : currentRequests.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="text-center py-10 text-gray-500">
+                  No donation requests found
+                </td>
+              </tr>
+            ) : (
+              currentRequests.map((req) => (
+                <tr key={req._id} className="text-sm text-gray-700">
+                  <td className="p-4">{req.recipientName}</td>
+                  <td className="p-4">{req.district}</td>
+                  <td className="p-4">{req.upazila}</td>
+                  <td className="p-4">{req.bloodGroup}</td>
+                  <td className="p-4">{req.donationDate}</td>
+                  <td className="p-4">{formatTime(req.donationTime)}</td>
+
+                  <td
+                    className={`p-4 text-center ${
+                      req.status === "Pending"
+                        ? "text-yellow-600"
+                        : req.status === "Inprogress"
+                        ? "text-green-600"
+                        : req.status === "Done"
+                        ? "text-blue-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {req.status}
+                  </td>
+
+                  <td className="p-4 flex justify-end gap-2">
+                    {/* your buttons */}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

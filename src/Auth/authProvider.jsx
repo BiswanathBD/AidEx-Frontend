@@ -21,9 +21,9 @@ const AuthProvider = ({ children }) => {
           .then((data) => {
             data.accessToken = currentUser.accessToken;
             setUser(data);
+            setLoading(false);
           });
       }
-      setLoading(false);
     });
 
     return () => {

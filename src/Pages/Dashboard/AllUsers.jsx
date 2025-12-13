@@ -4,10 +4,12 @@ import useAxios from "../../Hooks/useAxios";
 import { Navigate } from "react-router";
 import { FiMoreVertical } from "react-icons/fi";
 import toast from "react-hot-toast";
+import Loader from "../../Components/Shared/Loader";
 
 const AllUsers = () => {
   const { user, loading } = useContext(AuthContext);
   const axiosInstance = useAxios();
+  const [loader, setLoader] = useState(true);
 
   const [allUsers, setAllUsers] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -17,7 +19,10 @@ const AllUsers = () => {
   const usersPerPage = 8;
 
   useEffect(() => {
-    axiosInstance.get("/allUsers").then((res) => setAllUsers(res.data));
+    axiosInstance.get("/allUsers").then((res) => {
+      setAllUsers(res.data);
+      setLoader(false);
+    });
   }, [axiosInstance]);
 
   if (loading) return null;
@@ -100,11 +105,17 @@ const AllUsers = () => {
           </thead>
 
           <tbody>
-            {currentUsers.length === 0 ? (
+            {loader ? (
+              <tr>
+                <td colSpan={6}>
+                  <Loader />
+                </td>
+              </tr>
+            ) : currentUsers.length === 0 ? (
               <tr>
                 <td
                   colSpan={6}
-                  className="p-4 text-center text-gray-500 border-b border-gray-200"
+                  className="p-6 text-center text-gray-500 border-b border-gray-200"
                 >
                   No users found.
                 </td>
@@ -115,6 +126,7 @@ const AllUsers = () => {
                   key={u._id}
                   className="hover:bg-gray-50 text-sm text-gray-700"
                 >
+                  {/* avatar */}
                   <td className="p-4 border-b border-gray-100">
                     <img
                       src={u.avatar}
@@ -123,12 +135,15 @@ const AllUsers = () => {
                     />
                   </td>
 
+                  {/* name */}
                   <td className="p-4 border-b border-gray-100">{u.name}</td>
+
+                  {/* email */}
                   <td className="p-4 border-b border-gray-100">{u.email}</td>
 
                   {/* role */}
-                  <td className="p-4 border-b text-center border-gray-100">
-                    <button
+                  <td className="p-4 border-b border-gray-100 text-center">
+                    <span
                       className={`px-3 py-1 rounded-sm text-white font-semibold ${
                         u.role === "Admin"
                           ? "bg-blue-600"
@@ -138,9 +153,10 @@ const AllUsers = () => {
                       }`}
                     >
                       {u.role}
-                    </button>
+                    </span>
                   </td>
 
+                  {/* status */}
                   <td
                     className={`p-4 border-b border-gray-100 font-semibold ${
                       u.status === "Active" ? "text-green-600" : "text-red-600"
@@ -160,20 +176,19 @@ const AllUsers = () => {
                       <FiMoreVertical size={18} />
                     </button>
 
-                    {/* dropdown */}
                     {openMenu === u._id && (
-                      <div className="absolute right-4 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg/10 text-sm font-semibold z-10 overflow-hidden p-2 w-fit">
+                      <div className="absolute right-4 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg/10 text-sm font-semibold z-10 p-2">
                         {u.status === "Active" ? (
                           <button
                             onClick={() => handleUserAction(u._id, "block", u)}
-                            className="w-full mb-2 text-left px-4 py-2 bg-red-600 text-white rounded"
+                            className="w-full mb-2 px-4 py-2 bg-red-600 text-white rounded"
                           >
                             Block User
                           </button>
                         ) : (
                           <button
                             onClick={() => handleUserAction(u._id, "unblock")}
-                            className="w-full mb-2 text-left px-4 py-2 bg-green-600 text-white rounded"
+                            className="w-full mb-2 px-4 py-2 bg-green-600 text-white rounded"
                           >
                             Unblock User
                           </button>
@@ -184,7 +199,7 @@ const AllUsers = () => {
                             onClick={() =>
                               handleUserAction(u._id, "make-volunteer")
                             }
-                            className="w-full text-left px-4 py-2 mb-2 bg-yellow-600 text-white rounded"
+                            className="w-full mb-2 px-4 py-2 bg-yellow-600 text-white rounded"
                           >
                             Make Volunteer
                           </button>
@@ -195,7 +210,7 @@ const AllUsers = () => {
                             onClick={() =>
                               handleUserAction(u._id, "make-admin")
                             }
-                            className="w-full text-left px-4 py-2 bg-blue-600 text-white rounded"
+                            className="w-full px-4 py-2 bg-blue-600 text-white rounded"
                           >
                             Make Admin
                           </button>

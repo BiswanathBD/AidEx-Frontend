@@ -4,6 +4,7 @@ import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
 import { Navigate, useNavigate } from "react-router";
+import Loader from "../../Components/Shared/Loader";
 
 const MyRequest = () => {
   const { user, loading } = useContext(AuthContext);
@@ -13,12 +14,16 @@ const MyRequest = () => {
   const requestsPerPage = 6;
   const axiosInstance = useAxios();
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
 
   const fetchRequests = () => {
     if (!user?.email) return;
     axiosInstance
       .get(`/donation-request?email=${user.email}`)
-      .then((res) => setUserRequests(res.data || []))
+      .then((res) => {
+        setUserRequests(res.data);
+        setLoader(false);
+      })
       .catch(() => setUserRequests([]));
   };
 
@@ -129,92 +134,108 @@ const MyRequest = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100 text-sm text-gray-600">
-              <th className="p-4">Recipient</th>
+              <th className="p-4 rounded-l-2xl">Recipient</th>
               <th className="p-4">District</th>
               <th className="p-4">Upazila</th>
               <th className="p-4">Blood</th>
               <th className="p-4">Date</th>
               <th className="p-4">Time</th>
               <th className="p-4 text-center">Status</th>
-              <th className="p-4 text-right">Actions</th>
+              <th className="p-4 text-right rounded-r-2xl">Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {currentRequests.map((req) => (
-              <tr key={req._id} className="text-sm text-gray-700">
-                <td className="p-4">{req.recipientName}</td>
-                <td className="p-4">{req.district}</td>
-                <td className="p-4">{req.upazila}</td>
-                <td className="p-4">{req.bloodGroup}</td>
-                <td className="p-4">{req.donationDate}</td>
-                <td className="p-4">{formatTime(req.donationTime)}</td>
-
-                <td
-                  className={`p-4 border-b border-gray-100 text-center ${
-                    req.status === "Pending"
-                      ? "text-yellow-600"
-                      : req.status === "Inprogress"
-                      ? "text-green-600"
-                      : req.status === "Done"
-                      ? "text-blue-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {req.status}
-                </td>
-
-                <td className="p-4 flex justify-end gap-2">
-                  <button
-                    onClick={() =>
-                      navigate(`/dashboard/donation-request/view/${req._id}`)
-                    }
-                    className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
-                  >
-                    View
-                  </button>
-
-                  {req.status === "Pending" && (
-                    <>
-                      <button
-                        onClick={() =>
-                          navigate(
-                            `/dashboard/donation-request/edit/${req._id}`
-                          )
-                        }
-                        className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={() => handleDelete(req._id)}
-                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
-                      >
-                        <GoTrash size={16} />
-                      </button>
-                    </>
-                  )}
-
-                  {req.status === "Inprogress" && (
-                    <>
-                      <button
-                        onClick={() => handleStatusChange(req._id, "Done")}
-                        className="px-2 py-1 bg-green-500 text-white rounded text-xs"
-                      >
-                        Done
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(req._id, "Canceled")}
-                        className="px-2 py-1 bg-red-500 text-white rounded text-xs"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
+            {loader ? (
+              <tr>
+                <td colSpan={8}>
+                  <Loader />
                 </td>
               </tr>
-            ))}
+            ) : currentRequests.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="py-10 text-center text-gray-500">
+                  No donation requests found.
+                </td>
+              </tr>
+            ) : (
+              currentRequests.map((req) => (
+                <tr key={req._id} className="text-sm text-gray-700">
+                  <td className="p-4">{req.recipientName}</td>
+                  <td className="p-4">{req.district}</td>
+                  <td className="p-4">{req.upazila}</td>
+                  <td className="p-4">{req.bloodGroup}</td>
+                  <td className="p-4">{req.donationDate}</td>
+                  <td className="p-4">{formatTime(req.donationTime)}</td>
+
+                  <td
+                    className={`p-4 border-b border-gray-100 text-center ${
+                      req.status === "Pending"
+                        ? "text-yellow-600"
+                        : req.status === "Inprogress"
+                        ? "text-green-600"
+                        : req.status === "Done"
+                        ? "text-blue-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {req.status}
+                  </td>
+
+                  <td className="p-4 flex justify-end gap-2">
+                    <button
+                      onClick={() =>
+                        navigate(`/dashboard/donation-request/view/${req._id}`)
+                      }
+                      className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
+                    >
+                      View
+                    </button>
+
+                    {req.status === "Pending" && (
+                      <>
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/dashboard/donation-request/edit/${req._id}`
+                            )
+                          }
+                          className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(req._id)}
+                          className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                        >
+                          <GoTrash size={16} />
+                        </button>
+                      </>
+                    )}
+
+                    {req.status === "Inprogress" && (
+                      <>
+                        <button
+                          onClick={() => handleStatusChange(req._id, "Done")}
+                          className="px-2 py-1 bg-green-500 text-white rounded text-xs"
+                        >
+                          Done
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleStatusChange(req._id, "Canceled")
+                          }
+                          className="px-2 py-1 bg-red-500 text-white rounded text-xs"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
