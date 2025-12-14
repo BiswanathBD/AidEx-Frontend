@@ -11,7 +11,7 @@ const DonationRequests = () => {
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const requestsPerPage = 12;
+  const requestsPerPage = 6;
 
   const axiosInstance = useAxios();
 

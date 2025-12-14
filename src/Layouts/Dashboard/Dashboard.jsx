@@ -11,6 +11,7 @@ import { Outlet } from "react-router";
 import { AuthContext } from "../../Auth/AuthContext";
 import { FiLogOut } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { HiOutlineUsers } from "react-icons/hi2";
 
 const Dashboard = () => {
   const { user, setUser, userSignOut, loading } = useContext(AuthContext);
@@ -89,7 +90,7 @@ const Dashboard = () => {
               to={"/dashboard/all-users"}
               className="flex items-center gap-2"
             >
-              <PiUserDuotone size={24} />{" "}
+              <HiOutlineUsers size={24} />{" "}
               <span className="hidden md:block">All Users</span>
             </NavLink>
           )}

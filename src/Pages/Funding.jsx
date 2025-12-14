@@ -13,7 +13,7 @@ const Funding = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     axiosInstance
