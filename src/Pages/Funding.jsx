@@ -82,7 +82,7 @@ const Funding = () => {
                       <td className="p-2 m-1">
                         <div className="flex gap-3 items-center">
                           <img
-                            className="w-8 aspect-square object-cover rounded-full"
+                            className="w-8 border border-[#f87898] p-px aspect-square object-cover rounded-full"
                             src={fund.avatar}
                             alt={fund.donorName}
                           />

@@ -32,7 +32,7 @@ const MyRequest = () => {
   }, [user, axiosInstance]);
 
   const filteredRequests =
-    filter === "all"
+    filter === "All"
       ? userRequests
       : userRequests.filter((r) => r.status === filter);
 
@@ -112,7 +112,7 @@ const MyRequest = () => {
       </h2>
 
       <div className="flex gap-2 mb-4 flex-wrap">
-        {["all", "Pending", "Inprogress", "Done", "Canceled"].map((s) => (
+        {["All", "Pending", "Inprogress", "Done", "Canceled"].map((s) => (
           <button
             key={s}
             onClick={() => {
