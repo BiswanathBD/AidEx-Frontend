@@ -16,6 +16,8 @@ import EditRequest from "../Pages/Dashboard/EditRequest";
 import DonationRequests from "../Pages/DonationRequests";
 import SearchDonor from "../Pages/SearchDonor";
 import Funding from "../Pages/Funding";
+import PaymentError from "../Pages/PaymentError";
+import PaymentSuccess from "../Pages/PaymentSuccess";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
             <Funding />
           </Private>
         ),
+      },
+      {
+        path: "/paymentError",
+        element: <PaymentError />,
+      },
+      {
+        path: "/paymentSuccess",
+        element: <PaymentSuccess />,
       },
     ],
   },
