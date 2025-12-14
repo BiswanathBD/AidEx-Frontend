@@ -80,7 +80,7 @@ const AdminVolunteerDashboard = () => {
                 {stats.totalRequests}
               </p>
               <p className="text-lg sm:text-xl lg:text-2xl text-gray-500 font-semibold">
-                Blood Donation Requests
+                Total Requests
               </p>
             </div>
           </div>
