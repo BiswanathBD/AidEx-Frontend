@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxios from "../Hooks/useAxios";
+import Loader from "../Components/Shared/Loader";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -13,7 +14,7 @@ const SearchDonor = () => {
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
   const [selectedDistrictID, setSelectedDistrictID] = useState("");
   const [donors, setDonors] = useState([]);
-  console.log(donors);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -43,10 +44,17 @@ const SearchDonor = () => {
   }, [selectedDistrictID, upazilaData]);
 
   const onSubmit = (data) => {
+    setLoader(true);
     axiosInstance
       .get("/search-donor", { params: data })
-      .then((res) => setDonors(res.data || []))
-      .catch(() => setDonors([]));
+      .then((res) => {
+        setDonors(res.data || []);
+        setLoader(false);
+      })
+      .catch(() => {
+        setDonors([]);
+        setLoader(false);
+      });
   };
 
   return (
@@ -110,7 +118,9 @@ const SearchDonor = () => {
         </form>
       </div>
 
-      {donors.length > 0 && (
+      {loader ? (
+        <Loader />
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {donors.map((donor) => (
             <div
@@ -151,7 +161,7 @@ const SearchDonor = () => {
                         : "text-red-500"
                     }`}
                   >
-                    Donor is {donor.status}
+                    Donor {donor.status}
                   </span>
                 </div>
               </div>
