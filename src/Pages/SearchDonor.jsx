@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxios from "../Hooks/useAxios";
 import Loader from "../Components/Shared/Loader";
+import { motion } from "framer-motion";
+motion;
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -58,7 +60,12 @@ const SearchDonor = () => {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+    >
       <div className="bg-white p-4 rounded-xl">
         <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
           <span className="text-black">Search</span> Donor
@@ -122,9 +129,16 @@ const SearchDonor = () => {
         <Loader />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {donors.map((donor) => (
-            <div
+          {donors.map((donor, index) => (
+            <motion.div
               key={donor._id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.3,
+                delay: index * 0.2,
+                ease: "easeOut",
+              }}
               className="bg-white rounded-2xl p-5 flex gap-4 items-center"
             >
               <div className="relative">
@@ -165,11 +179,11 @@ const SearchDonor = () => {
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

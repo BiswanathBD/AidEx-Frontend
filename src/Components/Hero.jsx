@@ -11,7 +11,7 @@ const Hero = () => {
 
   return (
     <motion.div
-      initial={{ y: -28, opacity: 0 }}
+      initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="bg-white rounded-lg overflow-hidden"

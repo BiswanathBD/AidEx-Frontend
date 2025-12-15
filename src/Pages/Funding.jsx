@@ -3,7 +3,7 @@ import useAxios from "../Hooks/useAxios";
 import Loader from "../Components/Shared/Loader";
 import { AuthContext } from "../Auth/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-motion
+motion;
 
 const Funding = () => {
   const { user } = useContext(AuthContext);
@@ -44,8 +44,10 @@ const Funding = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center px-4">
-        <h2 className="text-2xl font-bold text-[#f87898]"><span className="text-black">Funding</span> History</h2>
+      <div className="flex justify-between items-center px-4 mb-8">
+        <h2 className="text-2xl font-bold text-[#f87898]">
+          <span className="text-black">Funding</span> History
+        </h2>
 
         <button className="btn-primary" onClick={() => setShowModal(true)}>
           Give Fund
@@ -56,8 +58,13 @@ const Funding = () => {
         <Loader />
       ) : (
         funds.length > 0 && (
-          <>
-            <div className="bg-white p-2 rounded-xl mt-4 overflow-x-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <div className="bg-white p-2 rounded-xl mt-4 overflow-x-auto overflow-y-hidden">
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-[#f87898]/20">
@@ -74,10 +81,17 @@ const Funding = () => {
                 </thead>
 
                 <tbody>
-                  {currentFunds.map((fund) => (
-                    <tr
+                  {currentFunds.map((fund, index) => (
+                    <motion.tr
                       key={fund._id}
-                      className="border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: index * 0.2,
+                        ease: "easeOut",
+                      }}
+                      className="border-b border-gray-100 last:border-b-0"
                     >
                       <td className="p-2 m-1">
                         <div className="flex gap-3 items-center">
@@ -102,7 +116,7 @@ const Funding = () => {
                           <sup className="text-sm text-gray-400 mr-1">$</sup>
                         </span>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
@@ -128,11 +142,11 @@ const Funding = () => {
                 )}
               </div>
             )}
-          </>
+          </motion.div>
         )
       )}
 
-      {/* Modal */}
+      {/* modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div

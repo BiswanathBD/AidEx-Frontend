@@ -4,6 +4,8 @@ import useAxios from "../Hooks/useAxios";
 import { BsClockFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
 import Loader from "../Components/Shared/Loader";
+import { motion } from "framer-motion";
+motion;
 
 const DonationRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -58,9 +60,16 @@ const DonationRequests = () => {
               No pending donation requests.
             </p>
           ) : (
-            currentRequests.map((req) => (
-              <div
+            currentRequests.map((req, index) => (
+              <motion.div
                 key={req._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.2,
+                  ease: "easeOut",
+                }}
                 className="flex flex-col sm:flex-row rounded-xl p-4 bg-white overflow-hidden"
               >
                 {/* blood group */}
@@ -98,7 +107,7 @@ const DonationRequests = () => {
                     View Details
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             ))
           )}
         </div>
