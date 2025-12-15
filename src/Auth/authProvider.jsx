@@ -11,7 +11,6 @@ import { auth } from "../../firebase.config";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  // console.log(user);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -21,15 +20,19 @@ const AuthProvider = ({ children }) => {
           .then((data) => {
             data.accessToken = currentUser.accessToken;
             setUser(data);
-            setLoading(false);
-          });
+          })
+          .catch((err) => {
+            console.error(err);
+            setUser(null);
+          })
+          .finally(() => setLoading(false));
+      } else {
+        setUser(null);
+        setLoading(false);
       }
     });
 
-    return () => {
-      unsubscribe();
-      setLoading(false);
-    };
+    return unsubscribe;
   }, []);
 
   // sign up with password

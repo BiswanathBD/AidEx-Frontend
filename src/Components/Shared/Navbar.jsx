@@ -41,9 +41,7 @@ const Navbar = () => {
             <NavLink to={"/"}>Home</NavLink>
             <NavLink to={"/requests"}>Donation Requests</NavLink>
             <NavLink to={"/search"}>Search Donors</NavLink>
-            {
-              user && <NavLink to={"/funding"}>Funding</NavLink>
-            }
+            {user && <NavLink to={"/funding"}>Funding</NavLink>}
           </nav>
 
           {user ? (
@@ -99,6 +97,30 @@ const Navbar = () => {
               <Link to={"/register"}>
                 <button className="btn-secondary">Register</button>
               </Link>
+
+              {/* mobile nav */}
+              <div
+                onClick={() => setShow(!show)}
+                className="relative lg:hidden"
+              >
+                <FaBars color="#f87898" />
+                <div
+                className={`absolute flex flex-col text-nowrap bg-[#f87898] p-6 lg:p-2 transition-all rounded-xl
+                  ${
+                    show
+                      ? "top-8 right-8"
+                      : "top-6 right-6 opacity-0 pointer-events-none"
+                  }
+                  `}
+              >
+                <div className="flex flex-col gap-4 text-white">
+                  <Link to={"/"}>Home</Link>
+                  <Link to={"/requests"}>Requests</Link>
+                  <Link to={"/search"}>Search Donors</Link>
+                  <Link to={"/funding"}>Funding</Link>
+                </div>
+              </div>
+              </div>
             </div>
           )}
         </div>
