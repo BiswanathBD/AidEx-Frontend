@@ -9,7 +9,7 @@ import Loader from "../../Components/Shared/Loader";
 const MyRequest = () => {
   const { user, loading } = useContext(AuthContext);
   const [userRequests, setUserRequests] = useState([]);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 6;
   const axiosInstance = useAxios();
@@ -108,7 +108,7 @@ const MyRequest = () => {
   return (
     <div className="p-4 mt-4 bg-white rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        My Donation Request
+        <span className="text-black">My Donation</span> Request
       </h2>
 
       <div className="flex gap-2 mb-4 flex-wrap">

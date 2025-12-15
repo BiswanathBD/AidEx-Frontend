@@ -70,7 +70,9 @@ const AllUsers = () => {
 
   return (
     <div className="p-4 mt-4 bg-white rounded-xl shadow-sm">
-      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">All Users</h2>
+      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
+        <span className="text-black">All</span> Users
+      </h2>
 
       <div className="flex gap-2 mb-4 flex-wrap">
         {["all", "active", "blocked"].map((status) => (

@@ -122,8 +122,8 @@ const Register = () => {
 
             {/* Form */}
             <div className="p-2 sm:p-8">
-              <h2 className="text-4xl font-bold text-center text-neutral-700 mb-6">
-                Create Account
+              <h2 className="text-4xl font-bold text-center text-[#f87898] mb-6">
+                Create <span className="text-black">Account</span>
               </h2>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

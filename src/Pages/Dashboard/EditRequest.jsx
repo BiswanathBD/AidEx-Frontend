@@ -114,7 +114,7 @@ const EditDonationRequest = () => {
   return (
     <div className="bg-white p-4 mt-4 rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        Edit Donation Request
+        Edit <span className="text-black">Donation Request</span>
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

@@ -24,7 +24,7 @@ const Hero = () => {
         />
         <div className="w-5/6">
           <h1 className="text-4xl xl:text-6xl font-bold mx-auto text-neutral-600 md:mt-8">
-            Blood Donation
+            <span className="text-[#f87898]">Blood</span> Donation
           </h1>
           <p className="text-neutral-400 my-4">
             A small act of kindness can save someone's life. Donating blood not

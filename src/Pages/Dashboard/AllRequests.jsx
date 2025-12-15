@@ -109,7 +109,7 @@ const AllRequests = () => {
   return (
     <div className="p-4 mt-4 bg-white rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        All Donation Requests
+        All <span className="text-black">Donation Requests</span>
       </h2>
 
       <div className="flex gap-2 mb-4 flex-wrap">

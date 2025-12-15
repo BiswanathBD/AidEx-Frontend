@@ -46,13 +46,13 @@ const DonationRequests = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        Blood Donation Requests
+        <span className="text-black">Blood Donation</span> Requests
       </h2>
 
       {loader && <Loader />}
 
       {!loader && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 text-nowrap">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-nowrap">
           {currentRequests.length === 0 ? (
             <p className="col-span-full text-center text-gray-500 font-semibold">
               No pending donation requests.

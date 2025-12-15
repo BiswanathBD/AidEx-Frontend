@@ -45,7 +45,7 @@ const Funding = () => {
   return (
     <div>
       <div className="flex justify-between items-center px-4">
-        <h2 className="text-2xl font-bold text-[#f87898]">Funding</h2>
+        <h2 className="text-2xl font-bold text-[#f87898]"><span className="text-black">Funding</span> History</h2>
 
         <button className="btn-primary" onClick={() => setShowModal(true)}>
           Give Fund

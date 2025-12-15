@@ -61,7 +61,7 @@ const SearchDonor = () => {
     <div>
       <div className="bg-white p-4 rounded-xl">
         <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-          Search Donor
+          <span className="text-black">Search</span> Donor
         </h2>
 
         <form

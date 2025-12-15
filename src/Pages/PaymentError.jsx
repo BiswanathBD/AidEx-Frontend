@@ -14,7 +14,7 @@ const PaymentError = () => {
         <div className="mt-8 mb-2 flex gap-4 justify-center">
           <Link
             to={"/funding"}
-            className="btn-primary bg-white! text-[#f87898]! border border-[#f87898]!"
+            className="btn-secondary"
           >
             Funding
           </Link>

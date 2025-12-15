@@ -105,7 +105,7 @@ const MyProfile = () => {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold md:mb-6 md:px-4 text-[#f87898]">
-          My Profile
+          <span className="text-black">My</span> Profile
         </h2>
         {!isEditing ? (
           <button

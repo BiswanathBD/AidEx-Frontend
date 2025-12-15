@@ -29,8 +29,8 @@ const AdminVolunteerDashboard = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 mt-4 bg-white rounded-xl">
-      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        Welcome, {user.name} ❤️
+      <h2 className="text-2xl font-bold md:mb-6 md:px-4 text-[#f87898]">
+        Welcome🌸<span className="text-black">{user.name}</span>
       </h2>
 
       {loading ? (

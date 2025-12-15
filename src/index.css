@@ -73,7 +73,7 @@ nav .active {
   height: 48px;
   border-radius: 50%;
   display: inline-block;
-  border-top: 4px solid #d1d1d1;
+  border-top: 4px solid #5e5e5e;
   border-right: 4px solid transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;

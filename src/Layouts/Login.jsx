@@ -51,8 +51,8 @@ const Login = () => {
           </div>
 
           <div className="p-8">
-            <h2 className="text-4xl font-bold text-center text-neutral-600 mb-6">
-              Welcome Back
+            <h2 className="text-4xl font-bold text-center text-[#f87898] mb-6">
+              Welcome <span className="text-black">Back</span>
             </h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

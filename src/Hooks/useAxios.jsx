@@ -3,8 +3,8 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "../Auth/AuthContext";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
-  // baseURL: "https://aidex-backend-by-biswanath.vercel.app",
+  // baseURL: "http://localhost:3000",
+  baseURL: "https://aidex-backend-by-biswanath.vercel.app",
 });
 
 const useAxios = () => {

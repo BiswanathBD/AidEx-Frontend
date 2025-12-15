@@ -78,7 +78,7 @@ const RequestDetails = () => {
 
           <div className="lg:flex-1">
             <h2 className="text-3xl font-bold text-[#f87898] mb-8">
-              Donation Request Details
+              <span className="text-black">Donation Request</span> Details
             </h2>
 
             {/* right side info */}
