@@ -4,6 +4,8 @@ import useAxios from "../../Hooks/useAxios";
 import { HiOutlineArrowLongLeft } from "react-icons/hi2";
 import { AuthContext } from "../../Auth/AuthContext";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+motion;
 
 const RequestDetails = () => {
   const { user } = useContext(AuthContext);
@@ -58,14 +60,25 @@ const RequestDetails = () => {
 
   return (
     <div>
-      <p
+      <motion.p
         onClick={() => navigate(-1)}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="flex gap-1 text-[#f87898] px-2 font-semibold cursor-pointer hover:underline rounded-sm w-fit"
       >
         <HiOutlineArrowLongLeft size={28} />
         <span>Go back</span>
-      </p>
-      <div className="bg-white rounded-xl mt-4   p-5">
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+        className="bg-white rounded-xl mt-4   p-5"
+      >
         <div className="lg:flex lg:gap-10 lg:items-start">
           {/* left side blood group */}
           <div className="flex justify-center lg:block bg-gray-50 p-4 lg:p-8 rounded-lg">
@@ -185,7 +198,7 @@ const RequestDetails = () => {
               Accept Donation Request
             </button>
           )}
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import { AuthContext } from "../../Auth/AuthContext";
 import toast from "react-hot-toast";
 import { Navigate, useNavigate } from "react-router";
 import useAxios from "../../Hooks/useAxios";
+import { motion } from "framer-motion";
+motion;
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -79,7 +81,13 @@ const CreateDonationRequest = () => {
   if (user.status === "Block") return <Navigate to={"/dashboard"} />;
 
   return (
-    <div className="bg-white p-4 mt-4 rounded-xl">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+      className="bg-white p-4 mt-4 rounded-xl"
+    >
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         Create <span className="text-black">Donation Request</span>
       </h2>
@@ -291,7 +299,7 @@ const CreateDonationRequest = () => {
           </button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

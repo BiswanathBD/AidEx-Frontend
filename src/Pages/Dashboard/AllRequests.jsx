@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
@@ -18,19 +18,21 @@ const AllRequests = () => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
 
-  const fetchRequests = () => {
-    axiosInstance
-      .get("/allRequest")
-      .then((res) => {
-        setUserRequests(res.data);
-        setLoader(false);
-      })
-      .catch(() => setUserRequests([]));
-  };
+  const fetchRequests = useCallback(async () => {
+    try {
+      setLoader(true);
+      const res = await axiosInstance.get("/allRequest");
+      setUserRequests(res.data || []);
+    } catch {
+      setUserRequests([]);
+    } finally {
+      setLoader(false);
+    }
+  }, [axiosInstance]);
 
   useEffect(() => {
     if (user?.email) fetchRequests();
-  }, [user, axiosInstance]);
+  }, [user, axiosInstance, fetchRequests]);
 
   const filteredRequests =
     filter === "All"
@@ -168,7 +170,7 @@ const AllRequests = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.3,
-                  delay: index * 0.06,
+                  delay: index * 0.2,
                   ease: "easeOut",
                 }}
                 className="text-sm text-gray-700"

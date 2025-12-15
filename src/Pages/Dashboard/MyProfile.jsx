@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import toast, { Toaster } from "react-hot-toast";
+import Loader from "../../Components/Shared/Loader";
+import { motion } from "framer-motion";
+motion
 
 const MyProfile = () => {
   const { user, setUser, loading } = useContext(AuthContext);
@@ -29,7 +32,6 @@ const MyProfile = () => {
 
   const watchDistrict = watch("district");
 
-  // Fetch districts
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/nuhil/bangladesh-geocode/refs/heads/master/districts/districts.json"
@@ -38,7 +40,6 @@ const MyProfile = () => {
       .then((data) => setDistrictData(data[2].data));
   }, []);
 
-  // Fetch upazilas
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/nuhil/bangladesh-geocode/refs/heads/master/upazilas/upazilas.json"
@@ -47,7 +48,6 @@ const MyProfile = () => {
       .then((data) => setUpazilaData(data[2].data));
   }, []);
 
-  // Filter upazilas based on selected district
   useEffect(() => {
     if (!watchDistrict || districtData.length === 0 || upazilaData.length === 0)
       return;
@@ -97,10 +97,16 @@ const MyProfile = () => {
     }
   };
 
-  if (loading || !user) return null;
-
-  return (
-    <div className="p-4 sm:p-6 mt-4 bg-white rounded-xl relative">
+  return loading || !user ? (
+    <Loader />
+  ) : (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="p-4 sm:p-6 mt-4 bg-white rounded-xl relative"
+    >
       <Toaster position="top-center" reverseOrder={false} />
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -245,7 +251,7 @@ const MyProfile = () => {
           </div>
         )}
       </form>
-    </div>
+    </motion.div>
   );
 };
 

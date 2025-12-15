@@ -5,6 +5,7 @@ import { Navigate } from "react-router";
 import { FiMoreVertical } from "react-icons/fi";
 import toast from "react-hot-toast";
 import Loader from "../../Components/Shared/Loader";
+import { motion } from "framer-motion";
 
 const AllUsers = () => {
   const { user, loading } = useContext(AuthContext);
@@ -33,7 +34,6 @@ const AllUsers = () => {
       ? allUsers
       : allUsers.filter((u) => u.status.toLowerCase() === filter);
 
-  // pagination
   const indexOfLast = currentPage * usersPerPage;
   const indexOfFirst = indexOfLast - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
@@ -41,19 +41,13 @@ const AllUsers = () => {
 
   const handlePageChange = (n) => setCurrentPage(n);
 
-  // user update
   const handleUserAction = async (id, action, user) => {
     let updateData = { user };
 
-    if (action === "block") {
-      updateData = { status: "Blocked" };
-    } else if (action === "unblock") {
-      updateData = { status: "Active" };
-    } else if (action === "make-volunteer") {
-      updateData = { role: "Volunteer" };
-    } else if (action === "make-admin") {
-      updateData = { role: "Admin" };
-    }
+    if (action === "block") updateData = { status: "Blocked" };
+    else if (action === "unblock") updateData = { status: "Active" };
+    else if (action === "make-volunteer") updateData = { role: "Volunteer" };
+    else if (action === "make-admin") updateData = { role: "Admin" };
 
     const t = toast.loading("Updating user...");
     const res = await axiosInstance.put(`/update-user/${id}`, updateData);
@@ -62,14 +56,19 @@ const AllUsers = () => {
       setAllUsers((prev) =>
         prev.map((u) => (u._id === id ? { ...u, ...updateData } : u))
       );
-
       setOpenMenu(null);
       toast.success("User updated successfully!", { id: t });
     }
   };
 
   return (
-    <div className="p-4 mt-4 bg-white rounded-xl">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="p-4 mt-4 bg-white rounded-xl"
+    >
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         <span className="text-black">All</span> Users
       </h2>
@@ -93,7 +92,7 @@ const AllUsers = () => {
         ))}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-hidden">
         <table className="border-collapse w-full">
           <thead>
             <tr className="bg-gray-100 text-left text-sm text-gray-600">
@@ -115,20 +114,23 @@ const AllUsers = () => {
               </tr>
             ) : currentUsers.length === 0 ? (
               <tr>
-                <td
-                  colSpan={6}
-                  className="p-6 text-center text-gray-500 border-b border-gray-200"
-                >
+                <td colSpan={6} className="p-6 text-center text-gray-500">
                   No users found.
                 </td>
               </tr>
             ) : (
-              currentUsers.map((u) => (
-                <tr
+              currentUsers.map((u, index) => (
+                <motion.tr
                   key={u._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.15,
+                    ease: "easeOut",
+                  }}
                   className="hover:bg-gray-50 text-sm text-gray-700"
                 >
-                  {/* avatar */}
                   <td className="p-4 border-b border-gray-100">
                     <img
                       src={u.avatar}
@@ -137,13 +139,9 @@ const AllUsers = () => {
                     />
                   </td>
 
-                  {/* name */}
                   <td className="p-4 border-b border-gray-100">{u.name}</td>
-
-                  {/* email */}
                   <td className="p-4 border-b border-gray-100">{u.email}</td>
 
-                  {/* role */}
                   <td className="p-4 border-b border-gray-100 text-center">
                     <span
                       className={`px-3 py-1 rounded-sm text-white font-semibold ${
@@ -158,20 +156,22 @@ const AllUsers = () => {
                     </span>
                   </td>
 
-                  {/* status */}
                   <td
                     className={`p-4 border-b border-gray-100 font-semibold ${
-                      u.status === "Active" ? "text-green-600" : "text-red-600"
+                      u.status === "Active"
+                        ? "text-green-600"
+                        : "text-red-600"
                     }`}
                   >
                     {u.status}
                   </td>
 
-                  {/* actions */}
                   <td className="p-4 border-b border-gray-100 relative">
                     <button
                       onClick={() =>
-                        setOpenMenu((prev) => (prev === u._id ? null : u._id))
+                        setOpenMenu((prev) =>
+                          prev === u._id ? null : u._id
+                        )
                       }
                       className="p-2 hover:bg-gray-200 rounded-full"
                     >
@@ -179,17 +179,21 @@ const AllUsers = () => {
                     </button>
 
                     {openMenu === u._id && (
-                      <div className="absolute right-4 mt-1 bg-white border border-gray-100 rounded-lg shadow-lg/10 text-sm font-semibold z-10 p-2">
+                      <div className="absolute right-4 mt-1 bg-white border rounded-lg shadow-lg/10 text-sm font-semibold z-10 p-2">
                         {u.status === "Active" ? (
                           <button
-                            onClick={() => handleUserAction(u._id, "block", u)}
+                            onClick={() =>
+                              handleUserAction(u._id, "block", u)
+                            }
                             className="w-full mb-2 px-4 py-2 bg-red-600 text-white rounded"
                           >
                             Block User
                           </button>
                         ) : (
                           <button
-                            onClick={() => handleUserAction(u._id, "unblock")}
+                            onClick={() =>
+                              handleUserAction(u._id, "unblock")
+                            }
                             className="w-full mb-2 px-4 py-2 bg-green-600 text-white rounded"
                           >
                             Unblock User
@@ -220,14 +224,13 @@ const AllUsers = () => {
                       </div>
                     )}
                   </td>
-                </tr>
+                </motion.tr>
               ))
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-end mr-4 mt-4 gap-4 flex-wrap">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
@@ -245,7 +248,7 @@ const AllUsers = () => {
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

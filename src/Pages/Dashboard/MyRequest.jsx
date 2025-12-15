@@ -5,6 +5,8 @@ import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
 import { Navigate, useNavigate } from "react-router";
 import Loader from "../../Components/Shared/Loader";
+import { motion } from "framer-motion";
+motion
 
 const MyRequest = () => {
   const { user, loading } = useContext(AuthContext);
@@ -106,7 +108,13 @@ const MyRequest = () => {
   if (user.role !== "Donor") return <Navigate to="/dashboard" />;
 
   return (
-    <div className="p-4 mt-4 bg-white rounded-xl">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="p-4 mt-4 bg-white rounded-xl"
+    >
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         <span className="text-black">My Donation</span> Request
       </h2>
@@ -130,7 +138,7 @@ const MyRequest = () => {
         ))}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-hidden">
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100 text-sm text-gray-600">
@@ -159,8 +167,18 @@ const MyRequest = () => {
                 </td>
               </tr>
             ) : (
-              currentRequests.map((req) => (
-                <tr key={req._id} className="text-sm text-gray-700">
+              currentRequests.map((req, index) => (
+                <motion.tr
+                  key={req._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.2,
+                    ease: "easeOut",
+                  }}
+                  className="text-sm text-gray-700"
+                >
                   <td className="p-4">{req.recipientName}</td>
                   <td className="p-4">{req.district}</td>
                   <td className="p-4">{req.upazila}</td>
@@ -233,7 +251,7 @@ const MyRequest = () => {
                       </>
                     )}
                   </td>
-                </tr>
+                </motion.tr>
               ))
             )}
           </tbody>
@@ -257,7 +275,7 @@ const MyRequest = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
