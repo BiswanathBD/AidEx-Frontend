@@ -139,7 +139,7 @@ const Funding = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed top-6 right-1/2 translate-x-1/2 flex justify-center items-start z-200"
+            className="fixed top-6 right-1/2 translate-x-1/2 flex justify-center items-start z-50"
           >
             <motion.div
               initial={{ y: -20, opacity: 0 }}

@@ -4,25 +4,30 @@ import { Outlet } from "react-router";
 import Footer from "../Components/Shared/Footer";
 import Container from "../Components/Shared/Container";
 import { AuthContext } from "../Auth/AuthContext";
+import Loader from "../Components/Shared/Loader";
 
 const Root = () => {
   const { loading } = useContext(AuthContext);
 
-  if (loading) return null;
-
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="fixed w-full z-100">
+      <div className="fixed w-full z-50">
         <Navbar />
       </div>
+
       <div className="grow mt-24">
-        <Container>
-          <Outlet />
-        </Container>
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <Loader />
+          </div>
+        ) : (
+          <Container>
+            <Outlet />
+          </Container>
+        )}
       </div>
-      <div>
-        <Footer />
-      </div>
+
+      <Footer />
     </div>
   );
 };

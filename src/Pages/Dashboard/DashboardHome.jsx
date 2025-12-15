@@ -9,7 +9,7 @@ const DashboardHome = () => {
   if (loading) return null;
 
   return (
-    <div className="">
+    <div>
       {user.role === "Donor" && <DonorDashboard />}
       {(user.role === "Volunteer" || user.role === "Admin") && (
         <AdminVolunteerDashboard />

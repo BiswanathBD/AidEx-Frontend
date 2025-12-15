@@ -69,7 +69,7 @@ const AllUsers = () => {
   };
 
   return (
-    <div className="p-4 mt-4 bg-white rounded-xl shadow-sm">
+    <div className="p-4 mt-4 bg-white rounded-xl">
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         <span className="text-black">All</span> Users
       </h2>
@@ -94,7 +94,7 @@ const AllUsers = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table className="border-collapse w-full">
           <thead>
             <tr className="bg-gray-100 text-left text-sm text-gray-600">
               <th className="p-4 rounded-l-2xl">Avatar</th>

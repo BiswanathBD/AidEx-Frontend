@@ -12,6 +12,8 @@ import { AuthContext } from "../../Auth/AuthContext";
 import { FiLogOut } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { HiOutlineUsers } from "react-icons/hi2";
+import { motion } from "framer-motion";
+motion;
 
 const Dashboard = () => {
   const { user, setUser, userSignOut, loading } = useContext(AuthContext);
@@ -31,10 +33,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard flex">
+    <div className="dashboard w-full flex">
       {/* side ber */}
-      <div className="bg-white w-fit min-h-screen px-6 py-4 text-nowrap">
-        {/* Logo */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-white min-h-screen px-4 sm:px-6 py-4 text-nowrap"
+      >
+        {/* logo */}
         <Link to={"/"}>
           <div className="flex items-center w-fit mx-auto">
             <img src={LogoImg} alt="logo" className="w-8 object-contain" />
@@ -44,11 +51,11 @@ const Dashboard = () => {
           </div>
         </Link>
 
-        <div className="dash-nav mt-4 pt-4 border-t border-gray-200 text-neutral-500 space-y-4">
+        <div className="dash-nav mt-4 pt-4 border-t border-gray-200 text-neutral-500 space-y-4 mx-auto w-full text-center">
           {/* home */}
           <NavLink to={"/dashboard"} end className="flex items-center gap-2">
-            <AiTwotoneHome size={24} />{" "}
-            <span className="hidden md:block">Home</span>
+            <AiTwotoneHome size={24} />
+            <span className="hidden md:block">Dashboard</span>
           </NavLink>
 
           {/* profile */}
@@ -56,7 +63,7 @@ const Dashboard = () => {
             to={"/dashboard/profile"}
             className="flex items-center gap-2"
           >
-            <PiUserDuotone size={24} />{" "}
+            <PiUserDuotone size={24} />
             <span className="hidden md:block">My Profile</span>
           </NavLink>
 
@@ -67,18 +74,18 @@ const Dashboard = () => {
                 to={"/dashboard/my-donation-requests"}
                 className="flex items-center gap-2"
               >
-                <PiDropDuotone size={24} />{" "}
+                <PiDropDuotone size={24} />
                 <span className="hidden md:block">My Requests</span>
               </NavLink>
 
               {/* create donation request */}
               <NavLink
                 to={"/dashboard/create-donation-request"}
-                className={`items-center gap-2 ${
+                className={`flex items-center gap-2 ${
                   user.status !== "Active" ? "hidden" : "flex"
                 }`}
               >
-                <PiPlusCircleDuotone size={24} />{" "}
+                <PiPlusCircleDuotone size={24} />
                 <span className="hidden md:block">Create Request</span>
               </NavLink>
             </>
@@ -90,7 +97,7 @@ const Dashboard = () => {
               to={"/dashboard/all-users"}
               className="flex items-center gap-2"
             >
-              <HiOutlineUsers size={24} />{" "}
+              <HiOutlineUsers size={24} />
               <span className="hidden md:block">All Users</span>
             </NavLink>
           )}
@@ -106,11 +113,19 @@ const Dashboard = () => {
             </NavLink>
           )}
         </div>
-      </div>
+      </motion.div>
 
-      {/* header */}
-      <div className="p-3  w-full">
-        <div className="font-semibold text-neutral-500 pb-3 border-b border-white flex items-center gap-2 justify-end">
+      <div className="p-3 w-8/10 lg:w-9/10 mx-auto">
+        {/* header */}
+        <motion.div
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+          className="font-semibold text-neutral-500 pb-3 border-b border-white flex items-center gap-2 justify-end"
+        >
+          <h4 className="text-2xl hidden sm:block font-semibold text-[#f87898]">
+            {user.name}
+          </h4>
           <img
             src={user?.avatar}
             alt={user?.name}
@@ -123,7 +138,7 @@ const Dashboard = () => {
           >
             <FiLogOut size={20} />
           </button>
-        </div>
+        </motion.div>
 
         {/* dashboard content */}
         <div className="md:p-4">

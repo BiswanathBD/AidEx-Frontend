@@ -4,12 +4,13 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Container from "../Components/Shared/Container";
 import Logo from "../Components/Shared/Logo";
 import loginImg from "../assets/login-banner.jpg";
-import { AuthContext } from "../Auth/AuthContext";3541
+import { AuthContext } from "../Auth/AuthContext";
+3541;
 import { Link, Navigate, useLocation } from "react-router";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { user, passwordSignin } = useContext(AuthContext);
+  const { user, loading, passwordSignin } = useContext(AuthContext);
   const location = useLocation();
 
   const {
@@ -34,7 +35,7 @@ const Login = () => {
     });
   };
 
-  if (user) return <Navigate to={location?.state || "/"} />;
+  if (user || loading) return <Navigate to={location?.state || "/"} />;
 
   return (
     <Container>

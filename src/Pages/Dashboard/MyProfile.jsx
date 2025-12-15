@@ -163,21 +163,24 @@ const MyProfile = () => {
                 Status: {user.status}
               </span>
             </p>
-          <div className="h-0.5 rounded-full mt-6 bg-gray-100"></div>
+            <div className="h-0.5 rounded-full mt-6 bg-gray-100"></div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <input
-            {...register("avatar")}
-            disabled={!isEditing}
-            placeholder="Avatar URL"
-            className={`sm:col-span-3 lg:col-span-3 py-2 px-3 rounded-lg border bg-gray-50 transition ${
-              isEditing
-                ? "border-gray-300 focus:ring-1 focus:ring-[#f87898]"
-                : "border-transparent"
-            }`}
-          />
+          {isEditing && (
+            <input
+              {...register("avatar")}
+              disabled={!isEditing}
+              placeholder="Avatar URL"
+              className={`sm:col-span-3 lg:col-span-3 py-2 px-3 rounded-lg border bg-gray-50 transition ${
+                isEditing
+                  ? "border-gray-300 focus:ring-1 focus:ring-[#f87898]"
+                  : "border-transparent"
+              }`}
+            />
+          )}
+
           <select
             {...register("bloodGroup")}
             disabled={!isEditing}

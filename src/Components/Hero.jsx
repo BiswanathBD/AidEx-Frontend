@@ -26,7 +26,7 @@ const Hero = () => {
           <h1 className="text-4xl xl:text-6xl font-bold mx-auto text-neutral-600 md:mt-8">
             <span className="text-[#f87898]">Blood</span> Donation
           </h1>
-          <p className="text-neutral-400 my-4">
+          <p className="text-neutral-500 my-4">
             A small act of kindness can save someone's life. Donating blood not
             only helps those in urgent need but also brings hope to families.
             Your contribution today can create a brighter tomorrow.

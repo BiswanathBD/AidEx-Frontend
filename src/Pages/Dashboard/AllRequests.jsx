@@ -5,6 +5,8 @@ import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
 import { Navigate, useNavigate } from "react-router";
 import Loader from "../../Components/Shared/Loader";
+import { motion } from "framer-motion";
+motion;
 
 const AllRequests = () => {
   const { user, loading } = useContext(AuthContext);
@@ -107,7 +109,13 @@ const AllRequests = () => {
     return <Navigate to="/dashboard" />;
 
   return (
-    <div className="p-4 mt-4 bg-white rounded-xl">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+      className="p-4 mt-4 bg-white rounded-xl"
+    >
       <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
         All <span className="text-black">Donation Requests</span>
       </h2>
@@ -131,7 +139,7 @@ const AllRequests = () => {
         ))}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-hidden">
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100 text-sm text-gray-600">
@@ -147,13 +155,24 @@ const AllRequests = () => {
           </thead>
 
           {loader && (
-            <div>
+            <td colSpan={8}>
               <Loader />
-            </div>
+            </td>
           )}
+
           <tbody>
-            {currentRequests.map((req) => (
-              <tr key={req._id} className="text-sm text-gray-700">
+            {currentRequests.map((req, index) => (
+              <motion.tr
+                key={req._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.06,
+                  ease: "easeOut",
+                }}
+                className="text-sm text-gray-700"
+              >
                 <td className="p-4">{req.recipientName}</td>
                 <td className="p-4">{req.district}</td>
                 <td className="p-4">{req.upazila}</td>
@@ -214,17 +233,15 @@ const AllRequests = () => {
                   )}
 
                   {user.role === "Admin" && (
-                    <>
-                      <button
-                        onClick={() => handleDelete(req._id)}
-                        className="px-2 py-1 bg-red-400 text-white rounded text-xs"
-                      >
-                        <GoTrash size={16} />
-                      </button>
-                    </>
+                    <button
+                      onClick={() => handleDelete(req._id)}
+                      className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                    >
+                      <GoTrash size={16} />
+                    </button>
                   )}
                 </td>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>
@@ -247,7 +264,7 @@ const AllRequests = () => {
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

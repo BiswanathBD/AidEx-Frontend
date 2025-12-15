@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import useAxios from "../../Hooks/useAxios";
 import { AuthContext } from "../../Auth/AuthContext";
+import Loader from "../../Components/Shared/Loader";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -29,6 +30,8 @@ const EditDonationRequest = () => {
     formState: { errors },
   } = useForm();
 
+  const selectedDistrict = watch("district");
+
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/nuhil/bangladesh-geocode/refs/heads/master/districts/districts.json"
@@ -45,12 +48,13 @@ const EditDonationRequest = () => {
 
   useEffect(() => {
     axiosInstance.get(`/donation-request/${id}`).then((res) => {
-      if (res.data.status !== "Pending") {
+      const data = res.data;
+      if (data.status !== "Pending") {
         toast.error("Only pending requests can be edited");
         navigate("/dashboard/my-donation-requests");
         return;
       }
-      setRequestData(res.data);
+      setRequestData(data);
 
       const fields = [
         "recipientName",
@@ -60,28 +64,21 @@ const EditDonationRequest = () => {
         "donationDate",
         "donationTime",
         "message",
+        "district",
+        "upazila",
       ];
-      fields.forEach((field) => setValue(field, res.data[field]));
+      fields.forEach((field) => setValue(field, data[field]));
     });
   }, [id, axiosInstance, navigate, setValue]);
 
   useEffect(() => {
-    if (requestData && districtData.length > 0 && upazilaData.length > 0) {
+    if (requestData && districtData.length > 0) {
       const districtObj = districtData.find(
         (d) => d.name === requestData.district
       );
-      if (districtObj) {
-        setSelectedDistrictID(districtObj.id);
-        setValue("district", districtObj.name);
-
-        const matchedUpazilas = upazilaData.filter(
-          (u) => u.district_id === districtObj.id
-        );
-        setFilteredUpazilas(matchedUpazilas);
-        setValue("upazila", requestData.upazila);
-      }
+      if (districtObj) setSelectedDistrictID(districtObj.id);
     }
-  }, [requestData, districtData, upazilaData, setValue]);
+  }, [requestData, districtData]);
 
   useEffect(() => {
     if (!selectedDistrictID) return;
@@ -89,8 +86,17 @@ const EditDonationRequest = () => {
       (u) => u.district_id === selectedDistrictID
     );
     setFilteredUpazilas(matched);
-    setValue("upazila", "");
-  }, [selectedDistrictID, upazilaData, setValue]);
+
+    if (!matched.find((u) => u.name === watch("upazila"))) {
+      setValue("upazila", "");
+    }
+  }, [selectedDistrictID, upazilaData, setValue, watch]);
+
+  useEffect(() => {
+    if (!selectedDistrict || districtData.length === 0) return;
+    const districtObj = districtData.find((d) => d.name === selectedDistrict);
+    if (districtObj) setSelectedDistrictID(districtObj.id);
+  }, [selectedDistrict, districtData]);
 
   const onSubmit = (data) => {
     toast
@@ -109,7 +115,7 @@ const EditDonationRequest = () => {
   };
 
   if (!requestData || districtData.length === 0 || upazilaData.length === 0)
-    return null;
+    return <Loader />;
 
   return (
     <div className="bg-white p-4 mt-4 rounded-xl">
@@ -135,19 +141,10 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          {/* district */}
           <div className="flex flex-col">
             <select
               {...register("district", { required: "District is required" })}
               className="input"
-              value={watch("district")}
-              onChange={(e) => {
-                const districtObj = districtData.find(
-                  (d) => d.name === e.target.value
-                );
-                setSelectedDistrictID(districtObj?.id);
-                setValue("district", e.target.value);
-              }}
             >
               <option value="">Select District</option>
               {districtData.map((d) => (
@@ -163,12 +160,10 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          {/* upazila */}
           <div className="flex flex-col">
             <select
               {...register("upazila", { required: "Upazila is required" })}
               className="input"
-              value={watch("upazila")}
             >
               <option value="">Select Upazila</option>
               {filteredUpazilas.map((u) => (
@@ -184,7 +179,6 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          {/* hospital */}
           <div className="flex flex-col">
             <input
               type="text"
@@ -214,6 +208,7 @@ const EditDonationRequest = () => {
               </span>
             )}
           </div>
+
           <div className="flex flex-col">
             <select
               {...register("bloodGroup", {
@@ -236,7 +231,6 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          {/* date */}
           <div className="flex flex-col">
             <input
               type="date"
@@ -255,7 +249,6 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          {/* time */}
           <div className="flex flex-col">
             <input
               type="time"
@@ -296,7 +289,6 @@ const EditDonationRequest = () => {
           )}
         </div>
 
-        {/* submit button */}
         <div className="flex justify-end">
           <button
             type="submit"

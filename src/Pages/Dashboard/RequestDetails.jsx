@@ -175,14 +175,16 @@ const RequestDetails = () => {
           )}
         </div>
 
-        {request.status === "Pending" && user.role === "Donor" && (
-          <button
-            onClick={() => handleAcceptDonate(request)}
-            className="mt-8 w-full py-3 bg-[#f87898] text-white font-semibold rounded-lg hover:bg-[#f66086] transition"
-          >
-            Accept Donation Request
-          </button>
-        )}
+        {request.status === "Pending" &&
+          user.role === "Donor" &&
+          user.email !== request.requesterEmail && (
+            <button
+              onClick={() => handleAcceptDonate(request)}
+              className="mt-8 w-full py-3 bg-[#f87898] text-white font-semibold rounded-lg hover:bg-[#f66086] transition"
+            >
+              Accept Donation Request
+            </button>
+          )}
       </div>
     </div>
   );

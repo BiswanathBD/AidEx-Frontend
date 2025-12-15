@@ -38,6 +38,7 @@ button {
 nav a {
   padding: 6px 8px;
   color: gray;
+  font-weight: 500;
 }
 
 nav a:hover {

@@ -106,6 +106,8 @@ const Register = () => {
     }
   };
 
+  if (user || loading) return <Navigate to={location?.state || "/"} />;
+
   return (
     <Container>
       {user ? (
@@ -135,7 +137,7 @@ const Register = () => {
                   <input
                     type="text"
                     {...register("name", { required: "Name is required" })}
-                    className="border rounded px-4 py-2 focus:ring-2 focus:ring-pink-600"
+                    className="input"
                     placeholder="Enter your name"
                   />
                   {errors.name && (
@@ -153,7 +155,7 @@ const Register = () => {
                   <input
                     type="email"
                     {...register("email", { required: "Email is required" })}
-                    className="border rounded px-4 py-2 focus:ring-2 focus:ring-pink-600"
+                    className="input"
                     placeholder="Enter your email"
                   />
                   {errors.email && (
@@ -172,7 +174,7 @@ const Register = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleAvatarUpload}
-                    className="border rounded px-4 py-2 focus:ring-2 focus:ring-pink-600"
+                    className="input"
                   />
 
                   {avatarUrl && (
@@ -193,7 +195,7 @@ const Register = () => {
                     {...register("bloodGroup", {
                       required: "Blood group is required",
                     })}
-                    className="border rounded px-4 py-2 focus:ring-2 focus:ring-pink-600"
+                    className="input"
                   >
                     <option value="">Select Blood Group</option>
                     {bloodGroups.map((bg) => (
@@ -214,7 +216,7 @@ const Register = () => {
                       {...register("district", {
                         required: "District is required",
                       })}
-                      className="border rounded px-4 py-2 focus:ring-2 focus:ring-pink-600"
+                      className="input"
                       onChange={(e) => {
                         const selectedName = e.target.value;
                         const districtObj = districtData.find(
@@ -242,7 +244,7 @@ const Register = () => {
                       {...register("upazila", {
                         required: "Upazila is required",
                       })}
-                      className="border rounded px-4 py-2 focus:ring-2 focus:ring-pink-600"
+                      className="input"
                     >
                       <option value="">Select Upazila</option>
                       {filteredUpazilas.map((u) => (
@@ -265,7 +267,7 @@ const Register = () => {
                       required: "Password is required",
                       minLength: 6,
                     })}
-                    className="border rounded px-4 py-2 pr-10 focus:ring-2 focus:ring-pink-600"
+                    className="input"
                     placeholder="Enter password"
                   />
 
@@ -293,7 +295,7 @@ const Register = () => {
                       validate: (value) =>
                         value === watch("password") || "Passwords do not match",
                     })}
-                    className="border rounded px-4 py-2 pr-10 focus:ring-2 focus:ring-pink-600"
+                    className="input"
                     placeholder="Confirm password"
                   />
 
