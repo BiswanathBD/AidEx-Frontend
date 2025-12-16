@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import useAxios from "../Hooks/useAxios";
 import Loader from "../Components/Shared/Loader";
 import { motion } from "framer-motion";
+import { FaRegSadTear } from "react-icons/fa";
 motion;
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
@@ -17,6 +18,7 @@ const SearchDonor = () => {
   const [selectedDistrictID, setSelectedDistrictID] = useState("");
   const [donors, setDonors] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [searchDonors, setSearchDonor] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -47,14 +49,18 @@ const SearchDonor = () => {
 
   const onSubmit = (data) => {
     setLoader(true);
+    setSearchDonor(false);
+
     axiosInstance
       .get("/search-donor", { params: data })
       .then((res) => {
         setDonors(res.data || []);
+        setSearchDonor(true);
         setLoader(false);
       })
       .catch(() => {
         setDonors([]);
+        setSearchDonor(true);
         setLoader(false);
       });
   };
@@ -76,7 +82,7 @@ const SearchDonor = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           {/* blood group */}
-          <select {...register("bloodGroup")} className="input">
+          <select {...register("bloodGroup")} className="input" required>
             <option value="">Blood Group</option>
             {bloodGroups.map((bg) => (
               <option key={bg} value={bg}>
@@ -87,6 +93,7 @@ const SearchDonor = () => {
 
           {/* district */}
           <select
+            required
             {...register("district")}
             className="input"
             onChange={(e) => {
@@ -106,7 +113,7 @@ const SearchDonor = () => {
           </select>
 
           {/* upazila */}
-          <select {...register("upazila")} className="input">
+          <select {...register("upazila")} className="input" required>
             <option value="">Select Upazila</option>
             {filteredUpazilas.map((u) => (
               <option key={u.id} value={u.name}>
@@ -127,7 +134,7 @@ const SearchDonor = () => {
 
       {loader ? (
         <Loader />
-      ) : (
+      ) : searchDonors && donors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {donors.map((donor, index) => (
             <motion.div
@@ -182,6 +189,25 @@ const SearchDonor = () => {
             </motion.div>
           ))}
         </div>
+      ) : (
+        searchDonors && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="flex flex-col items-center justify-center py-10 bg-white rounded-2xl mt-6"
+          >
+            <FaRegSadTear className="text-5xl text-[#f87898] mb-4" />
+
+            <h3 className="text-xl font-semibold text-gray-700 mb-1">
+              No Donor Found
+            </h3>
+
+            <p className="text-sm text-gray-500 text-center max-w-60">
+              We couldn’t find any donor matching your search criteria.
+            </p>
+          </motion.div>
+        )
       )}
     </motion.div>
   );

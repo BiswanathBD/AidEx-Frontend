@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import useAxios from "../Hooks/useAxios";
 import { BsClockFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
@@ -10,6 +10,7 @@ motion;
 const DonationRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [loader, setLoader] = useState(true);
+  const loaction = useLocation();
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,6 +103,7 @@ const DonationRequests = () => {
 
                   <Link
                     to={`/request/view/${req._id}`}
+                    state={location.pathname}
                     className="px-3 py-1.5 text-white font-semibold rounded bg-[#f87898] hover:bg-[#f45f7b] transition duration-200 text-center mt-2 mb-0.5"
                   >
                     View Details

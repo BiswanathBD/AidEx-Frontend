@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router";
+import { useParams, useNavigate, Link, useLocation } from "react-router";
 import useAxios from "../../Hooks/useAxios";
 import { HiOutlineArrowLongLeft } from "react-icons/hi2";
 import { AuthContext } from "../../Auth/AuthContext";
@@ -15,6 +15,7 @@ const RequestDetails = () => {
   const navigate = useNavigate();
   const [request, setRequest] = useState(null);
   const [loader, setLoader] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     axiosInstance.get(`/donation-request/${id}`).then((res) => {
@@ -22,8 +23,6 @@ const RequestDetails = () => {
       setLoader(false);
     });
   }, [id, axiosInstance]);
-
-  // if (!request) return null;
 
   if (loader) return <Loader />;
 
@@ -68,7 +67,7 @@ const RequestDetails = () => {
     request && (
       <div>
         <motion.p
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(location.state || -1)}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
