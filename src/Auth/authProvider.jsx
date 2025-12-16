@@ -21,8 +21,7 @@ const AuthProvider = ({ children }) => {
             data.accessToken = currentUser.accessToken;
             setUser(data);
           })
-          .catch((err) => {
-            console.error(err);
+          .catch(() => {
             setUser(null);
           })
           .finally(() => setLoading(false));
