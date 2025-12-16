@@ -3,6 +3,8 @@ import { Link, useSearchParams } from "react-router";
 import Loader from "../Components/Shared/Loader";
 import useAxios from "../Hooks/useAxios";
 import { PiSealCheckDuotone } from "react-icons/pi";
+import { motion } from "framer-motion";
+motion;
 
 const PaymentSuccess = () => {
   const axiosInstance = useAxios();
@@ -40,7 +42,12 @@ const PaymentSuccess = () => {
   if (!payment) return;
 
   return (
-    <div className="flex justify-center mt-8">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="flex justify-center mt-8"
+    >
       <div className="bg-white py-6 px-10 rounded-2xl text-center">
         <div className="flex justify-center mb-6">
           <PiSealCheckDuotone size={128} color="green" />
@@ -48,10 +55,7 @@ const PaymentSuccess = () => {
         <h2 className="text-3xl font-bold">Payment Successful</h2>
 
         <div className="mt-8 mb-2 flex gap-4 justify-center">
-          <Link
-            to={"/funding"}
-            className="btn-secondary"
-          >
+          <Link to={"/funding"} className="btn-secondary">
             Funding
           </Link>
           <Link to={"/"} className="btn-primary">
@@ -59,7 +63,7 @@ const PaymentSuccess = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
