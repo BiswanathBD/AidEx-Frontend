@@ -32,15 +32,20 @@ const Hero = () => {
             Your contribution today can create a brighter tomorrow.
           </p>
 
-          {user ? (
-            <Link to={"/requests"}>
-              <button className="btn-primary mt-4">Donate Now</button>
+          <div className="flex flex-wrap gap-4">
+            {user ? (
+              <Link to={"/requests"}>
+                <button className="btn-primary mt-4">Donate Now</button>
+              </Link>
+            ) : (
+              <Link to={"/register"}>
+                <button className="btn-primary mt-4">Join as a donor</button>
+              </Link>
+            )}
+            <Link to={"/search"} className="btn-secondary mt-4">
+              Search Donors
             </Link>
-          ) : (
-            <Link to={"/register"}>
-              <button className="btn-primary mt-4">Become a Donor</button>
-            </Link>
-          )}
+          </div>
         </div>
       </div>
       <img className="w-full" src={bgImg} alt="" />

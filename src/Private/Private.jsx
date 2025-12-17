@@ -8,7 +8,10 @@ const Private = ({ children }) => {
 
   if (loading) return null;
 
-  if (!user) return <Navigate to={"/login"} state={location.pathname} />;
+  if (!user)
+    return (
+      <Navigate to={"/login"} state={location.pathname} />
+    );
 
   return children;
 };

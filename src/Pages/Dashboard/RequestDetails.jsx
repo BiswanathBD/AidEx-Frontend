@@ -1,22 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate, Link, useLocation } from "react-router";
+import { useParams, useNavigate, useLocation } from "react-router";
 import useAxios from "../../Hooks/useAxios";
 import { HiOutlineArrowLongLeft } from "react-icons/hi2";
 import { AuthContext } from "../../Auth/AuthContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Loader from "../../Components/Shared/Loader";
-motion;
 
 const RequestDetails = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const axiosInstance = useAxios();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [request, setRequest] = useState(null);
   const [loader, setLoader] = useState(true);
-  const location = useLocation();
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     axiosInstance.get(`/donation-request/${id}`).then((res) => {
@@ -42,7 +42,7 @@ const RequestDetails = () => {
     canceled: "bg-red-100 text-red-700",
   };
 
-  const handleAcceptDonate = async (request) => {
+  const handleAcceptDonate = async () => {
     const updatedRequest = {
       ...request,
       status: "Inprogress",
@@ -53,7 +53,11 @@ const RequestDetails = () => {
     const toastId = toast.loading("Accepting donation...");
 
     try {
-      const res = await axiosInstance.put(`/donation-request/${request._id}`);
+      const res = await axiosInstance.put(
+        `/donation-request/${request._id}`,
+        updatedRequest
+      );
+
       if (res.data) {
         toast.success("Donation accepted successfully!", { id: toastId });
         setRequest(updatedRequest);
@@ -71,9 +75,8 @@ const RequestDetails = () => {
           onClick={() => navigate(location.state || -1)}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="flex gap-1 text-[#f87898] px-2 font-semibold cursor-pointer hover:underline rounded-sm w-fit"
+          transition={{ duration: 0.5 }}
+          className="flex gap-1 text-[#f87898] px-2 font-semibold cursor-pointer hover:underline w-fit"
         >
           <HiOutlineArrowLongLeft size={28} />
           <span>Go back</span>
@@ -82,48 +85,44 @@ const RequestDetails = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-          className="bg-white rounded-xl mt-4   p-5"
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-xl mt-4 p-5"
         >
-          <div className="lg:flex lg:gap-10 lg:items-start">
-            {/* left side blood group */}
-            <div className="flex justify-center lg:block bg-gray-50 p-4 lg:p-8 rounded-lg">
-              <div className="w-32 lg:w-48 aspect-square rounded-full bg-[#f87898]/20 shadow-[0_0_35px_#f8789833] flex items-center justify-center">
-                <span className="text-5xl lg:text-7xl font-extrabold text-[#f87898] ml-1 mb-1">
+          <div className="lg:flex lg:gap-10">
+            <div className="flex justify-center bg-gray-50 p-8 rounded-lg">
+              <div className="w-40 aspect-square rounded-full bg-[#f87898]/20 flex items-center justify-center">
+                <span className="text-6xl font-extrabold text-[#f87898]">
                   {request.bloodGroup}
                 </span>
               </div>
             </div>
 
             <div className="lg:flex-1">
-              <h2 className="text-3xl font-bold text-[#f87898] mb-8">
-                <span className="text-black">Donation Request</span> Details
+              <h2 className="text-3xl font-bold mb-6">
+                <span className="text-black">Donation Request</span>{" "}
+                <span className="text-[#f87898]">Details</span>
               </h2>
 
-              {/* right side info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-                <div className="bg-gray-50 rounded-lg px-4 py-3 overflow-hidden">
-                  <span className="text-gray-500 text-sm">Requester Name</span>
-                  <p className="font-medium text-gray-800 mt-1">
-                    {request.requesterName}
-                  </p>
+              <div className="grid md:grid-cols-2 gap-5">
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <span className="text-sm text-gray-500">Requester Name</span>
+                  <p>{request.requesterName}</p>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg px-4 py-3 overflow-hidden">
-                  <span className="text-gray-500 text-sm">Requester Email</span>
-                  <p className="font-medium mt-1">{request.requesterEmail}</p>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <span className="text-sm text-gray-500">Requester Email</span>
+                  <p>{request.requesterEmail}</p>
                 </div>
 
-                <div className="bg-gray-50 rounded-lg px-4 py-3 overflow-hidden">
-                  <span className="text-gray-500 text-sm">Recipient Name</span>
-                  <p className="font-medium mt-1">{request.recipientName}</p>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <span className="text-sm text-gray-500">Recipient Name</span>
+                  <p>{request.recipientName}</p>
                 </div>
 
-                <div className="bg-gray-50 px-4 py-3 rounded-lg grid overflow-hidden">
-                  <span className="text-gray-500 text-sm">Status</span>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <span className="text-sm text-gray-500">Status</span>
                   <span
-                    className={`mt-1 w-fit inline-block px-3 py-1 rounded-full text-sm font-semibold capitalize ${
+                    className={`block mt-1 px-3 py-1 w-fit rounded-full text-sm font-semibold capitalize ${
                       statusColor[request.status.toLowerCase()]
                     }`}
                   >
@@ -134,49 +133,35 @@ const RequestDetails = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Hospital</span>
-              <p className="font-medium mt-1">{request.hospital}</p>
+          <div className="grid md:grid-cols-2 gap-5 mt-6">
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-500">Hospital</span>
+              <p>{request.hospital}</p>
             </div>
 
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Address</span>
-              <p className="font-medium mt-1">{request.address}</p>
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-500">Address</span>
+              <p>{request.address}</p>
             </div>
 
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">District</span>
-              <p className="font-medium mt-1">{request.district}</p>
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-500">District</span>
+              <p>{request.district}</p>
             </div>
 
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Upazila</span>
-              <p className="font-medium mt-1">{request.upazila}</p>
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-500">Upazila</span>
+              <p>{request.upazila}</p>
             </div>
 
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Donation Date</span>
-              <p className="font-medium mt-1">{request.donationDate}</p>
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-500">Donation Date</span>
+              <p>{request.donationDate}</p>
             </div>
 
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Donation Time</span>
-              <p className="font-medium mt-1">
-                {formatTime(request.donationTime)}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Message</span>
-              <p className="font-medium mt-1">{request.message}</p>
-            </div>
-
-            <div className="bg-gray-50 px-4 py-3 rounded-lg overflow-hidden">
-              <span className="text-gray-500 text-sm">Requested At</span>
-              <p className="font-medium mt-1">
-                {new Date(request.requested_at).toLocaleString()}
-              </p>
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-500">Donation Time</span>
+              <p>{formatTime(request.donationTime)}</p>
             </div>
 
             {/* donor info if have */}
@@ -199,13 +184,47 @@ const RequestDetails = () => {
             user.role === "Donor" &&
             user.email !== request.requesterEmail && (
               <button
-                onClick={() => handleAcceptDonate(request)}
-                className="mt-8 w-full py-3 bg-[#f87898] text-white font-semibold rounded-lg hover:bg-[#f66086] transition"
+                onClick={() => setIsModalOpen(true)}
+                className="mt-8 w-full py-3 bg-[#f87898] text-white font-semibold rounded-lg"
               >
                 Accept Donation Request
               </button>
             )}
         </motion.div>
+
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl w-full max-w-md">
+              <h3 className="text-xl font-bold text-[#f87898] mb-4">
+                Confirm Donation
+              </h3>
+
+              <div className="space-y-4">
+                <input readOnly value={user.name} className="input" />
+                <input readOnly value={user.email} className="input" />
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    handleAcceptDonate();
+                    setIsModalOpen(false);
+                  }}
+                  className="btn-primary w-full"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   );

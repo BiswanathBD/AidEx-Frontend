@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router";
 import { AiTwotoneHome } from "react-icons/ai";
 import { PiDropDuotone } from "react-icons/pi";
-import { FaFacebookF, FaTwitter, FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { RiTwitterXLine } from "react-icons/ri";
 import Logo from "./Logo";
 import Container from "./Container";
 import { LuLayoutDashboard } from "react-icons/lu";
@@ -57,16 +58,16 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-white mb-3">Follow Us</h4>
             <div className="flex gap-4">
-              <a className="p-2 rounded-full bg-white/10 hover:bg-[#f87898] transition">
+              <a className="social">
                 <FaFacebookF size={16} />
               </a>
-              <a className="p-2 rounded-full bg-white/10 hover:bg-[#f87898] transition">
-                <FaTwitter size={16} />
+              <a className="social">
+                <RiTwitterXLine size={16} />
               </a>
-              <a className="p-2 rounded-full bg-white/10 hover:bg-[#f87898] transition">
+              <a className="social">
                 <FaGithub size={16} />
               </a>
-              <a className="p-2 rounded-full bg-white/10 hover:bg-[#f87898] transition">
+              <a className="social">
                 <FaLinkedinIn size={16} />
               </a>
             </div>
