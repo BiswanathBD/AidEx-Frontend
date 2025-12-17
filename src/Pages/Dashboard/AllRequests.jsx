@@ -144,7 +144,7 @@ const AllRequests = () => {
       <div className="overflow-x-auto overflow-y-hidden">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-sm text-gray-600">
+            <tr className="bg-gray-100 text-sm text-gray-600 text-left">
               <th className="p-4 rounded-l-2xl">Recipient</th>
               <th className="p-4">District</th>
               <th className="p-4">Upazila</th>

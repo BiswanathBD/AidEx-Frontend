@@ -6,7 +6,6 @@ import useAxios from "../../Hooks/useAxios";
 import { AuthContext } from "../../Auth/AuthContext";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
-motion
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -17,10 +16,10 @@ const EditDonationRequest = () => {
   const axiosInstance = useAxios();
 
   const [requestData, setRequestData] = useState(null);
-  const [districtData, setDistrictData] = useState([]);
-  const [upazilaData, setUpazilaData] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
-  const [selectedDistrictID, setSelectedDistrictID] = useState("");
+  const [selectedDistrictId, setSelectedDistrictId] = useState("");
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -33,30 +32,30 @@ const EditDonationRequest = () => {
   } = useForm();
 
   const selectedDistrict = watch("district");
-
+  // fetch district and upozila data
   useEffect(() => {
     fetch(
       "https://raw.githubusercontent.com/nuhil/bangladesh-geocode/refs/heads/master/districts/districts.json"
     )
       .then((res) => res.json())
-      .then((data) => setDistrictData(data[2].data));
+      .then((data) => setDistricts(data[2].data));
 
     fetch(
       "https://raw.githubusercontent.com/nuhil/bangladesh-geocode/refs/heads/master/upazilas/upazilas.json"
     )
       .then((res) => res.json())
-      .then((data) => setUpazilaData(data[2].data));
+      .then((data) => setUpazilas(data[2].data));
   }, []);
 
+  // request data by id
   useEffect(() => {
     axiosInstance.get(`/donation-request/${id}`).then((res) => {
-      const data = res.data;
-      if (data.status !== "Pending") {
+      if (res.data.status !== "Pending") {
         toast.error("Only pending requests can be edited");
         navigate("/dashboard/my-donation-requests");
         return;
       }
-      setRequestData(data);
+      setRequestData(res.data);
 
       const fields = [
         "recipientName",
@@ -67,39 +66,39 @@ const EditDonationRequest = () => {
         "donationTime",
         "message",
         "district",
-        "upazila",
       ];
-      fields.forEach((field) => setValue(field, data[field]));
+
+      fields.forEach((field) => setValue(field, res.data[field]));
     });
   }, [id, axiosInstance, navigate, setValue]);
 
   useEffect(() => {
-    if (requestData && districtData.length > 0) {
-      const districtObj = districtData.find(
-        (d) => d.name === requestData.district
-      );
-      if (districtObj) setSelectedDistrictID(districtObj.id);
-    }
-  }, [requestData, districtData]);
+    if (!selectedDistrict || districts.length === 0) return;
+
+    const district = districts.find((d) => d.name === selectedDistrict);
+    if (district) setSelectedDistrictId(district.id);
+  }, [selectedDistrict, districts]);
 
   useEffect(() => {
-    if (!selectedDistrictID) return;
-    const matched = upazilaData.filter(
-      (u) => u.district_id === selectedDistrictID
+    if (!selectedDistrictId) return;
+
+    const matched = upazilas.filter(
+      (u) => u.district_id === selectedDistrictId
     );
     setFilteredUpazilas(matched);
-
-    if (!matched.find((u) => u.name === watch("upazila"))) {
-      setValue("upazila", "");
-    }
-  }, [selectedDistrictID, upazilaData, setValue, watch]);
+  }, [selectedDistrictId, upazilas]);
 
   useEffect(() => {
-    if (!selectedDistrict || districtData.length === 0) return;
-    const districtObj = districtData.find((d) => d.name === selectedDistrict);
-    if (districtObj) setSelectedDistrictID(districtObj.id);
-  }, [selectedDistrict, districtData]);
+    if (!requestData || filteredUpazilas.length === 0) return;
 
+    const exists = filteredUpazilas.find((u) => u.name === requestData.upazila);
+
+    if (exists) {
+      setValue("upazila", requestData.upazila);
+    }
+  }, [filteredUpazilas, requestData, setValue]);
+
+  // submit
   const onSubmit = (data) => {
     toast
       .promise(axiosInstance.put(`/edit-donation-request/${id}`, data), {
@@ -108,148 +107,98 @@ const EditDonationRequest = () => {
         error: "Failed to update request",
       })
       .then(() => {
-        if (user.role === "Donor") {
-          navigate("/dashboard/my-donation-requests");
-        } else {
-          navigate("/dashboard/all-blood-donation-request");
-        }
+        navigate(
+          user.role === "Donor"
+            ? "/dashboard/my-donation-requests"
+            : "/dashboard/all-blood-donation-request"
+        );
       });
   };
 
-  if (!requestData || districtData.length === 0 || upazilaData.length === 0)
+  if (!requestData || districts.length === 0 || upazilas.length === 0) {
     return <Loader />;
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.4 }}
       className="bg-white p-4 mt-4 rounded-xl"
     >
-      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
+      <h2 className="text-2xl font-bold mb-6 text-[#f87898]">
         Edit <span className="text-black">Donation Request</span>
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="flex flex-col">
-            <input
-              type="text"
-              placeholder="Enter recipient name"
-              {...register("recipientName", {
-                required: "Recipient name is required",
-              })}
-              className="input"
-            />
-            {errors.recipientName && (
-              <span className="text-red-500 text-sm">
-                {errors.recipientName.message}
-              </span>
-            )}
-          </div>
+          {/* name */}
+          <input
+            className="input"
+            placeholder="Recipient Name"
+            {...register("recipientName", { required: true })}
+          />
 
-          <div className="flex flex-col">
-            <select
-              {...register("district", { required: "District is required" })}
-              className="input"
-            >
-              <option value="">Select District</option>
-              {districtData.map((d) => (
-                <option key={d.id} value={d.name}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
-            {errors.district && (
-              <span className="text-red-500 text-sm">
-                {errors.district.message}
-              </span>
-            )}
-          </div>
+          {/* district */}
+          <select
+            className="input"
+            {...register("district", { required: true })}
+          >
+            <option value="">Select District</option>
+            {districts.map((d) => (
+              <option key={d.id} value={d.name}>
+                {d.name}
+              </option>
+            ))}
+          </select>
 
-          <div className="flex flex-col">
-            <select
-              {...register("upazila", { required: "Upazila is required" })}
-              className="input"
-            >
-              <option value="">Select Upazila</option>
-              {filteredUpazilas.map((u) => (
-                <option key={u.id} value={u.name}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-            {errors.upazila && (
-              <span className="text-red-500 text-sm">
-                {errors.upazila.message}
-              </span>
-            )}
-          </div>
+          {/* upazila */}
+          <select className="input" {...register("upazila")}>
+            <option value="">Select Upazila</option>
+            {filteredUpazilas.map((u) => (
+              <option key={u.id} value={u.name}>
+                {u.name}
+              </option>
+            ))}
+          </select>
 
-          <div className="flex flex-col">
-            <input
-              type="text"
-              placeholder="Enter hospital name"
-              {...register("hospital", {
-                required: "Hospital name is required",
-              })}
-              className="input"
-            />
-            {errors.hospital && (
-              <span className="text-red-500 text-sm">
-                {errors.hospital.message}
-              </span>
-            )}
-          </div>
+          {/* hospital */}
+          <input
+            className="input"
+            placeholder="Hospital Name"
+            {...register("hospital", { required: true })}
+          />
 
-          <div className="flex flex-col md:col-span-2">
-            <input
-              type="text"
-              placeholder="Enter full address"
-              {...register("address", { required: "Address is required" })}
-              className="input"
-            />
-            {errors.address && (
-              <span className="text-red-500 text-sm">
-                {errors.address.message}
-              </span>
-            )}
-          </div>
+          {/* address */}
+          <input
+            className="input md:col-span-2"
+            placeholder="Full Address"
+            {...register("address", { required: true })}
+          />
 
-          <div className="flex flex-col">
-            <select
-              {...register("bloodGroup", {
-                required: "Blood group is required",
-              })}
-              className="input"
-              value={watch("bloodGroup")}
-            >
-              <option value="">Select Blood Group</option>
-              {bloodGroups.map((bg) => (
-                <option key={bg} value={bg}>
-                  {bg}
-                </option>
-              ))}
-            </select>
-            {errors.bloodGroup && (
-              <span className="text-red-500 text-sm">
-                {errors.bloodGroup.message}
-              </span>
-            )}
-          </div>
+          {/* blood group */}
+          <select
+            className="input"
+            {...register("bloodGroup", { required: true })}
+          >
+            <option value="">Select Blood Group</option>
+            {bloodGroups.map((bg) => (
+              <option key={bg}>{bg}</option>
+            ))}
+          </select>
 
-          <div className="flex flex-col">
+          {/* date */}
+          <div>
             <input
               type="date"
-              placeholder="Select donation date"
+              className="input"
               {...register("donationDate", {
                 required: "Donation date is required",
                 validate: (value) =>
-                  value >= today || "Cannot select past date",
+                  value >= today || "You cannot select a past date",
               })}
-              className="input"
             />
+
             {errors.donationDate && (
               <span className="text-red-500 text-sm">
                 {errors.donationDate.message}
@@ -257,51 +206,24 @@ const EditDonationRequest = () => {
             )}
           </div>
 
-          <div className="flex flex-col">
-            <input
-              type="time"
-              placeholder="Select donation time"
-              {...register("donationTime", {
-                required: "Donation time is required",
-                validate: (value) => {
-                  const selectedDate = watch("donationDate");
-                  if (selectedDate === today) {
-                    const now = new Date();
-                    const timeStr = now.toTimeString().slice(0, 5);
-                    return value >= timeStr || "Cannot select past time";
-                  }
-                  return true;
-                },
-              })}
-              className="input"
-            />
-            {errors.donationTime && (
-              <span className="text-red-500 text-sm">
-                {errors.donationTime.message}
-              </span>
-            )}
-          </div>
+          {/* time */}
+          <input
+            type="time"
+            className="input"
+            {...register("donationTime", { required: true })}
+          />
         </div>
 
-        <div className="flex flex-col">
-          <textarea
-            {...register("message", { required: "Message is required" })}
-            placeholder="Write request message..."
-            rows="3"
-            className="input w-full"
-          ></textarea>
-          {errors.message && (
-            <span className="text-red-500 text-sm">
-              {errors.message.message}
-            </span>
-          )}
-        </div>
+        {/* msg */}
+        <textarea
+          rows="3"
+          className="input w-full"
+          placeholder="Write request message..."
+          {...register("message", { required: true })}
+        />
 
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-[#f87898] text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 w-full md:w-auto"
-          >
+          <button className="bg-[#f87898] text-white px-6 py-3 rounded-lg">
             Update Request
           </button>
         </div>

@@ -14,7 +14,7 @@ const AllUsers = () => {
 
   const [allUsers, setAllUsers] = useState([]);
   const [filter, setFilter] = useState("all");
-  const [openMenu, setOpenMenu] = useState(null);
+  const [openMenu, setOpenMenu] = useState({ id: null, index: null });
 
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 8;
@@ -56,7 +56,7 @@ const AllUsers = () => {
       setAllUsers((prev) =>
         prev.map((u) => (u._id === id ? { ...u, ...updateData } : u))
       );
-      setOpenMenu(null);
+      setOpenMenu({ id: null, index: null });
       toast.success("User updated successfully!", { id: t });
     }
   };
@@ -101,7 +101,7 @@ const AllUsers = () => {
               <th className="p-4">Email</th>
               <th className="p-4 text-center">Role</th>
               <th className="p-4">Status</th>
-              <th className="p-4 rounded-r-2xl">Actions</th>
+              <th className="p-4 rounded-r-2xl text-center">Actions</th>
             </tr>
           </thead>
 
@@ -158,19 +158,19 @@ const AllUsers = () => {
 
                   <td
                     className={`p-4 border-b border-gray-100 font-semibold ${
-                      u.status === "Active"
-                        ? "text-green-600"
-                        : "text-red-600"
+                      u.status === "Active" ? "text-green-600" : "text-red-600"
                     }`}
                   >
                     {u.status}
                   </td>
 
-                  <td className="p-4 border-b border-gray-100 relative">
+                  <td className="p-4 border-b border-gray-100 relative flex justify-center">
                     <button
                       onClick={() =>
                         setOpenMenu((prev) =>
-                          prev === u._id ? null : u._id
+                          prev.id === u._id
+                            ? { id: null, index: null }
+                            : { id: u._id, index }
                         )
                       }
                       className="p-2 hover:bg-gray-200 rounded-full"
@@ -178,23 +178,25 @@ const AllUsers = () => {
                       <FiMoreVertical size={18} />
                     </button>
 
-                    {openMenu === u._id && (
-                      <div className="absolute right-4 mt-1 bg-white border rounded-lg shadow-lg/10 text-sm font-semibold z-10 p-2">
+                    {openMenu.id === u._id && (
+                      <div
+                        className={`absolute right-4 z-50 p-2 bg-white rounded-xl shadow-lg text-sm font-semibold text-nowrap flex flex-col gap-2 ${
+                          index >= currentUsers.length - 2
+                            ? "bottom-full -mb-4"
+                            : "top-full -mt-4"
+                        }`}
+                      >
                         {u.status === "Active" ? (
                           <button
-                            onClick={() =>
-                              handleUserAction(u._id, "block", u)
-                            }
-                            className="w-full mb-2 px-4 py-2 bg-red-600 text-white rounded"
+                            onClick={() => handleUserAction(u._id, "block", u)}
+                            className="w-full px-4 py-2 bg-red-600 text-white rounded"
                           >
                             Block User
                           </button>
                         ) : (
                           <button
-                            onClick={() =>
-                              handleUserAction(u._id, "unblock")
-                            }
-                            className="w-full mb-2 px-4 py-2 bg-green-600 text-white rounded"
+                            onClick={() => handleUserAction(u._id, "unblock")}
+                            className="w-full px-4 py-2 bg-green-600 text-white rounded"
                           >
                             Unblock User
                           </button>
@@ -205,7 +207,7 @@ const AllUsers = () => {
                             onClick={() =>
                               handleUserAction(u._id, "make-volunteer")
                             }
-                            className="w-full mb-2 px-4 py-2 bg-yellow-600 text-white rounded"
+                            className="w-full px-4 py-2 bg-yellow-600 text-white rounded"
                           >
                             Make Volunteer
                           </button>

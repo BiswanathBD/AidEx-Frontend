@@ -65,7 +65,7 @@ nav .active {
 }
 
 .input {
-  @apply w-full border border-gray-300 px-4 py-2 rounded focus:border-none focus:ring-1 focus:ring-[#f87898] outline-none;
+  @apply w-full border border-gray-300 px-4 py-2 rounded focus:border-none focus:ring-1 focus:ring-[#f87898] outline-none h-fit;
 }
 
 /* loader animation */
