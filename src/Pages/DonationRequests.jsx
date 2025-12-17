@@ -10,7 +10,7 @@ motion;
 const DonationRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [loader, setLoader] = useState(true);
-  const loaction = useLocation();
+  const location = useLocation();
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);

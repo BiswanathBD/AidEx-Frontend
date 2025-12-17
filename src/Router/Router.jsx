@@ -18,11 +18,14 @@ import SearchDonor from "../Pages/SearchDonor";
 import Funding from "../Pages/Funding";
 import PaymentError from "../Pages/PaymentError";
 import PaymentSuccess from "../Pages/PaymentSuccess";
+import ErrorPage from "../Pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
+
     children: [
       {
         index: true,

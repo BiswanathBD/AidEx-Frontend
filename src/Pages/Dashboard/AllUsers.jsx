@@ -6,6 +6,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import toast from "react-hot-toast";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
+motion
 
 const AllUsers = () => {
   const { user, loading } = useContext(AuthContext);

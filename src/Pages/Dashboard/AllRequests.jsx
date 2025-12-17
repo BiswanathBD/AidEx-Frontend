@@ -3,7 +3,7 @@ import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
 import Swal from "sweetalert2";
-import { Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useLocation } from "react-router";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
 motion;
@@ -15,7 +15,7 @@ const AllRequests = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 6;
   const axiosInstance = useAxios();
-  const navigate = useNavigate();
+  const location = useLocation();
   const [loader, setLoader] = useState(true);
 
   const fetchRequests = useCallback(async () => {
@@ -197,24 +197,22 @@ const AllRequests = () => {
                 </td>
 
                 <td className="p-4 flex justify-end gap-2">
-                  <button
-                    onClick={() =>
-                      navigate(`/dashboard/donation-request/view/${req._id}`)
-                    }
+                  <Link
+                    to={`/dashboard/donation-request/view/${req._id}`}
+                    state={location.pathname}
                     className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
                   >
                     View
-                  </button>
+                  </Link>
 
                   {req.status === "Pending" && user.role !== "Volunteer" && (
-                    <button
-                      onClick={() =>
-                        navigate(`/dashboard/donation-request/edit/${req._id}`)
-                      }
+                    <Link
+                      to={`/dashboard/donation-request/edit/${req._id}`}
+                      state={location.pathname}
                       className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
                     >
                       Edit
-                    </button>
+                    </Link>
                   )}
 
                   {req.status === "Inprogress" && (

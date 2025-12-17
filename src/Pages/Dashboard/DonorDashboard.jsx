@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, useLocation } from "react-router";
 import Swal from "sweetalert2";
 import { GoTrash } from "react-icons/go";
 import { AuthContext } from "../../Auth/AuthContext";
@@ -12,6 +12,7 @@ const DonorDashboard = () => {
   const { user } = useContext(AuthContext);
   const axiosInstance = useAxios();
   const navigate = useNavigate();
+  const location = useLocation();
   const [requests, setRequests] = useState([]);
   const [loader, setLoader] = useState(true);
 
@@ -165,26 +166,22 @@ const DonorDashboard = () => {
                     </td>
 
                     <td className="p-4 border-b border-gray-100 flex justify-end gap-2 flex-wrap font-semibold">
-                      <button
-                        onClick={() =>
-                          navigate(`/dashboard/donation-request/view/${r._id}`)
-                        }
+                      <Link
+                        to={`/dashboard/donation-request/view/${r._id}`}
+                        state={location.pathname}
                         className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
                       >
                         View
-                      </button>
+                      </Link>
 
                       {r.status === "Pending" && (
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `/dashboard/donation-request/edit/${r._id}`
-                            )
-                          }
+                        <Link
+                          to={`/dashboard/donation-request/edit/${r._id}`}
+                          state={location.pathname}
                           className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
                         >
                           Edit
-                        </button>
+                        </Link>
                       )}
 
                       {r.status === "Pending" && (
