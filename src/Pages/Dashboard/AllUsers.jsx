@@ -6,7 +6,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import toast from "react-hot-toast";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
-motion
+motion;
 
 const AllUsers = () => {
   const { user, loading } = useContext(AuthContext);
@@ -18,7 +18,7 @@ const AllUsers = () => {
   const [openMenu, setOpenMenu] = useState({ id: null, index: null });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 8;
+  const usersPerPage = 12;
 
   useEffect(() => {
     axiosInstance.get("/allUsers").then((res) => {
@@ -26,9 +26,6 @@ const AllUsers = () => {
       setLoader(false);
     });
   }, [axiosInstance]);
-
-  if (loading) return null;
-  if (user.role !== "Admin") return <Navigate to={"/dashboard"} />;
 
   const filteredUsers =
     filter === "all"
@@ -42,8 +39,13 @@ const AllUsers = () => {
 
   const handlePageChange = (n) => setCurrentPage(n);
 
-  const handleUserAction = async (id, action, user) => {
-    let updateData = { user };
+  const handleUserAction = async (id, action) => {
+    let updateData = {};
+
+    if (id === user._id) {
+      setOpenMenu({ id: null, index: null });
+      return toast.error("Self update not allowed");
+    }
 
     if (action === "block") updateData = { status: "Blocked" };
     else if (action === "unblock") updateData = { status: "Active" };
@@ -61,6 +63,9 @@ const AllUsers = () => {
       toast.success("User updated successfully!", { id: t });
     }
   };
+
+  if (loading) return <Loader />;
+  if (user.role !== "Admin") return <Navigate to={"/dashboard"} />;
 
   return (
     <motion.div

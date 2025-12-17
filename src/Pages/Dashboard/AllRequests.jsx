@@ -13,7 +13,7 @@ const AllRequests = () => {
   const [userRequests, setUserRequests] = useState([]);
   const [filter, setFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const requestsPerPage = 6;
+  const requestsPerPage = 12;
   const axiosInstance = useAxios();
   const location = useLocation();
   const [loader, setLoader] = useState(true);
