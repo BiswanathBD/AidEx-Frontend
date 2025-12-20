@@ -73,8 +73,19 @@ const Register = () => {
     const { password, confirmPassword, ...userData } = data;
 
     const registerPromise = passwordSignUp(data.email, password).then((res) => {
-      if (res.user) {
-        axiosInstance.post("/user", userData).then((res) => setUser(res.data));
+      if (res.user.accessToken) {
+        const accessToken = res.user.accessToken;
+
+        axiosInstance.post("/user", userData).then((res) => {
+          if (res.data.insertedId) {
+            fetch(`${import.meta.env.VITE_DOMAIN}/user?email=${data.email}`)
+              .then((res) => res.json())
+              .then((data) => {
+                data.accessToken = accessToken;
+                setUser(data);
+              });
+          }
+        });
       }
     });
 
@@ -106,7 +117,7 @@ const Register = () => {
     }
   };
 
-  if (user || loading) return <Navigate to={location?.state || "/"} />;
+  if (user) return <Navigate to={location?.state || "/"} />;
 
   return (
     <Container>

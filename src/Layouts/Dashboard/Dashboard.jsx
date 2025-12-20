@@ -13,11 +13,11 @@ import { FiLogOut } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { motion } from "framer-motion";
+import Loader from "../../Components/Shared/Loader";
 motion;
 
 const Dashboard = () => {
   const { user, setUser, userSignOut, loading } = useContext(AuthContext);
-  if (loading) return;
 
   const handleSignOut = () => {
     const signOutPromise = userSignOut();
@@ -31,6 +31,8 @@ const Dashboard = () => {
       error: "Failed to sign out.",
     });
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="dashboard w-full flex">
@@ -53,7 +55,11 @@ const Dashboard = () => {
           </Link>
           <div className="dash-nav mt-4 pt-4 border-t border-gray-200 text-neutral-500 space-y-4 mx-auto w-full text-center">
             {/* home */}
-            <NavLink to={"/dashboard"} end className="flex items-center justify-center md:justify-start gap-2">
+            <NavLink
+              to={"/dashboard"}
+              end
+              className="flex items-center justify-center md:justify-start gap-2"
+            >
               <AiTwotoneHome size={24} />
               <span className="hidden md:block">Dashboard</span>
             </NavLink>
@@ -126,9 +132,7 @@ const Dashboard = () => {
         </button>
       </motion.div>
 
-      <div
-        className="p-3 w-full mx-auto h-screen overflow-y-auto"
-      >
+      <div className="p-3 w-full mx-auto h-screen overflow-y-auto">
         {/* header */}
         <motion.div
           initial={{ opacity: 0, y: -40 }}
