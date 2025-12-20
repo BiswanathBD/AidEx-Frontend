@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import useAxios from "../Hooks/useAxios";
 import Loader from "../Components/Shared/Loader";
 import { AuthContext } from "../Auth/AuthContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 motion;
 
 const Funding = () => {
@@ -147,20 +147,20 @@ const Funding = () => {
       )}
 
       {/* modal */}
-      <AnimatePresence>
-        {showModal && (
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center z-50">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed top-6 right-1/2 translate-x-1/2 flex justify-center items-start z-50"
+            className="fixed flex justify-center items-start z-50"
           >
             <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
+              initial={{ y: 0, opacity: 0 }}
+              animate={{ y: 24, opacity: 1 }}
+              exit={{ y: 0, opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="bg-[#f87898] p-6 rounded-2xl shadow-lg w-80"
+              className="bg-[#f87898] p-6 rounded-2xl shadow-xl w-full max-w-md sm:w-md m-4"
             >
               <h2 className="text-2xl font-bold text-white">Give Fund</h2>
               <p className="text-white mb-2">
@@ -174,20 +174,19 @@ const Funding = () => {
                   min={1}
                   placeholder="Enter Amount"
                   required
-                  className="rounded px-4 py-3 text-2xl font-bold w-full mt-1 bg-white placeholder:text-[#f87898]/50 text-[#f87898] focus:outline-none"
+                  className="rounded px-4 py-3 text-xl font-bold mt-1 w-full bg-white placeholder:text-[#f87898]/50 text-[#f87898] focus:outline-none"
                 />
 
-                <div className="flex justify-between gap-4 font-semibold">
+                <div className="flex justify-between gap-4 font-semibold mt-4">
                   <button
-                    type="button"
                     onClick={() => setShowModal(false)}
-                    className="w-full border border-white text-white py-2 rounded mt-4"
+                    className="w-full border border-white text-white px-3 py-2 rounded hover:bg-white/5"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="w-full bg-white text-[#f87898] py-2 rounded mt-4"
+                    className="w-full bg-white text-[#f87898] px-3 py-2 rounded hover:bg-white/90"
                   >
                     Continue
                   </button>
@@ -195,8 +194,8 @@ const Funding = () => {
               </form>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 };

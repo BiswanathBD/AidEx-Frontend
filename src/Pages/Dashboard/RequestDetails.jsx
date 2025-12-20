@@ -5,7 +5,10 @@ import { HiOutlineArrowLongLeft } from "react-icons/hi2";
 import { AuthContext } from "../../Auth/AuthContext";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+motion;
 import Loader from "../../Components/Shared/Loader";
+import { FaUser } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const RequestDetails = () => {
   const { user } = useContext(AuthContext);
@@ -72,7 +75,7 @@ const RequestDetails = () => {
     request && (
       <div>
         <motion.p
-          onClick={() => navigate(location.state || -1)}
+          onClick={() => navigate(location.state || "/requests")}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -192,20 +195,32 @@ const RequestDetails = () => {
             )}
         </motion.div>
 
-        {/* Modal */}
+        {/* modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl w-full max-w-md">
+          <div className="fixed inset-0 bg-black/40 flex justify-center z-50">
+            <motion.div
+              initial={{ opacity: 0, y: 0 }}
+              animate={{ opacity: 1, y: 24 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white p-6 rounded-xl h-fit w-full max-w-md m-4 overflow-hidden"
+            >
               <h3 className="text-xl font-bold text-[#f87898] mb-4">
                 Confirm Donation
               </h3>
 
-              <div className="space-y-4">
-                <input readOnly value={user.name} className="input" />
-                <input readOnly value={user.email} className="input" />
+              {/* donor info */}
+              <div>
+                <p className="flex items-center gap-2">
+                  <FaUser color="#f87898" />
+                  <span className="text-lg font-semibold">{user.name}</span>
+                </p>
+                <p className="flex items-center gap-2">
+                  <MdEmail color="#f87898" />
+                  <span>{user.email}</span>
+                </p>
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex justify-end gap-3 mt-6">
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="btn-secondary"
@@ -217,12 +232,12 @@ const RequestDetails = () => {
                     handleAcceptDonate();
                     setIsModalOpen(false);
                   }}
-                  className="btn-primary w-full"
+                  className="btn-primary"
                 >
                   Confirm
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
         )}
       </div>
