@@ -58,16 +58,35 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-white mb-3">Follow Us</h4>
             <div className="flex gap-4">
-              <a className="social">
+              {/* facebook */}
+              <a
+                className="social"
+                href="https://www.facebook.com/Biswanath.Sarker.BD"
+                target="blank"
+              >
                 <FaFacebookF size={16} />
               </a>
-              <a className="social">
+
+              {/* twitter */}
+              <a className="social" href="https://x.com/Biswanath08BD" target="blank">
                 <RiTwitterXLine size={16} />
               </a>
-              <a className="social">
+
+              {/* github */}
+              <a
+                className="social"
+                href="https://github.com/BiswanathBD"
+                target="blank"
+              >
                 <FaGithub size={16} />
               </a>
-              <a className="social">
+
+              {/* linkedin */}
+              <a
+                className="social"
+                href="https://www.linkedin.com/in/biswanath-sarker-bd/"
+                target="blank"
+              >
                 <FaLinkedinIn size={16} />
               </a>
             </div>
