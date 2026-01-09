@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   FaHeartbeat,
   FaHandHoldingHeart,
@@ -8,6 +8,11 @@ import {
   FaDonate,
 } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeContext";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
@@ -73,10 +78,10 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className={`p-6 rounded-2xl group hover:scale-101 transition-all duration-300 border ${
+              className={`p-6 rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
-                  ? "bg-black border-[#f87898] hover:border-[#f87898]"
-                  : "bg-white hover:shadow-lg border-[#f87898]/5"
+                  ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                  : "bg-white hover:shadow-lg"
               }`}
             >
               <div

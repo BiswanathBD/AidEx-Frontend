@@ -17,9 +17,7 @@ const Logo = () => {
         >
           aid
           <span
-            className={`font-light transition-colors duration-300 ${
-              isDark ? "text-red-400" : "text-red-600"
-            }`}
+            className={`font-light transition-colors duration-300 text-[#f87898]`}
           >
             Ex
           </span>

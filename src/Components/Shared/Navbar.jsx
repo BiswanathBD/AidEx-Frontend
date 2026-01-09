@@ -177,22 +177,14 @@ const Navbar = () => {
                     />
 
                     <div
-                      className={`absolute flex flex-col text-nowrap p-6 lg:p-2 transition-all rounded-xl ${
-                        isDark
-                          ? "bg-black border border-[#f87898]/20"
-                          : "bg-[#f87898]"
-                      } ${
+                      className={`absolute flex flex-col text-nowrap p-6 lg:p-2 transition-all rounded-xl bg-[#f87898] ${
                         show
                           ? "top-8 right-8"
                           : "top-6 right-6 opacity-0 pointer-events-none"
                       }`}
                     >
                       <div
-                        className={`flex flex-col gap-4 pb-8 mb-8 border-b lg:hidden ${
-                          isDark
-                            ? "text-gray-300 border-gray-600"
-                            : "text-white border-white/20"
-                        }`}
+                        className={`flex flex-col gap-4 pb-8 mb-8 border-b lg:hidden text-white border-white/20`}
                       >
                         <Link
                           to={"/"}
@@ -232,22 +224,14 @@ const Navbar = () => {
                       </div>
 
                       <Link
-                        className={`hidden lg:block border-b px-2 pb-2 font-semibold mb-4 ${
-                          isDark
-                            ? "text-gray-300 border-gray-600"
-                            : "text-white border-white/20"
-                        }`}
+                        className={`hidden lg:block border-b px-2 pb-2 font-semibold mb-4 text-white border-white/20`}
                         to={"/dashboard"}
                       >
                         Dashboard
                       </Link>
                       <button
                         onClick={handleSignOut}
-                        className={`rounded-sm px-2 py-1 font-semibold ${
-                          isDark
-                            ? "bg-gray-200 text-gray-800 hover:bg-white"
-                            : "bg-white text-[#f87898]"
-                        }`}
+                        className={`rounded-sm px-2 py-1 font-semibold bg-white text-[#f87898] hover:bg-gray-100`}
                       >
                         Sign Out
                       </button>
@@ -275,21 +259,13 @@ const Navbar = () => {
                   >
                     <FaBars color={isDark ? "#f87898" : "#f87898"} />
                     <div
-                      className={`absolute flex flex-col text-nowrap p-6 lg:p-2 transition-all rounded-xl ${
-                        isDark
-                          ? "bg-black border border-[#f87898]/20"
-                          : "bg-[#f87898]"
-                      } ${
+                      className={`absolute flex flex-col text-nowrap p-6 lg:p-2 transition-all rounded-xl bg-[#f87898] ${
                         show
                           ? "top-8 right-8"
                           : "top-6 right-6 opacity-0 pointer-events-none"
                       }`}
                     >
-                      <div
-                        className={`flex flex-col gap-4 ${
-                          isDark ? "text-gray-300" : "text-white"
-                        }`}
-                      >
+                      <div className={`flex flex-col gap-4 text-white`}>
                         <Link
                           to={"/"}
                           className="flex items-center gap-3 hover:text-gray-200 transition-colors"
