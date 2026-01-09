@@ -1,5 +1,6 @@
 import { useTheme } from "../Context/ThemeContext";
 import { FaQuoteLeft, FaStar, FaHeart } from "react-icons/fa";
+import useScrollAnimation from "../Hooks/useScrollAnimation";
 
 const testimonialsData = [
   {
@@ -66,6 +67,7 @@ const testimonialsData = [
 
 const Testimonials = () => {
   const { isDark } = useTheme();
+  const cardsRef = useScrollAnimation("scroll-animate-card");
 
   return (
     <section className="py-16">
@@ -103,7 +105,8 @@ const Testimonials = () => {
           {testimonialsData.map((testimonial, index) => (
             <div
               key={index}
-              className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
+              ref={(el) => (cardsRef.current[index] = el)}
+              className={`scroll-animate-card p-4 sm:p-6 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                   : "bg-white hover:shadow-lg"
@@ -173,30 +176,6 @@ const Testimonials = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <div
-          className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
-            isDark
-              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
-              : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
-          } transition-all duration-300`}
-        >
-          <h3
-            className={`text-lg sm:text-xl font-bold mb-2 ${
-              isDark ? "text-gray-200" : "text-gray-800"
-            }`}
-          >
-            Ready to Make a Difference?
-          </h3>
-          <p
-            className={`text-sm sm:text-base ${
-              isDark ? "text-gray-400" : "text-gray-600"
-            }`}
-          >
-            Join our community of heroes and start saving lives today.
-          </p>
         </div>
       </div>
     </section>

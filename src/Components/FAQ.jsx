@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTheme } from "../Context/ThemeContext";
 import { FaChevronDown, FaChevronUp, FaQuestionCircle } from "react-icons/fa";
 import { MdBloodtype, MdSecurity, MdPhone } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line
 
 const faqData = [
   {
@@ -110,6 +111,47 @@ const FAQ = () => {
     setOpenQuestion(openQuestion === questionId ? null : questionId);
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const answerVariants = {
+    hidden: {
+      opacity: 0,
+      height: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    visible: {
+      opacity: 1,
+      height: "auto",
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   return (
     <section className="py-16">
       <div>
@@ -195,24 +237,34 @@ const FAQ = () => {
             {faqData.map(
               (category, categoryIndex) =>
                 activeCategory === category.category && (
-                  <div key={categoryIndex} className="space-y-4">
+                  <motion.div
+                    key={categoryIndex}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: false, amount: 0.2 }}
+                    variants={containerVariants}
+                    className="space-y-4"
+                  >
                     {category.questions.map((faq, questionIndex) => {
                       const questionId = `${categoryIndex}-${questionIndex}`;
                       const isOpen = openQuestion === questionId;
 
                       return (
-                        <div
+                        <motion.div
                           key={questionIndex}
+                          variants={cardVariants}
                           className={`rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 ${
                             isDark
                               ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                               : "bg-white hover:shadow-lg"
                           } ${isOpen ? "shadow-lg" : ""}`}
                         >
-                          <button
+                          <motion.button
                             onClick={() =>
                               toggleQuestion(categoryIndex, questionIndex)
                             }
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
                             className={`w-full p-4 sm:p-6 text-left flex items-center justify-between transition-all duration-200 ${
                               isOpen
                                 ? isDark
@@ -228,55 +280,58 @@ const FAQ = () => {
                             >
                               {faq.question}
                             </h3>
-                            <div
-                              className={`shrink-0 transition-transform duration-300 ${
-                                isOpen ? "rotate-180" : ""
-                              }`}
+                            <motion.div
+                              animate={{ rotate: isOpen ? 180 : 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="shrink-0"
                             >
-                              <FaChevronDown
-                                className={`text-[#f87898] text-sm sm:text-base ${
-                                  isOpen ? "hidden" : "block"
-                                }`}
-                              />
-                              <FaChevronUp
-                                className={`text-[#f87898] text-sm sm:text-base ${
-                                  isOpen ? "block" : "hidden"
-                                }`}
-                              />
-                            </div>
-                          </button>
+                              <FaChevronDown className="text-[#f87898] text-sm sm:text-base" />
+                            </motion.div>
+                          </motion.button>
 
-                          <div
-                            className={`overflow-hidden transition-all duration-300 ${
-                              isOpen
-                                ? "max-h-96 opacity-100"
-                                : "max-h-0 opacity-0"
-                            }`}
-                          >
-                            <div className="p-4 sm:p-6 pt-0">
-                              <p
-                                className={`leading-relaxed text-xs sm:text-sm ${
-                                  isDark ? "text-gray-400" : "text-gray-600"
-                                }`}
+                          <AnimatePresence>
+                            {isOpen && (
+                              <motion.div
+                                initial="hidden"
+                                animate="visible"
+                                exit="hidden"
+                                variants={answerVariants}
+                                className="overflow-hidden"
                               >
-                                {faq.answer}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                                <div className="p-4 sm:p-6 pt-0">
+                                  <motion.p
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.2, delay: 0.1 }}
+                                    className={`leading-relaxed text-xs sm:text-sm ${
+                                      isDark ? "text-gray-400" : "text-gray-600"
+                                    }`}
+                                  >
+                                    {faq.answer}
+                                  </motion.p>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 )
             )}
           </div>
         </div>
 
         {/* Contact Support */}
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
             isDark
-              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+              ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
               : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
           } transition-all duration-300`}
         >
@@ -310,7 +365,7 @@ const FAQ = () => {
               Call Us
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

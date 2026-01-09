@@ -1,8 +1,10 @@
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeContext";
+import useScrollAnimation from "../Hooks/useScrollAnimation";
 
 const ContactUs = () => {
   const { isDark } = useTheme();
+  const cardsRef = useScrollAnimation("scroll-animate-card");
 
   return (
     <section className="py-16">
@@ -37,7 +39,8 @@ const ContactUs = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
           <div
-            className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
+            ref={(el) => (cardsRef.current[0] = el)}
+            className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
               isDark
                 ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                 : "bg-white hover:shadow-lg"
@@ -130,7 +133,8 @@ const ContactUs = () => {
 
           {/* send message */}
           <div
-            className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
+            ref={(el) => (cardsRef.current[1] = el)}
+            className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
               isDark
                 ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                 : "bg-white hover:shadow-lg"

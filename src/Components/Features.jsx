@@ -8,6 +8,7 @@ import {
   FaDonate,
 } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeContext";
+import useScrollAnimation from "../Hooks/useScrollAnimation";
 
 const features = [
   {
@@ -50,34 +51,7 @@ const features = [
 
 const Features = () => {
   const { isDark } = useTheme();
-  const cardsRef = useRef([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate");
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      }
-    );
-
-    const currentCards = cardsRef.current;
-    currentCards.forEach((card) => {
-      if (card) observer.observe(card);
-    });
-
-    return () => {
-      currentCards.forEach((card) => {
-        if (card) observer.unobserve(card);
-      });
-    };
-  }, []);
+  const cardsRef = useScrollAnimation("scroll-animate-card");
 
   return (
     <section className="py-16">
@@ -116,7 +90,7 @@ const Features = () => {
             <div
               key={index}
               ref={(el) => (cardsRef.current[index] = el)}
-              className={`feature-card p-6 rounded-2xl group hover:scale-101 transition-all duration-300 ${
+              className={`scroll-animate-card p-6 rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                   : "bg-white hover:shadow-lg"

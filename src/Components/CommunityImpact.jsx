@@ -10,6 +10,8 @@ import {
   FaUserFriends,
 } from "react-icons/fa";
 import { MdVolunteerActivism, MdCampaign } from "react-icons/md";
+import useScrollAnimation from "../Hooks/useScrollAnimation";
+import { motion } from "framer-motion"; // eslint-disable-line
 
 const impactData = [
   {
@@ -99,6 +101,8 @@ const initiativeData = [
 
 const CommunityImpact = () => {
   const { isDark } = useTheme();
+  const impactCardsRef = useScrollAnimation("scroll-animate-card");
+  const initiativeCardsRef = useScrollAnimation("scroll-animate-card");
 
   return (
     <section className="py-16">
@@ -138,7 +142,8 @@ const CommunityImpact = () => {
           {impactData.map((impact, index) => (
             <div
               key={index}
-              className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
+              ref={(el) => (impactCardsRef.current[index] = el)}
+              className={`scroll-animate-card p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                   : "bg-white hover:shadow-lg"
@@ -193,7 +198,8 @@ const CommunityImpact = () => {
             {initiativeData.map((initiative, index) => (
               <div
                 key={index}
-                className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
+                ref={(el) => (initiativeCardsRef.current[index] = el)}
+                className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                   isDark
                     ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                     : "bg-white hover:shadow-lg"
@@ -247,7 +253,11 @@ const CommunityImpact = () => {
         </div>
 
         {/* Community Spotlight */}
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
             isDark
               ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
@@ -348,32 +358,7 @@ const CommunityImpact = () => {
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Join Community CTA */}
-        <div
-          className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
-            isDark
-              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
-              : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
-          } transition-all duration-300`}
-        >
-          <h3
-            className={`text-lg sm:text-xl font-bold mb-2 ${
-              isDark ? "text-gray-200" : "text-gray-800"
-            }`}
-          >
-            Be Part of Something Bigger
-          </h3>
-          <p
-            className={`mb-4 sm:mb-6 text-sm sm:text-base ${
-              isDark ? "text-gray-400" : "text-gray-600"
-            }`}
-          >
-            Join our community of heroes and help us build a stronger, more
-            caring society where no one suffers due to blood shortage.
-          </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -142,7 +142,90 @@ nav .active {
   @apply p-2 rounded-full bg-white/10 hover:bg-[#f87898] transition;
 }
 
-/* Features Cards Scroll Animation */
+/* Common Scroll Animation for Cards */
+.scroll-animate-card {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate-card.animate {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.scroll-animate-card.animate-out {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Staggered animation delays for animate in */
+.scroll-animate-card:nth-child(1).animate {
+  transition-delay: 0ms;
+}
+
+.scroll-animate-card:nth-child(2).animate {
+  transition-delay: 100ms;
+}
+
+.scroll-animate-card:nth-child(3).animate {
+  transition-delay: 200ms;
+}
+
+.scroll-animate-card:nth-child(4).animate {
+  transition-delay: 300ms;
+}
+
+.scroll-animate-card:nth-child(5).animate {
+  transition-delay: 400ms;
+}
+
+.scroll-animate-card:nth-child(6).animate {
+  transition-delay: 500ms;
+}
+
+.scroll-animate-card:nth-child(7).animate {
+  transition-delay: 600ms;
+}
+
+.scroll-animate-card:nth-child(8).animate {
+  transition-delay: 700ms;
+}
+
+/* Reverse animation delays for animate out */
+.scroll-animate-card:nth-child(1).animate-out {
+  transition-delay: 700ms;
+}
+
+.scroll-animate-card:nth-child(2).animate-out {
+  transition-delay: 600ms;
+}
+
+.scroll-animate-card:nth-child(3).animate-out {
+  transition-delay: 500ms;
+}
+
+.scroll-animate-card:nth-child(4).animate-out {
+  transition-delay: 400ms;
+}
+
+.scroll-animate-card:nth-child(5).animate-out {
+  transition-delay: 300ms;
+}
+
+.scroll-animate-card:nth-child(6).animate-out {
+  transition-delay: 200ms;
+}
+
+.scroll-animate-card:nth-child(7).animate-out {
+  transition-delay: 100ms;
+}
+
+.scroll-animate-card:nth-child(8).animate-out {
+  transition-delay: 0ms;
+}
+
+/* Legacy support for feature cards */
 .feature-card {
   opacity: 0;
   transform: scale(0.9);
@@ -152,6 +235,11 @@ nav .active {
 .feature-card.animate {
   opacity: 1;
   transform: scale(1);
+}
+
+.feature-card.animate-out {
+  opacity: 0;
+  transform: scale(0.95);
 }
 
 .feature-card:nth-child(1).animate {
@@ -176,4 +264,29 @@ nav .active {
 
 .feature-card:nth-child(6).animate {
   transition-delay: 500ms;
+}
+
+/* Reverse animation delays for scroll up */
+.feature-card:nth-child(1).animate-out {
+  transition-delay: 500ms;
+}
+
+.feature-card:nth-child(2).animate-out {
+  transition-delay: 400ms;
+}
+
+.feature-card:nth-child(3).animate-out {
+  transition-delay: 300ms;
+}
+
+.feature-card:nth-child(4).animate-out {
+  transition-delay: 200ms;
+}
+
+.feature-card:nth-child(5).animate-out {
+  transition-delay: 100ms;
+}
+
+.feature-card:nth-child(6).animate-out {
+  transition-delay: 0ms;
 }

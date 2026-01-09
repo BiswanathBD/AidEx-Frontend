@@ -10,6 +10,8 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { MdVerifiedUser, MdSecurity } from "react-icons/md";
+import useScrollAnimation from "../Hooks/useScrollAnimation";
+import { motion } from "framer-motion"; // eslint-disable-line
 
 const trustFeatures = [
   {
@@ -71,6 +73,8 @@ const certifications = [
 
 const TrustSafety = () => {
   const { isDark } = useTheme();
+  const trustCardsRef = useScrollAnimation("scroll-animate-card");
+  const certCardsRef = useScrollAnimation("scroll-animate-card");
 
   return (
     <section className="py-16">
@@ -108,7 +112,8 @@ const TrustSafety = () => {
           {trustFeatures.map((feature, index) => (
             <div
               key={index}
-              className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
+              ref={(el) => (trustCardsRef.current[index] = el)}
+              className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                   : "bg-white hover:shadow-lg"
@@ -161,7 +166,11 @@ const TrustSafety = () => {
         </div>
 
         {/* Security Stats */}
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl mb-12 sm:mb-16 ${
             isDark
               ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
@@ -243,10 +252,16 @@ const TrustSafety = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Certifications */}
-        <div className="text-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center"
+        >
           <h3
             className={`text-xl sm:text-2xl font-bold mb-6 sm:mb-8 ${
               isDark ? "text-gray-200" : "text-gray-800"
@@ -259,39 +274,30 @@ const TrustSafety = () => {
             {certifications.map((cert, index) => (
               <div
                 key={index}
-                className={`p-4 sm:p-6 rounded-lg sm:rounded-xl group hover:scale-101 transition-all duration-300 ${
-                  isDark
-                    ? "bg-white/5 hover:bg-white/10"
-                    : "bg-gray-50 hover:bg-gray-100 hover:shadow-md"
-                }`}
+                ref={(el) => (certCardsRef.current[index] = el)}
+                className="scroll-animate-card p-4 sm:p-6 rounded-lg sm:rounded-xl group hover:scale-101 transition-all duration-300 bg-[#f87898] hover:bg-[#f87898]/90 hover:shadow-md"
               >
                 <div className="flex justify-center mb-3">
-                  <FaCertificate className="text-[#f87898] text-xl sm:text-2xl" />
+                  <FaCertificate className="text-white text-xl sm:text-2xl" />
                 </div>
-                <h4
-                  className={`font-bold text-xs sm:text-sm mb-1 ${
-                    isDark ? "text-gray-200" : "text-gray-800"
-                  }`}
-                >
+                <h4 className="font-bold text-xs sm:text-sm mb-1 text-white">
                   {cert.name}
                 </h4>
-                <p
-                  className={`text-xs ${
-                    isDark ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  {cert.description}
-                </p>
+                <p className="text-xs text-white/80">{cert.description}</p>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Emergency Contact */}
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
             isDark
-              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+              ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
               : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
           } transition-all duration-300`}
         >
@@ -329,7 +335,7 @@ const TrustSafety = () => {
               Security Report
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

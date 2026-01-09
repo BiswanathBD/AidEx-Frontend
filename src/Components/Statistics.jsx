@@ -6,6 +6,7 @@ import {
   FaHandHoldingHeart,
 } from "react-icons/fa";
 import { MdBloodtype, MdLocationOn } from "react-icons/md";
+import useScrollAnimation from "../Hooks/useScrollAnimation";
 
 const statisticsData = [
   {
@@ -48,6 +49,7 @@ const statisticsData = [
 
 const Statistics = () => {
   const { isDark } = useTheme();
+  const cardsRef = useScrollAnimation("scroll-animate-card");
 
   return (
     <section className="py-16">
@@ -85,7 +87,8 @@ const Statistics = () => {
           {statisticsData.map((stat, index) => (
             <div
               key={index}
-              className={`p-6 sm:p-8 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
+              ref={(el) => (cardsRef.current[index] = el)}
+              className={`scroll-animate-card p-6 sm:p-8 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                   : "bg-white hover:shadow-lg"
@@ -124,25 +127,6 @@ const Statistics = () => {
               </p>
             </div>
           ))}
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center mt-8 sm:mt-12">
-          <h3
-            className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${
-              isDark ? "text-gray-200" : "text-gray-800"
-            }`}
-          >
-            Be Part of This <span className="text-[#f87898]">Amazing</span>{" "}
-            Journey
-          </h3>
-          <p
-            className={`text-base sm:text-lg ${
-              isDark ? "text-gray-300" : "text-gray-700"
-            }`}
-          >
-            Join thousands of heroes who are saving lives every day
-          </p>
         </div>
       </div>
     </section>
