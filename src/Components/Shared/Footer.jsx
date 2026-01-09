@@ -68,7 +68,11 @@ const Footer = () => {
               </a>
 
               {/* twitter */}
-              <a className="social" href="https://x.com/Biswanath08BD" target="blank">
+              <a
+                className="social"
+                href="https://x.com/Biswanath08BD"
+                target="blank"
+              >
                 <RiTwitterXLine size={16} />
               </a>
 

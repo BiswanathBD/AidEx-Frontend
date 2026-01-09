@@ -2,6 +2,12 @@
 
 body {
   background-color: rgb(240, 240, 240);
+  transition: background-color 0.3s ease;
+}
+
+.dark body {
+  background-color: #110909;
+  color: rgb(243, 244, 246);
 }
 
 button {
@@ -35,37 +41,55 @@ button {
   transform: translateY(-1px);
 }
 
-nav a {
-  padding: 6px 8px;
-  color: gray;
-  font-weight: 500;
+.dark .btn-secondary {
+  border-color: #f87898;
+  color: #f87898;
+  background: transparent;
 }
 
-nav a:hover {
-  transform: translateY(-1px);
-  color: black;
+nav a {
+  transition: all 0.3s ease;
 }
 
 nav .active {
   color: #f87898;
-  padding-bottom: 1px !important;
-  border-bottom: 2px solid #f87898;
 }
 
 .navbar {
   box-shadow: 0 0px 20px rgb(230, 230, 230);
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.dark .navbar {
+  box-shadow: 0 0px 20px rgb(0, 0, 0, 0.3);
+  background: linear-gradient(to right, #110909, #1f1017);
 }
 
 .dashboard .active {
   color: #f87898;
   font-weight: 600;
 }
+
 .dash-nav a:hover {
   color: black;
 }
 
+.dark .dash-nav a:hover {
+  color: white;
+}
+
 .input {
   @apply w-full border border-gray-300 px-4 py-2 rounded focus:border-none focus:ring-1 focus:ring-[#f87898] outline-none h-fit;
+  transition: all 0.3s ease;
+}
+
+.dark .input {
+  @apply border-gray-600 bg-[#1f1017] text-white;
+}
+
+.dark .input::placeholder {
+  color: rgb(156, 163, 175);
 }
 
 /* loader animation */
@@ -79,6 +103,7 @@ nav .active {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
+
 .loader::after {
   content: "";
   box-sizing: border-box;
@@ -91,6 +116,7 @@ nav .active {
   border-bottom: 4px solid #f87898;
   border-left: 4px solid transparent;
 }
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
