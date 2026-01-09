@@ -7,6 +7,7 @@ import {
   FaBolt,
   FaDonate,
 } from "react-icons/fa";
+import { useTheme } from "../Context/ThemeContext";
 
 const features = [
   {
@@ -48,16 +49,22 @@ const features = [
 ];
 
 const Features = () => {
+  const { isDark } = useTheme();
+
   return (
     <section className="py-16">
       <div>
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+          <h2
+            className={`text-3xl md:text-4xl font-bold ${
+              isDark ? "text-gray-200" : "text-gray-800"
+            }`}
+          >
             Why Choose <span className="text-[#f87898]">AidEx</span>?
           </h2>
-          <p className="mt-3 text-gray-600">
-            AidEx is built to make blood donation and emergency funding <br /> simple,
-            secure, and impactful for everyone.
+          <p className={`mt-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            AidEx is built to make blood donation and emergency funding <br />{" "}
+            simple, secure, and impactful for everyone.
           </p>
         </div>
 
@@ -66,17 +73,35 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white p-6 rounded-2xl group hover:scale-101 transition-all"
+              className={`p-6 rounded-2xl group hover:scale-101 transition-all duration-300 border ${
+                isDark
+                  ? "bg-linear-to-br from-[#110909] to-[#1f1017] hover:from-[#1f1017] hover:to-[#2a1a2a] border-[#f87898]/5"
+                  : "bg-white hover:shadow-lg border-[#f87898]/5"
+              }`}
             >
-              <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-[#f87898]/10 text-[#f87898] text-2xl mb-4 group-hover:bg-[#f87898] group-hover:text-white transition-all">
+              <div
+                className={`w-14 h-14 flex items-center justify-center rounded-xl text-2xl mb-4 transition-all duration-300 ${
+                  isDark
+                    ? "bg-[#f87898]/20 text-[#f87898] group-hover:bg-[#f87898] group-hover:text-white"
+                    : "bg-[#f87898]/10 text-[#f87898] group-hover:bg-[#f87898] group-hover:text-white"
+                }`}
+              >
                 {feature.icon}
               </div>
 
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              <h3
+                className={`text-xl font-semibold mb-2 ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                }`}
+              >
                 {feature.title}
               </h3>
 
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p
+                className={`text-sm leading-relaxed ${
+                  isDark ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
                 {feature.description}
               </p>
             </div>
