@@ -4,17 +4,21 @@ import bgImg from "../assets/hero-bg.png";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { AuthContext } from "../Auth/AuthContext";
+import { useTheme } from "../Context/ThemeContext";
 motion;
 
 const Hero = () => {
   const { user } = useContext(AuthContext);
+  const { isDark } = useTheme();
 
   return (
     <motion.div
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="bg-white dark:bg-[#1f1017] rounded-lg overflow-hidden transition-colors duration-300"
+      className={`rounded-lg overflow-hidden transition-colors duration-300 ${
+        isDark ? "bg-linear-to-br from-[#110909] to-[#1f1017]" : "bg-white"
+      }`}
     >
       <div className="grid lg:grid-cols-3 items-center p-8">
         <img
@@ -23,10 +27,18 @@ const Hero = () => {
           className="col-span-2 w-5/6 mx-auto"
         />
         <div className="w-5/6">
-          <h1 className="text-4xl xl:text-6xl font-bold mx-auto text-neutral-600 dark:text-neutral-300 md:mt-8">
+          <h1
+            className={`text-4xl xl:text-6xl font-bold mx-auto md:mt-8 ${
+              isDark ? "text-neutral-300" : "text-neutral-600"
+            }`}
+          >
             <span className="text-[#f87898]">Blood</span> Donation
           </h1>
-          <p className="text-neutral-500 dark:text-neutral-400 my-4">
+          <p
+            className={`my-4 ${
+              isDark ? "text-neutral-400" : "text-neutral-500"
+            }`}
+          >
             A small act of kindness can save someone's life. Donating blood not
             only helps those in urgent need but also brings hope to families.
             Your contribution today can create a brighter tomorrow.
