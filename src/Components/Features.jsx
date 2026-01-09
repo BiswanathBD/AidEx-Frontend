@@ -75,7 +75,7 @@ const Features = () => {
               key={index}
               className={`p-6 rounded-2xl group hover:scale-101 transition-all duration-300 border ${
                 isDark
-                  ? "bg-linear-to-br from-[#110909] to-[#1f1017] hover:from-[#1f1017] hover:to-[#2a1a2a] border-[#f87898]/5"
+                  ? "bg-black border-[#f87898] hover:border-[#f87898]"
                   : "bg-white hover:shadow-lg border-[#f87898]/5"
               }`}
             >

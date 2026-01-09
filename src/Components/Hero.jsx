@@ -17,7 +17,7 @@ const Hero = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`rounded-lg overflow-hidden transition-colors duration-300 ${
-        isDark ? "bg-linear-to-br from-[#110909] to-[#1f1017]" : "bg-white"
+        isDark ? "bg-black" : "bg-white"
       }`}
     >
       <div className="grid lg:grid-cols-3 items-center p-8">

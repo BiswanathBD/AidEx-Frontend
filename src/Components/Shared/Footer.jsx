@@ -10,7 +10,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 
 const Footer = () => {
   return (
-    <div className="bg-linear-to-br from-[#110909] to-[#1f1017] mt-24 py-10 text-gray-300">
+    <div className="bg-black mt-24 py-10 text-gray-300">
       <Container>
         <div className="grid md:grid-cols-3 gap-8">
           {/* logo */}

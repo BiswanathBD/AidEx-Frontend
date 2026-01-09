@@ -54,7 +54,7 @@ const Login = () => {
       <div className="my-8">
         <Logo />
 
-        <div className="grid lg:grid-cols-2 mt-8 bg-white dark:bg-[#1f1017] items-center rounded-lg overflow-hidden shadow-lg">
+        <div className="grid lg:grid-cols-2 mt-8 bg-white dark:bg-black items-center rounded-lg overflow-hidden shadow-lg">
           <div className="hidden lg:block">
             <img
               src={loginImg}

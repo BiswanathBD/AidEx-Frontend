@@ -26,7 +26,7 @@ const ThemeToggle = () => {
         {theme === "light" ? (
           <BsSun className="w-3 h-3 text-yellow-600" />
         ) : (
-          <BsMoon className="w-3 h-3 text-[#110909]" />
+          <BsMoon className="w-3 h-3 text-black" />
         )}
       </div>
 

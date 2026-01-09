@@ -49,7 +49,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-white dark:bg-linear-to-r dark:from-[#110909] dark:to-[#1f1017] transition-colors duration-300">
+    <div className="navbar bg-white dark:bg-black transition-colors duration-300">
       <Container>
         <div className=" flex justify-between items-center py-3 px-4">
           <div className="m-2">
@@ -179,7 +179,7 @@ const Navbar = () => {
                     <div
                       className={`absolute flex flex-col text-nowrap p-6 lg:p-2 transition-all rounded-xl ${
                         isDark
-                          ? "bg-linear-to-br from-[#2e1919] to-[#3c222e]"
+                          ? "bg-black border border-[#f87898]/20"
                           : "bg-[#f87898]"
                       } ${
                         show
@@ -277,7 +277,7 @@ const Navbar = () => {
                     <div
                       className={`absolute flex flex-col text-nowrap p-6 lg:p-2 transition-all rounded-xl ${
                         isDark
-                          ? "bg-linear-to-br from-[#110909] to-[#1f1017]"
+                          ? "bg-black border border-[#f87898]/20"
                           : "bg-[#f87898]"
                       } ${
                         show
