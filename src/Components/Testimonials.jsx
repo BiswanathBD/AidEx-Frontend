@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "../Context/ThemeContext";
 import { FaQuoteLeft, FaStar, FaHeart } from "react-icons/fa";
 
@@ -72,25 +71,25 @@ const Testimonials = () => {
     <section className="py-16">
       <div>
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="flex justify-center mb-4">
             <div
-              className={`p-4 rounded-2xl ${
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
                 isDark ? "bg-[#f87898]/10" : "bg-[#f87898]/5"
               }`}
             >
-              <FaHeart className="text-[#f87898] text-3xl" />
+              <FaHeart className="text-[#f87898] text-2xl sm:text-3xl" />
             </div>
           </div>
           <h2
-            className={`text-3xl md:text-4xl font-bold mb-4 ${
+            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Stories of <span className="text-[#f87898]">Hope</span> & Healing
           </h2>
           <p
-            className={`max-w-3xl mx-auto ${
+            className={`max-w-3xl mx-auto text-sm sm:text-base ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
@@ -100,29 +99,32 @@ const Testimonials = () => {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {testimonialsData.map((testimonial, index) => (
             <div
               key={index}
-              className={`p-6 rounded-2xl border transition-all duration-300 hover:scale-105 ${
+              className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
-                  ? "bg-black border-[#f87898] hover:border-[#f87898]"
-                  : "bg-white border-[#f87898]/5 hover:shadow-lg hover:border-[#f87898]/10"
+                  ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                  : "bg-white hover:shadow-lg"
               }`}
             >
               {/* Quote Icon */}
               <div className="flex justify-between items-start mb-4">
-                <FaQuoteLeft className="text-[#f87898] text-2xl opacity-50" />
+                <FaQuoteLeft className="text-[#f87898] text-lg sm:text-2xl opacity-50" />
                 <div className="flex gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-[#f87898] text-sm" />
+                    <FaStar
+                      key={i}
+                      className="text-[#f87898] text-xs sm:text-sm"
+                    />
                   ))}
                 </div>
               </div>
 
               {/* Testimonial Text */}
               <p
-                className={`text-sm leading-relaxed mb-6 ${
+                className={`text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 ${
                   isDark ? "text-gray-300" : "text-gray-700"
                 }`}
               >
@@ -130,22 +132,22 @@ const Testimonials = () => {
               </p>
 
               {/* User Info */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-[#f87898]/20"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-[#f87898]/20"
                 />
                 <div className="flex-1">
                   <h4
-                    className={`font-semibold ${
+                    className={`text-sm sm:text-base font-semibold ${
                       isDark ? "text-gray-200" : "text-gray-800"
                     }`}
                   >
                     {testimonial.name}
                   </h4>
                   <p
-                    className={`text-sm ${
+                    className={`text-xs sm:text-sm ${
                       isDark ? "text-gray-400" : "text-gray-600"
                     }`}
                   >
@@ -175,20 +177,24 @@ const Testimonials = () => {
 
         {/* Bottom CTA */}
         <div
-          className={`mt-16 p-8 rounded-2xl border text-center ${
+          className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
             isDark
-              ? "bg-[#f87898]/5 border-[#f87898]/10"
-              : "bg-[#f87898]/5 border-[#f87898]/10"
-          }`}
+              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+              : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+          } transition-all duration-300`}
         >
           <h3
-            className={`text-xl font-bold mb-2 ${
+            className={`text-lg sm:text-xl font-bold mb-2 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Ready to Make a Difference?
           </h3>
-          <p className={`${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          <p
+            className={`text-sm sm:text-base ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             Join our community of heroes and start saving lives today.
           </p>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useTheme } from "../Context/ThemeContext";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,7 +8,7 @@ import {
   FaPhoneAlt,
   FaHandHoldingHeart,
 } from "react-icons/fa";
-import { MdBloodtype, MdNotifications } from "react-icons/md";
+import { MdBloodtype } from "react-icons/md";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -96,7 +96,7 @@ const HowItWorks = () => {
     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 
     // Animate each timeline item
-    items.forEach((item, index) => {
+    items.forEach((item) => {
       if (!item) return;
 
       // All items animate from right to left
@@ -136,16 +136,25 @@ const HowItWorks = () => {
     <section className="py-16">
       <div>
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="flex justify-center mb-4">
+            <div
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
+                isDark ? "bg-[#f87898]/10" : "bg-[#f87898]/5"
+              }`}
+            >
+              <FaHandHoldingHeart className="text-[#f87898] text-2xl sm:text-3xl" />
+            </div>
+          </div>
           <h2
-            className={`text-3xl md:text-4xl font-bold mb-4 ${
+            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             How <span className="text-[#f87898]">AidEx</span> Works
           </h2>
           <p
-            className={`max-w-3xl mx-auto ${
+            className={`max-w-3xl mx-auto text-sm sm:text-base ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
@@ -157,10 +166,10 @@ const HowItWorks = () => {
 
         {/* Steps Timeline */}
         <div ref={timelineRef} className="max-w-4xl mx-auto space-y-8">
-          {stepsData.map((stepData, index) => (
+          {stepsData.map((stepData, stepIndex) => (
             <div
-              key={index}
-              ref={(el) => (itemsRef.current[index] = el)}
+              key={stepIndex}
+              ref={(el) => (itemsRef.current[stepIndex] = el)}
               className="relative flex gap-6 justify-center"
             >
               {/* Timeline Left Side */}
@@ -182,7 +191,7 @@ const HowItWorks = () => {
                 </div>
 
                 {/* Timeline Line */}
-                {index < stepsData.length - 1 && (
+                {stepIndex < stepsData.length - 1 && (
                   <div className="w-1 h-16 bg-[#f87898]/30 mt-4" />
                 )}
               </div>

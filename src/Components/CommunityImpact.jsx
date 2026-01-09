@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "../Context/ThemeContext";
 import {
   FaUsers,
@@ -105,18 +104,18 @@ const CommunityImpact = () => {
     <section className="py-16">
       <div>
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="flex justify-center mb-4">
             <div
-              className={`p-4 rounded-2xl ${
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
                 isDark ? "bg-[#f87898]/10" : "bg-[#f87898]/5"
               }`}
             >
-              <FaUserFriends className="text-[#f87898] text-3xl" />
+              <FaUserFriends className="text-[#f87898] text-2xl sm:text-3xl" />
             </div>
           </div>
           <h2
-            className={`text-3xl md:text-4xl font-bold mb-4 ${
+            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
@@ -124,7 +123,7 @@ const CommunityImpact = () => {
             Community
           </h2>
           <p
-            className={`max-w-3xl mx-auto ${
+            className={`max-w-3xl mx-auto text-sm sm:text-base ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
@@ -135,32 +134,34 @@ const CommunityImpact = () => {
         </div>
 
         {/* Impact Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
           {impactData.map((impact, index) => (
             <div
               key={index}
-              className={`p-6 rounded-2xl border text-center transition-all duration-300 hover:scale-105 ${
+              className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
                 isDark
-                  ? "bg-black border-[#f87898] hover:border-[#f87898]"
-                  : "bg-white border-[#f87898]/5 hover:shadow-lg hover:border-[#f87898]/10"
+                  ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                  : "bg-white hover:shadow-lg"
               }`}
             >
               <div className="flex justify-center mb-4">
                 <div
-                  className={`p-3 rounded-xl ${
+                  className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 group-hover:scale-110 ${
                     isDark ? "bg-[#f87898]/20" : "bg-[#f87898]/10"
                   }`}
                 >
-                  <div className="text-[#f87898] text-2xl">{impact.icon}</div>
+                  <div className="text-[#f87898] text-xl sm:text-2xl transition-all duration-300 group-hover:scale-110">
+                    {impact.icon}
+                  </div>
                 </div>
               </div>
 
-              <div className="text-3xl font-bold text-[#f87898] mb-2">
+              <div className="text-2xl sm:text-3xl font-bold text-[#f87898] mb-2">
                 {impact.count}
               </div>
 
               <h3
-                className={`font-semibold mb-2 ${
+                className={`text-sm sm:text-base font-semibold mb-2 ${
                   isDark ? "text-gray-200" : "text-gray-800"
                 }`}
               >
@@ -168,7 +169,7 @@ const CommunityImpact = () => {
               </h3>
 
               <p
-                className={`text-sm leading-relaxed ${
+                className={`text-xs sm:text-sm leading-relaxed ${
                   isDark ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -179,45 +180,45 @@ const CommunityImpact = () => {
         </div>
 
         {/* Community Initiatives */}
-        <div className="mb-16">
+        <div className="mb-12 sm:mb-16">
           <h3
-            className={`text-2xl font-bold text-center mb-8 ${
+            className={`text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Our Community <span className="text-[#f87898]">Initiatives</span>
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {initiativeData.map((initiative, index) => (
               <div
                 key={index}
-                className={`p-8 rounded-2xl border transition-all duration-300 hover:scale-105 ${
+                className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                   isDark
-                    ? "bg-black border-[#f87898] hover:border-[#f87898]"
-                    : "bg-white border-[#f87898]/5 hover:shadow-lg hover:border-[#f87898]/10"
+                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                    : "bg-white hover:shadow-lg"
                 }`}
               >
-                <div className="flex items-start gap-4 mb-6">
+                <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div
-                    className={`p-3 rounded-xl ${
+                    className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 group-hover:scale-110 ${
                       isDark ? "bg-[#f87898]/20" : "bg-[#f87898]/10"
                     }`}
                   >
-                    <div className="text-[#f87898] text-xl">
+                    <div className="text-[#f87898] text-lg sm:text-xl">
                       {initiative.icon}
                     </div>
                   </div>
                   <div className="flex-1">
                     <h4
-                      className={`text-xl font-bold mb-2 ${
+                      className={`text-lg sm:text-xl font-bold mb-2 ${
                         isDark ? "text-gray-200" : "text-gray-800"
                       }`}
                     >
                       {initiative.title}
                     </h4>
                     <p
-                      className={`text-sm leading-relaxed ${
+                      className={`text-xs sm:text-sm leading-relaxed ${
                         isDark ? "text-gray-400" : "text-gray-600"
                       }`}
                     >
@@ -229,9 +230,9 @@ const CommunityImpact = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {initiative.achievements.map((achievement, idx) => (
                     <div key={idx} className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-[#f87898]" />
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#f87898] shrink-0" />
                       <span
-                        className={`text-sm ${
+                        className={`text-xs sm:text-sm ${
                           isDark ? "text-gray-300" : "text-gray-700"
                         }`}
                       >
@@ -247,20 +248,22 @@ const CommunityImpact = () => {
 
         {/* Community Spotlight */}
         <div
-          className={`p-8 rounded-2xl border ${
-            isDark ? "bg-black border-[#f87898]" : "bg-white border-[#f87898]/5"
-          }`}
+          className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
+            isDark
+              ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+              : "bg-white hover:shadow-lg"
+          } transition-all duration-300`}
         >
-          <div className="text-center mb-8">
+          <div className="text-center mb-6 sm:mb-8">
             <h3
-              className={`text-2xl font-bold mb-4 ${
+              className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${
                 isDark ? "text-gray-200" : "text-gray-800"
               }`}
             >
               Community <span className="text-[#f87898]">Spotlight</span>
             </h3>
             <p
-              className={`max-w-2xl mx-auto ${
+              className={`max-w-2xl mx-auto text-sm sm:text-base ${
                 isDark ? "text-gray-400" : "text-gray-600"
               }`}
             >
@@ -269,24 +272,24 @@ const CommunityImpact = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="text-center">
               <div
-                className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center ${
                   isDark ? "bg-[#f87898]/20" : "bg-[#f87898]/10"
                 }`}
               >
-                <FaHeart className="text-[#f87898] text-2xl" />
+                <FaHeart className="text-[#f87898] text-xl sm:text-2xl" />
               </div>
               <h4
-                className={`font-bold mb-2 ${
+                className={`font-bold mb-2 text-sm sm:text-base ${
                   isDark ? "text-gray-200" : "text-gray-800"
                 }`}
               >
                 Hero of the Month
               </h4>
               <p
-                className={`text-sm ${
+                className={`text-xs sm:text-sm ${
                   isDark ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -297,21 +300,21 @@ const CommunityImpact = () => {
 
             <div className="text-center">
               <div
-                className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center ${
                   isDark ? "bg-[#f87898]/20" : "bg-[#f87898]/10"
                 }`}
               >
-                <FaUsers className="text-[#f87898] text-2xl" />
+                <FaUsers className="text-[#f87898] text-xl sm:text-2xl" />
               </div>
               <h4
-                className={`font-bold mb-2 ${
+                className={`font-bold mb-2 text-sm sm:text-base ${
                   isDark ? "text-gray-200" : "text-gray-800"
                 }`}
               >
                 Community Champion
               </h4>
               <p
-                className={`text-sm ${
+                className={`text-xs sm:text-sm ${
                   isDark ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -320,23 +323,23 @@ const CommunityImpact = () => {
               </p>
             </div>
 
-            <div className="text-center">
+            <div className="text-center sm:col-span-2 lg:col-span-1">
               <div
-                className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center ${
                   isDark ? "bg-[#f87898]/20" : "bg-[#f87898]/10"
                 }`}
               >
-                <FaAward className="text-[#f87898] text-2xl" />
+                <FaAward className="text-[#f87898] text-xl sm:text-2xl" />
               </div>
               <h4
-                className={`font-bold mb-2 ${
+                className={`font-bold mb-2 text-sm sm:text-base ${
                   isDark ? "text-gray-200" : "text-gray-800"
                 }`}
               >
                 Partner Excellence
               </h4>
               <p
-                className={`text-sm ${
+                className={`text-xs sm:text-sm ${
                   isDark ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -349,20 +352,24 @@ const CommunityImpact = () => {
 
         {/* Join Community CTA */}
         <div
-          className={`mt-16 p-8 rounded-2xl border text-center ${
+          className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
             isDark
-              ? "bg-[#f87898]/5 border-[#f87898]/10"
-              : "bg-[#f87898]/5 border-[#f87898]/10"
-          }`}
+              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+              : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+          } transition-all duration-300`}
         >
           <h3
-            className={`text-xl font-bold mb-2 ${
+            className={`text-lg sm:text-xl font-bold mb-2 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Be Part of Something Bigger
           </h3>
-          <p className={`mb-6 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          <p
+            className={`mb-4 sm:mb-6 text-sm sm:text-base ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             Join our community of heroes and help us build a stronger, more
             caring society where no one suffers due to blood shortage.
           </p>

@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "../Context/ThemeContext";
 import {
   FaHeartbeat,
@@ -54,16 +53,25 @@ const Statistics = () => {
     <section className="py-16">
       <div>
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="flex justify-center mb-4">
+            <div
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
+                isDark ? "bg-[#f87898]/10" : "bg-[#f87898]/5"
+              }`}
+            >
+              <FaHeartbeat className="text-[#f87898] text-2xl sm:text-3xl" />
+            </div>
+          </div>
           <h2
-            className={`text-3xl md:text-4xl font-bold mb-4 ${
+            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Our <span className="text-[#f87898]">Impact</span> in Numbers
           </h2>
           <p
-            className={`max-w-3xl mx-auto ${
+            className={`max-w-3xl mx-auto text-sm sm:text-base ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
@@ -73,32 +81,34 @@ const Statistics = () => {
         </div>
 
         {/* Statistics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {statisticsData.map((stat, index) => (
             <div
               key={index}
-              className={`p-8 rounded-2xl border text-center transition-all duration-300 hover:scale-105 ${
+              className={`p-6 sm:p-8 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
                 isDark
-                  ? "bg-black border-[#f87898] hover:border-[#f87898]"
-                  : "bg-white border-[#f87898]/5 hover:shadow-lg hover:border-[#f87898]/10"
+                  ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                  : "bg-white hover:shadow-lg"
               }`}
             >
               <div className="flex justify-center mb-4">
                 <div
-                  className={`p-4 rounded-2xl ${
+                  className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 group-hover:scale-110 ${
                     isDark ? "bg-[#f87898]/20" : "bg-[#f87898]/10"
                   }`}
                 >
-                  <div className="text-[#f87898] text-3xl">{stat.icon}</div>
+                  <div className="text-[#f87898] text-2xl sm:text-3xl transition-all duration-300 group-hover:scale-110">
+                    {stat.icon}
+                  </div>
                 </div>
               </div>
 
-              <div className="text-4xl font-bold text-[#f87898] mb-2">
+              <div className="text-3xl sm:text-4xl font-bold text-[#f87898] mb-2">
                 {stat.number}
               </div>
 
               <h3
-                className={`text-xl font-semibold mb-2 ${
+                className={`text-lg sm:text-xl font-semibold mb-2 ${
                   isDark ? "text-gray-200" : "text-gray-800"
                 }`}
               >
@@ -106,7 +116,7 @@ const Statistics = () => {
               </h3>
 
               <p
-                className={`text-sm ${
+                className={`text-xs sm:text-sm leading-relaxed ${
                   isDark ? "text-gray-400" : "text-gray-600"
                 }`}
               >
@@ -117,9 +127,9 @@ const Statistics = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <h3
-            className={`text-2xl font-bold mb-4 ${
+            className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
@@ -127,7 +137,9 @@ const Statistics = () => {
             Journey
           </h3>
           <p
-            className={`text-lg ${isDark ? "text-gray-300" : "text-gray-700"}`}
+            className={`text-base sm:text-lg ${
+              isDark ? "text-gray-300" : "text-gray-700"
+            }`}
           >
             Join thousands of heroes who are saving lives every day
           </p>

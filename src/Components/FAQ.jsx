@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTheme } from "../Context/ThemeContext";
 import { FaChevronDown, FaChevronUp, FaQuestionCircle } from "react-icons/fa";
 import { MdBloodtype, MdSecurity, MdPhone } from "react-icons/md";
@@ -114,25 +114,25 @@ const FAQ = () => {
     <section className="py-16">
       <div>
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="flex justify-center mb-4">
             <div
-              className={`p-4 rounded-2xl ${
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
                 isDark ? "bg-[#f87898]/10" : "bg-[#f87898]/5"
               }`}
             >
-              <FaQuestionCircle className="text-[#f87898] text-3xl" />
+              <FaQuestionCircle className="text-[#f87898] text-2xl sm:text-3xl" />
             </div>
           </div>
           <h2
-            className={`text-3xl md:text-4xl font-bold mb-4 ${
+            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Frequently Asked <span className="text-[#f87898]">Questions</span>
           </h2>
           <p
-            className={`max-w-3xl mx-auto ${
+            className={`max-w-3xl mx-auto text-sm sm:text-base ${
               isDark ? "text-gray-400" : "text-gray-600"
             }`}
           >
@@ -142,18 +142,18 @@ const FAQ = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Category Sidebar */}
           <div className="lg:col-span-1">
             <div
-              className={`p-6 rounded-2xl border sticky top-8 ${
+              className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl sticky top-8 ${
                 isDark
-                  ? "bg-black border-[#f87898]"
-                  : "bg-white border-[#f87898]/5"
-              }`}
+                  ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                  : "bg-white hover:shadow-lg"
+              } transition-all duration-300`}
             >
               <h3
-                className={`font-bold mb-4 ${
+                className={`font-bold mb-4 text-sm sm:text-base ${
                   isDark ? "text-gray-200" : "text-gray-800"
                 }`}
               >
@@ -164,7 +164,7 @@ const FAQ = () => {
                   <button
                     key={index}
                     onClick={() => setActiveCategory(category.category)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition-all duration-200 ${
+                    className={`w-full flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg text-left transition-all duration-200 ${
                       activeCategory === category.category
                         ? "bg-[#f87898] text-white shadow-md"
                         : isDark
@@ -173,7 +173,7 @@ const FAQ = () => {
                     }`}
                   >
                     <div
-                      className={`text-lg ${
+                      className={`text-sm sm:text-lg ${
                         activeCategory === category.category
                           ? "text-white"
                           : "text-[#f87898]"
@@ -181,7 +181,9 @@ const FAQ = () => {
                     >
                       {category.icon}
                     </div>
-                    <span className="font-medium">{category.category}</span>
+                    <span className="font-medium text-xs sm:text-sm">
+                      {category.category}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -201,17 +203,17 @@ const FAQ = () => {
                       return (
                         <div
                           key={questionIndex}
-                          className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+                          className={`rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 ${
                             isDark
-                              ? "bg-black border-[#f87898]"
-                              : "bg-white border-[#f87898]/5"
-                          } ${isOpen ? "shadow-lg" : "hover:shadow-md"}`}
+                              ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                              : "bg-white hover:shadow-lg"
+                          } ${isOpen ? "shadow-lg" : ""}`}
                         >
                           <button
                             onClick={() =>
                               toggleQuestion(categoryIndex, questionIndex)
                             }
-                            className={`w-full p-6 text-left flex items-center justify-between transition-all duration-200 ${
+                            className={`w-full p-4 sm:p-6 text-left flex items-center justify-between transition-all duration-200 ${
                               isOpen
                                 ? isDark
                                   ? "bg-[#f87898]/10"
@@ -220,7 +222,7 @@ const FAQ = () => {
                             }`}
                           >
                             <h3
-                              className={`font-semibold pr-4 ${
+                              className={`font-semibold pr-4 text-sm sm:text-base ${
                                 isDark ? "text-gray-200" : "text-gray-800"
                               }`}
                             >
@@ -232,12 +234,12 @@ const FAQ = () => {
                               }`}
                             >
                               <FaChevronDown
-                                className={`text-[#f87898] ${
+                                className={`text-[#f87898] text-sm sm:text-base ${
                                   isOpen ? "hidden" : "block"
                                 }`}
                               />
                               <FaChevronUp
-                                className={`text-[#f87898] ${
+                                className={`text-[#f87898] text-sm sm:text-base ${
                                   isOpen ? "block" : "hidden"
                                 }`}
                               />
@@ -251,9 +253,9 @@ const FAQ = () => {
                                 : "max-h-0 opacity-0"
                             }`}
                           >
-                            <div className="p-6 pt-0">
+                            <div className="p-4 sm:p-6 pt-0">
                               <p
-                                className={`leading-relaxed ${
+                                className={`leading-relaxed text-xs sm:text-sm ${
                                   isDark ? "text-gray-400" : "text-gray-600"
                                 }`}
                               >
@@ -272,32 +274,39 @@ const FAQ = () => {
 
         {/* Contact Support */}
         <div
-          className={`mt-16 p-8 rounded-2xl border text-center ${
+          className={`mt-12 sm:mt-16 p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl text-center ${
             isDark
-              ? "bg-[#f87898]/5 border-[#f87898]/10"
-              : "bg-[#f87898]/5 border-[#f87898]/10"
-          }`}
+              ? "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+              : "bg-[#f87898]/5 hover:bg-[#f87898]/10"
+          } transition-all duration-300`}
         >
           <h3
-            className={`text-xl font-bold mb-2 ${
+            className={`text-lg sm:text-xl font-bold mb-2 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Still Have Questions?
           </h3>
-          <p className={`mb-6 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          <p
+            className={`mb-4 sm:mb-6 text-sm sm:text-base ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             Our support team is here to help you with any questions or concerns.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
             <a
               href="https://mail.google.com/mail/?view=cm&fs=1&to=biswanath.sarker.bd@gmail.com&su=Support%20Request%20-%20AidEx"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
+              className="btn-primary w-full sm:w-auto"
             >
               Contact Support
             </a>
-            <a href="tel:+8801628284848" className="btn-secondary">
+            <a
+              href="tel:+8801628284848"
+              className="btn-secondary w-full sm:w-auto"
+            >
               Call Us
             </a>
           </div>

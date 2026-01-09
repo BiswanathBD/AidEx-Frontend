@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   FaHeartbeat,
   FaHandHoldingHeart,
@@ -8,11 +8,6 @@ import {
   FaDonate,
 } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeContext";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
@@ -55,21 +50,63 @@ const features = [
 
 const Features = () => {
   const { isDark } = useTheme();
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate");
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    const currentCards = cardsRef.current;
+    currentCards.forEach((card) => {
+      if (card) observer.observe(card);
+    });
+
+    return () => {
+      currentCards.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
+    };
+  }, []);
 
   return (
     <section className="py-16">
       <div>
         <div className="text-center mb-12">
+          <div className="flex justify-center mb-4">
+            <div
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
+                isDark ? "bg-[#f87898]/10" : "bg-[#f87898]/5"
+              }`}
+            >
+              <FaBolt className="text-[#f87898] text-2xl sm:text-3xl" />
+            </div>
+          </div>
           <h2
-            className={`text-3xl md:text-4xl font-bold ${
+            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
               isDark ? "text-gray-200" : "text-gray-800"
             }`}
           >
             Why Choose <span className="text-[#f87898]">AidEx</span>?
           </h2>
-          <p className={`mt-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-            AidEx is built to make blood donation and emergency funding <br />{" "}
-            simple, secure, and impactful for everyone.
+          <p
+            className={`text-sm sm:text-base ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
+            AidEx is built to make blood donation and emergency funding{" "}
+            <br className="hidden sm:block" /> simple, secure, and impactful for
+            everyone.
           </p>
         </div>
 
@@ -78,7 +115,8 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className={`p-6 rounded-2xl group hover:scale-101 transition-all duration-300 ${
+              ref={(el) => (cardsRef.current[index] = el)}
+              className={`feature-card p-6 rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
                   : "bg-white hover:shadow-lg"
