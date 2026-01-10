@@ -125,7 +125,7 @@ const Dashboard = () => {
         <button
           onClick={handleSignOut}
           title="Sign Out"
-          className="btn-primary mt-8 m-3 flex items-center gap-2 justify-center"
+          className="btn-primary mt-8 m-3 flex! items-center gap-2 justify-center"
         >
           <span className="hidden md:block">Sign Out</span>
           <FiLogOut />

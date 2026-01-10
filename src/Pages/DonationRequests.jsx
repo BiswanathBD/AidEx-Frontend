@@ -71,7 +71,7 @@ const DonationRequests = () => {
             isDark ? "text-white" : "text-white/90"
           }`}
         >
-          <span className={isDark ? "text-white" : "text-white/90"}>
+          <span className={isDark ? "text-white" : "text-black/80"}>
             Blood Donation
           </span>{" "}
           <span className="text-[#f87898]">Requests</span>
