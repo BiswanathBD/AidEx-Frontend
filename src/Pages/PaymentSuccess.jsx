@@ -48,7 +48,7 @@ const PaymentSuccess = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="flex justify-center mt-8"
     >
-      <div className="bg-white py-6 px-10 rounded-2xl text-center">
+      <div className="py-6 px-10 rounded-2xl text-center">
         <div className="flex justify-center mb-6">
           <PiSealCheckDuotone size={128} color="green" />
         </div>
