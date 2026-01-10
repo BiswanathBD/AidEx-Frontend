@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
@@ -6,9 +6,10 @@ import Swal from "sweetalert2";
 import { Link, Navigate, useLocation } from "react-router";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
-motion;
+import { useTheme } from "../../Context/ThemeContext";
 
 const AllRequests = () => {
+  const { isDark } = useTheme();
   const { user, loading } = useContext(AuthContext);
   const [userRequests, setUserRequests] = useState([]);
   const [filter, setFilter] = useState("All");
@@ -116,10 +117,16 @@ const AllRequests = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-      className="p-4 mt-4 bg-white rounded-xl"
+      className={`p-4 sm:p-6 lg:p-8 mt-4 rounded-xl ${
+        isDark ? "bg-black" : "bg-white"
+      }`}
     >
-      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        All <span className="text-black">Donation Requests</span>
+      <h2
+        className={`text-2xl font-bold mb-6 px-4 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        <span className="text-[#f87898]">All</span> Donation Requests
       </h2>
 
       <div className="flex gap-2 mb-4 flex-wrap">
@@ -130,10 +137,12 @@ const AllRequests = () => {
               setFilter(s);
               setCurrentPage(1);
             }}
-            className={`px-3 py-1 rounded-full text-sm border ${
+            className={`px-3 py-1 rounded-full text-sm border transition-all duration-300 ${
               filter === s
                 ? "bg-[#f87898] text-white border-[#f87898]"
-                : "bg-white text-gray-600 border-gray-300"
+                : isDark
+                ? "bg-black text-white/80 border-white/20 hover:border-white/30"
+                : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
             }`}
           >
             {s}
@@ -144,7 +153,13 @@ const AllRequests = () => {
       <div className="overflow-x-auto overflow-y-hidden">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-sm text-gray-600 text-left">
+            <tr
+              className={`text-sm text-left ${
+                isDark
+                  ? "bg-white/5 text-white/80"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+            >
               <th className="p-4 rounded-l-2xl">Recipient</th>
               <th className="p-4">District</th>
               <th className="p-4">Upazila</th>
@@ -157,9 +172,13 @@ const AllRequests = () => {
           </thead>
 
           {loader && (
-            <td colSpan={8}>
-              <Loader />
-            </td>
+            <tbody>
+              <tr>
+                <td colSpan={8}>
+                  <Loader />
+                </td>
+              </tr>
+            </tbody>
           )}
 
           <tbody>
@@ -170,37 +189,47 @@ const AllRequests = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.3,
-                  delay: index * 0.2,
+                  delay: index * 0.1,
                   ease: "easeOut",
                 }}
-                className="text-sm text-gray-700"
+                className={`text-sm border-b transition-colors duration-300 ${
+                  isDark
+                    ? "text-white/90 border-white/10 hover:bg-white/5"
+                    : "text-gray-700 border-gray-100 hover:bg-gray-50"
+                }`}
               >
                 <td className="p-4">{req.recipientName}</td>
                 <td className="p-4">{req.district}</td>
                 <td className="p-4">{req.upazila}</td>
-                <td className="p-4">{req.bloodGroup}</td>
+                <td className="p-4">
+                  <span className="px-2 py-1 bg-[#f87898]/20 text-[#f87898] rounded-full text-xs font-medium">
+                    {req.bloodGroup}
+                  </span>
+                </td>
                 <td className="p-4">{req.donationDate}</td>
                 <td className="p-4">{formatTime(req.donationTime)}</td>
 
-                <td
-                  className={`p-4 text-center ${
-                    req.status === "Pending"
-                      ? "text-yellow-600"
-                      : req.status === "Inprogress"
-                      ? "text-green-600"
-                      : req.status === "Done"
-                      ? "text-blue-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {req.status}
+                <td className="p-4 text-center">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      req.status === "Pending"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : req.status === "Inprogress"
+                        ? "bg-green-100 text-green-700"
+                        : req.status === "Done"
+                        ? "bg-blue-100 text-blue-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {req.status}
+                  </span>
                 </td>
 
                 <td className="p-4 flex justify-end gap-2">
                   <Link
                     to={`/dashboard/donation-request/view/${req._id}`}
                     state={location.pathname}
-                    className="px-2 py-1 bg-gray-400 text-white rounded text-xs"
+                    className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-xs transition-colors duration-300"
                   >
                     View
                   </Link>
@@ -209,7 +238,7 @@ const AllRequests = () => {
                     <Link
                       to={`/dashboard/donation-request/edit/${req._id}`}
                       state={location.pathname}
-                      className="px-2 py-1 bg-blue-400 text-white rounded text-xs"
+                      className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs transition-colors duration-300"
                     >
                       Edit
                     </Link>
@@ -219,13 +248,13 @@ const AllRequests = () => {
                     <>
                       <button
                         onClick={() => handleStatusChange(req._id, "Done")}
-                        className="px-2 py-1 bg-green-500 text-white rounded text-xs"
+                        className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs transition-colors duration-300"
                       >
                         Done
                       </button>
                       <button
                         onClick={() => handleStatusChange(req._id, "Canceled")}
-                        className="px-2 py-1 bg-red-500 text-white rounded text-xs"
+                        className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs transition-colors duration-300"
                       >
                         Cancel
                       </button>
@@ -235,7 +264,7 @@ const AllRequests = () => {
                   {user.role === "Admin" && (
                     <button
                       onClick={() => handleDelete(req._id)}
-                      className="px-2 py-1 bg-red-400 text-white rounded text-xs"
+                      className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs transition-colors duration-300"
                     >
                       <GoTrash size={16} />
                     </button>
@@ -248,15 +277,17 @@ const AllRequests = () => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-end mr-4 mt-4 gap-4 flex-wrap">
+        <div className="flex justify-end mr-4 mt-6 gap-2 flex-wrap">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
             <button
               key={num}
               onClick={() => setCurrentPage(num)}
-              className={`px-3 py-1 rounded-full text-sm border ${
+              className={`px-3 py-1 rounded-full text-sm border transition-all duration-300 ${
                 currentPage === num
                   ? "bg-[#f87898] text-white border-[#f87898]"
-                  : "bg-white text-gray-600 border-gray-300"
+                  : isDark
+                  ? "bg-black text-white/80 border-white/20 hover:border-white/30"
+                  : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
               }`}
             >
               {num}

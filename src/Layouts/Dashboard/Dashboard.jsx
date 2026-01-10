@@ -11,13 +11,16 @@ import { Outlet } from "react-router";
 import { AuthContext } from "../../Auth/AuthContext";
 import { FiLogOut } from "react-icons/fi";
 import toast from "react-hot-toast";
-import { HiOutlineUsers } from "react-icons/hi2";
+import { HiOutlineMoon, HiOutlineSun, HiOutlineUsers } from "react-icons/hi2";
 import { motion } from "framer-motion";
 import Loader from "../../Components/Shared/Loader";
+import { useTheme } from "../../Context/ThemeContext";
+import Logo from "../../Components/Shared/Logo";
 motion;
 
 const Dashboard = () => {
   const { user, setUser, userSignOut, loading } = useContext(AuthContext);
+  const { isDark, toggleTheme } = useTheme();
 
   const handleSignOut = () => {
     const signOutPromise = userSignOut();
@@ -41,19 +44,19 @@ const Dashboard = () => {
         initial={{ opacity: 0, x: -40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="bg-white min-h-screen text-nowrap w-fit flex flex-col justify-between"
+        className={`min-h-screen text-nowrap w-fit flex flex-col justify-between ${
+          isDark ? "bg-black" : "bg-white"
+        }`}
       >
         <div className="px-4 sm:px-6 py-4">
           {/* logo */}
-          <Link to={"/"}>
-            <div className="flex items-center justify-center">
-              <img src={LogoImg} alt="logo" className="w-8 object-contain" />
-              <h3 className="hidden md:block text-2xl font-bold text-neutral-600">
-                aid<span className="font-light text-red-600">Ex</span>.
-              </h3>
-            </div>
-          </Link>
-          <div className="dash-nav mt-4 pt-4 border-t border-gray-200 text-neutral-500 space-y-4 mx-auto w-full text-center">
+          <Logo />
+
+          <div
+            className={`dash-nav mt-4 pt-4 border-t text-neutral-500 space-y-4 mx-auto w-full text-center ${
+              isDark ? "border-white/10" : "border-black/5"
+            }`}
+          >
             {/* home */}
             <NavLink
               to={"/dashboard"}
@@ -138,7 +141,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-          className="font-semibold text-neutral-500 pb-3 border-b border-white flex items-center gap-2 justify-end"
+          className={`font-semibold pb-3 flex items-center gap-2 justify-end px-4`}
         >
           <h4 className="text-xl hidden sm:block font-semibold text-[#f87898]">
             {user.name}
@@ -148,6 +151,18 @@ const Dashboard = () => {
             alt={user?.name}
             className="w-10 aspect-square object-cover rounded-full p-0.5 border-2 border-[#f87898]"
           />
+
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg transition-all duration-300 hover:scale-105 ${
+              isDark
+                ? "bg-black text-white hover:bg-white/5"
+                : "bg-white text-gray-700 hover:bg-black/5"
+            }`}
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDark ? <HiOutlineSun size={20} /> : <HiOutlineMoon size={20} />}
+          </button>
         </motion.div>
 
         {/* dashboard content */}

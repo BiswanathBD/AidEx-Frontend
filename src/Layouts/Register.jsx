@@ -1,18 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Container from "../Components/Shared/Container";
 import Logo from "../Components/Shared/Logo";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import loginImg from "../assets/login-banner.jpg";
+import { FcGoogle } from "react-icons/fc";
+import loginImg from "../assets/login-banner.png";
 import { AuthContext } from "../Auth/AuthContext";
 import { Link, Navigate, useLocation } from "react-router";
 import useAxios from "../Hooks/useAxios";
 import toast from "react-hot-toast";
+import { useTheme } from "../Context/ThemeContext";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 const Register = () => {
-  const { user, setUser, passwordSignUp, loading } = useContext(AuthContext);
+  const { isDark } = useTheme();
+  const { user, setUser, passwordSignUp, googleSignIn, loading } =
+    useContext(AuthContext);
   const axiosInstance = useAxios();
   const location = useLocation();
 
@@ -70,7 +74,7 @@ const Register = () => {
     data.role = "Donor";
     data.avatar = avatarUrl;
 
-    const { password, confirmPassword, ...userData } = data;
+    const { password, ...userData } = data;
 
     const registerPromise = passwordSignUp(data.email, password).then((res) => {
       if (res.user.accessToken) {
@@ -93,6 +97,62 @@ const Register = () => {
       loading: "Processing...",
       success: "Register successfully!",
       error: "Failed to register.",
+    });
+  };
+
+  const handleGoogleRegister = () => {
+    const googleRegisterPromise = googleSignIn().then(async (result) => {
+      const firebaseUser = result.user;
+
+      try {
+        // First, try to get existing user
+        const userResponse = await fetch(
+          `${import.meta.env.VITE_DOMAIN}/user?email=${firebaseUser.email}`
+        );
+
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          if (userData && userData.email) {
+            // User exists, set user data
+            userData.accessToken = firebaseUser.accessToken;
+            setUser(userData);
+            return;
+          }
+        }
+
+        // User doesn't exist, create new user
+        const newUserData = {
+          name: firebaseUser.displayName || firebaseUser.email.split("@")[0],
+          email: firebaseUser.email,
+          avatar: firebaseUser.photoURL || avatarUrl,
+          role: "Donor",
+          status: "Active",
+          bloodGroup: "",
+          district: "",
+          upazila: "",
+        };
+
+        const createResponse = await axiosInstance.post("/user", newUserData);
+
+        if (createResponse.data.insertedId) {
+          // Get the newly created user
+          const newUserResponse = await fetch(
+            `${import.meta.env.VITE_DOMAIN}/user?email=${firebaseUser.email}`
+          );
+          const newUser = await newUserResponse.json();
+          newUser.accessToken = firebaseUser.accessToken;
+          setUser(newUser);
+        }
+      } catch (error) {
+        console.error("Google registration error:", error);
+        throw error;
+      }
+    });
+
+    toast.promise(googleRegisterPromise, {
+      loading: "Registering with Google...",
+      success: "Google Registration Successful!",
+      error: "Google Registration Failed",
     });
   };
 
@@ -121,38 +181,51 @@ const Register = () => {
 
   return (
     <Container>
-      {user ? (
-        <Navigate to={location.state || "/"} />
-      ) : (
-        <div className="my-8">
+      <div className={`min-h-screen transition-colors duration-300 `}>
+        <div className="py-8">
           <Logo />
 
-          <div className="grid lg:grid-cols-2 items-center mt-8 bg-white rounded-lg shadow-lg">
+          <div
+            className={`grid lg:grid-cols-2 items-center mt-8 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 ${
+              isDark ? "bg-black border border-white/10" : "bg-white shadow-lg"
+            }`}
+          >
             {/* Banner */}
             <div className="hidden lg:block">
-              <img src={loginImg} alt="Register" className="w-full" />
+              <img
+                src={loginImg}
+                alt="Register"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             {/* Form */}
-            <div className="p-2 sm:p-8">
-              <h2 className="text-4xl font-bold text-center text-[#f87898] mb-6">
-                Create <span className="text-black">Account</span>
+            <div className="p-8 lg:p-12">
+              <h2
+                className={`text-4xl font-bold text-center mb-6 transition-colors duration-300 ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Create <span className="text-[#f87898]">Account</span>
               </h2>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Name */}
                 <div className="flex flex-col">
-                  <label className="mb-2 font-medium text-neutral-600">
+                  <label
+                    className={`mb-2 font-medium transition-colors duration-300 ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Full Name
                   </label>
                   <input
                     type="text"
                     {...register("name", { required: "Name is required" })}
-                    className="input"
                     placeholder="Enter your name"
                   />
                   {errors.name && (
-                    <span className="text-red-500 text-sm">
+                    <span className="text-red-500 text-sm mt-1">
                       {errors.name.message}
                     </span>
                   )}
@@ -160,17 +233,20 @@ const Register = () => {
 
                 {/* Email */}
                 <div className="flex flex-col">
-                  <label className="mb-2 font-medium text-neutral-600">
+                  <label
+                    className={`mb-2 font-medium transition-colors duration-300 ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Email
                   </label>
                   <input
                     type="email"
                     {...register("email", { required: "Email is required" })}
-                    className="input"
                     placeholder="Enter your email"
                   />
                   {errors.email && (
-                    <span className="text-red-500 text-sm">
+                    <span className="text-red-500 text-sm mt-1">
                       {errors.email.message}
                     </span>
                   )}
@@ -178,14 +254,17 @@ const Register = () => {
 
                 {/* Avatar */}
                 <div className="flex flex-col relative">
-                  <label className="mb-2 font-medium text-neutral-600">
+                  <label
+                    className={`mb-2 font-medium transition-colors duration-300 ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Avatar
                   </label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleAvatarUpload}
-                    className="input"
                   />
 
                   {avatarUrl && (
@@ -199,14 +278,17 @@ const Register = () => {
 
                 {/* Blood Group */}
                 <div className="flex flex-col">
-                  <label className="mb-2 font-medium text-neutral-600">
+                  <label
+                    className={`mb-2 font-medium transition-colors duration-300 ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Blood Group
                   </label>
                   <select
                     {...register("bloodGroup", {
                       required: "Blood group is required",
                     })}
-                    className="input"
                   >
                     <option value="">Select Blood Group</option>
                     {bloodGroups.map((bg) => (
@@ -215,19 +297,27 @@ const Register = () => {
                       </option>
                     ))}
                   </select>
+                  {errors.bloodGroup && (
+                    <span className="text-red-500 text-sm mt-1">
+                      {errors.bloodGroup.message}
+                    </span>
+                  )}
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* District */}
                   <div className="flex flex-col">
-                    <label className="mb-2 font-medium text-neutral-600">
+                    <label
+                      className={`mb-2 font-medium transition-colors duration-300 ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       District
                     </label>
                     <select
                       {...register("district", {
                         required: "District is required",
                       })}
-                      className="input"
                       onChange={(e) => {
                         const selectedName = e.target.value;
                         const districtObj = districtData.find(
@@ -244,18 +334,26 @@ const Register = () => {
                         </option>
                       ))}
                     </select>
+                    {errors.district && (
+                      <span className="text-red-500 text-sm mt-1">
+                        {errors.district.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* Upazila */}
                   <div className="flex flex-col">
-                    <label className="mb-2 font-medium text-neutral-600">
+                    <label
+                      className={`mb-2 font-medium transition-colors duration-300 ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      }`}
+                    >
                       Upazila
                     </label>
                     <select
                       {...register("upazila", {
                         required: "Upazila is required",
                       })}
-                      className="input"
                     >
                       <option value="">Select Upazila</option>
                       {filteredUpazilas.map((u) => (
@@ -264,12 +362,21 @@ const Register = () => {
                         </option>
                       ))}
                     </select>
+                    {errors.upazila && (
+                      <span className="text-red-500 text-sm mt-1">
+                        {errors.upazila.message}
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 {/* Password */}
                 <div className="flex flex-col relative">
-                  <label className="mb-2 font-medium text-neutral-600">
+                  <label
+                    className={`mb-2 font-medium transition-colors duration-300 ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Password
                   </label>
                   <input
@@ -278,12 +385,14 @@ const Register = () => {
                       required: "Password is required",
                       minLength: 6,
                     })}
-                    className="input"
+                    className="pr-12"
                     placeholder="Enter password"
                   />
 
                   <span
-                    className="absolute right-3 top-10 cursor-pointer"
+                    className={`absolute right-4 top-11 cursor-pointer transition-colors duration-300 hover:text-[#f87898] ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -292,11 +401,20 @@ const Register = () => {
                       <AiOutlineEye size={20} />
                     )}
                   </span>
+                  {errors.password && (
+                    <span className="text-red-500 text-sm mt-1">
+                      {errors.password.message}
+                    </span>
+                  )}
                 </div>
 
                 {/* Confirm Password */}
                 <div className="flex flex-col relative">
-                  <label className="mb-2 font-medium text-neutral-600">
+                  <label
+                    className={`mb-2 font-medium transition-colors duration-300 ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
                     Confirm Password
                   </label>
                   <input
@@ -306,12 +424,14 @@ const Register = () => {
                       validate: (value) =>
                         value === watch("password") || "Passwords do not match",
                     })}
-                    className="input"
+                    className="pr-12"
                     placeholder="Confirm password"
                   />
 
                   <span
-                    className="absolute right-3 top-10 cursor-pointer"
+                    className={`absolute right-4 top-11 cursor-pointer transition-colors duration-300 hover:text-[#f87898] ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
@@ -320,19 +440,63 @@ const Register = () => {
                       <AiOutlineEye size={20} />
                     )}
                   </span>
+                  {errors.confirmPassword && (
+                    <span className="text-red-500 text-sm mt-1">
+                      {errors.confirmPassword.message}
+                    </span>
+                  )}
                 </div>
 
                 {/* Submit */}
-                <button type="submit" className="w-full btn-primary mt-4">
+                <button type="submit" className="w-full btn-primary mt-6">
                   Register
                 </button>
 
-                <p className="text-center text-gray-500 mt-3">
+                {/* Divider */}
+                <div className="flex items-center my-6">
+                  <div
+                    className={`flex-1 h-px ${
+                      isDark ? "bg-white/20" : "bg-gray-300"
+                    }`}
+                  ></div>
+                  <span
+                    className={`px-4 text-sm ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    or
+                  </span>
+                  <div
+                    className={`flex-1 h-px ${
+                      isDark ? "bg-white/20" : "bg-gray-300"
+                    }`}
+                  ></div>
+                </div>
+
+                {/* Google Register Button */}
+                <button
+                  type="button"
+                  onClick={handleGoogleRegister}
+                  className={`w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg border transition-all duration-300 hover:scale-[1.02] ${
+                    isDark
+                      ? "border-white/20 bg-black text-white hover:border-white/30 hover:bg-white/5"
+                      : "border-gray-300 bg-white text-gray-900 hover:border-gray-400 hover:shadow-md"
+                  }`}
+                >
+                  <FcGoogle size={24} />
+                  <span className="font-medium">Continue with Google</span>
+                </button>
+
+                <p
+                  className={`text-center transition-colors duration-300 mt-4 ${
+                    isDark ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
                   Already have an account?{" "}
                   <Link
                     to={"/login"}
                     state={location.state}
-                    className="text-pink-600 font-medium hover:underline"
+                    className="text-[#f87898] font-medium hover:underline transition-colors duration-300"
                   >
                     Login
                   </Link>
@@ -341,7 +505,7 @@ const Register = () => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </Container>
   );
 };

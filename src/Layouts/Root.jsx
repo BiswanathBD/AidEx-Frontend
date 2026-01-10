@@ -10,7 +10,7 @@ const Root = () => {
   const { loading } = useContext(AuthContext);
 
   return (
-    <div className="min-h-screen flex flex-col overflow-hidden">
+    <div className="min-h-screen flex flex-col overflow-hidden transition-all duration-300">
       <div className="fixed w-full z-50">
         <Navbar />
       </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
@@ -6,10 +6,12 @@ import useAxios from "../../Hooks/useAxios";
 import { AuthContext } from "../../Auth/AuthContext";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
+import { useTheme } from "../../Context/ThemeContext";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 const EditDonationRequest = () => {
+  const { isDark } = useTheme();
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -123,27 +125,30 @@ const EditDonationRequest = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="bg-white p-4 mt-4 rounded-xl"
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+      className={`p-4 sm:p-6 lg:p-8 mt-4 rounded-xl ${
+        isDark ? "bg-black" : "bg-white"
+      }`}
     >
-      <h2 className="text-2xl font-bold mb-6 text-[#f87898]">
-        Edit <span className="text-black">Donation Request</span>
+      <h2
+        className={`text-2xl font-bold mb-6 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        <span className="text-[#f87898]">Edit</span> Donation Request
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* name */}
           <input
-            className="input"
             placeholder="Recipient Name"
             {...register("recipientName", { required: true })}
           />
 
           {/* district */}
-          <select
-            className="input"
-            {...register("district", { required: true })}
-          >
+          <select {...register("district", { required: true })}>
             <option value="">Select District</option>
             {districts.map((d) => (
               <option key={d.id} value={d.name}>
@@ -153,7 +158,7 @@ const EditDonationRequest = () => {
           </select>
 
           {/* upazila */}
-          <select className="input" {...register("upazila")}>
+          <select {...register("upazila")}>
             <option value="">Select Upazila</option>
             {filteredUpazilas.map((u) => (
               <option key={u.id} value={u.name}>
@@ -164,23 +169,19 @@ const EditDonationRequest = () => {
 
           {/* hospital */}
           <input
-            className="input"
             placeholder="Hospital Name"
             {...register("hospital", { required: true })}
           />
 
           {/* address */}
           <input
-            className="input md:col-span-2"
+            className="md:col-span-2"
             placeholder="Full Address"
             {...register("address", { required: true })}
           />
 
           {/* blood group */}
-          <select
-            className="input"
-            {...register("bloodGroup", { required: true })}
-          >
+          <select {...register("bloodGroup", { required: true })}>
             <option value="">Select Blood Group</option>
             {bloodGroups.map((bg) => (
               <option key={bg}>{bg}</option>
@@ -191,7 +192,7 @@ const EditDonationRequest = () => {
           <div>
             <input
               type="date"
-              className="input"
+              style={{ colorScheme: isDark ? "dark" : "light" }}
               {...register("donationDate", {
                 required: "Donation date is required",
                 validate: (value) =>
@@ -200,7 +201,7 @@ const EditDonationRequest = () => {
             />
 
             {errors.donationDate && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.donationDate.message}
               </span>
             )}
@@ -209,7 +210,7 @@ const EditDonationRequest = () => {
           {/* time */}
           <input
             type="time"
-            className="input"
+            style={{ colorScheme: isDark ? "dark" : "light" }}
             {...register("donationTime", { required: true })}
           />
         </div>
@@ -217,13 +218,12 @@ const EditDonationRequest = () => {
         {/* msg */}
         <textarea
           rows="3"
-          className="input w-full"
           placeholder="Write request message..."
           {...register("message", { required: true })}
         />
 
         <div className="flex justify-end">
-          <button className="bg-[#f87898] text-white px-6 py-3 rounded-lg">
+          <button className="bg-[#f87898] hover:bg-[#f87898]/90 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]">
             Update Request
           </button>
         </div>

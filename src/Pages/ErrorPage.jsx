@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { motion } from "framer-motion"; //eslint 
+import { motion } from "framer-motion"; 
 import { useTheme } from "../Context/ThemeContext";
 import { FaHome } from "react-icons/fa";
 

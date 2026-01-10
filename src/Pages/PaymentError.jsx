@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import React from "react";
-import { FaRegCircleXmark } from "react-icons/fa6";
+import { motion } from "framer-motion";
+import { FaSackXmark } from "react-icons/fa6";
 import { Link } from "react-router";
 motion;
 
@@ -14,7 +14,7 @@ const PaymentError = () => {
     >
       <div className="py-6 px-10 rounded-2xl text-center">
         <div className="flex justify-center mb-6">
-          <FaRegCircleXmark size={128} color="red" />
+          <FaSackXmark size={128} color="#e91e63" />
         </div>
         <h2 className="text-3xl font-bold">Payment Failed</h2>
 

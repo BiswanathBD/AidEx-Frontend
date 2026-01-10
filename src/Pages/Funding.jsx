@@ -289,7 +289,7 @@ const Funding = () => {
                   min={1}
                   placeholder="Enter Amount"
                   required
-                  className="rounded px-4 py-3 text-xl font-bold mt-1 w-full bg-white placeholder:text-[#f87898]/50 text-[#f87898] focus:outline-none"
+                  className="rounded px-4 py-3 text-xl font-bold mt-1 w-full bg-white! placeholder:text-[#f87898]/50! text-[#f87898]! focus:outline-none"
                 />
 
                 <div className="flex justify-between gap-4 font-semibold mt-4">

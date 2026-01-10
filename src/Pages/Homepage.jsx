@@ -21,8 +21,8 @@ const Homepage = () => {
       <CommunityImpact />
       <Testimonials />
       <TrustSafety />
-      <FAQ />
       <ContactUs />
+      <FAQ />
     </div>
   );
 };

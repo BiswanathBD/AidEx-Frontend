@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Auth/AuthContext";
 import toast from "react-hot-toast";
 import { Navigate, useNavigate } from "react-router";
 import useAxios from "../../Hooks/useAxios";
 import { motion } from "framer-motion";
-motion;
+import { useTheme } from "../../Context/ThemeContext";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 const CreateDonationRequest = () => {
+  const { isDark } = useTheme();
   const { user } = useContext(AuthContext);
   const [districtData, setDistrictData] = useState([]);
   const [upazilaData, setUpazilaData] = useState([]);
@@ -86,10 +87,16 @@ const CreateDonationRequest = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-      className="bg-white p-4 mt-4 rounded-xl"
+      className={`p-4 sm:p-6 lg:p-8 mt-4 rounded-xl ${
+        isDark ? "bg-black" : "bg-white"
+      }`}
     >
-      <h2 className="text-2xl font-bold mb-6 px-4 text-[#f87898]">
-        Create <span className="text-black">Donation Request</span>
+      <h2
+        className={`text-2xl font-bold mb-6 px-4 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        <span className="text-[#f87898]">Create</span> Donation Request
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -99,7 +106,6 @@ const CreateDonationRequest = () => {
             type="text"
             defaultValue={user?.name}
             readOnly
-            className="input"
             placeholder="Requester Name"
           />
 
@@ -108,7 +114,6 @@ const CreateDonationRequest = () => {
             type="email"
             defaultValue={user?.email}
             readOnly
-            className="input"
             placeholder="Requester Email"
           />
 
@@ -120,10 +125,9 @@ const CreateDonationRequest = () => {
                 required: "Recipient name is required",
               })}
               placeholder="Recipient Name"
-              className="input"
             />
             {errors.recipientName && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.recipientName.message}
               </span>
             )}
@@ -133,7 +137,6 @@ const CreateDonationRequest = () => {
           <div className="flex flex-col">
             <select
               {...register("district", { required: "District is required" })}
-              className="input"
               onChange={(e) => {
                 const selectedName = e.target.value;
                 const districtObj = districtData.find(
@@ -150,7 +153,7 @@ const CreateDonationRequest = () => {
               ))}
             </select>
             {errors.district && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.district.message}
               </span>
             )}
@@ -160,7 +163,6 @@ const CreateDonationRequest = () => {
           <div className="flex flex-col">
             <select
               {...register("upazila", { required: "Upazila is required" })}
-              className="input"
             >
               <option value="">Select Upazila</option>
               {filteredUpazilas.map((u) => (
@@ -170,7 +172,7 @@ const CreateDonationRequest = () => {
               ))}
             </select>
             {errors.upazila && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.upazila.message}
               </span>
             )}
@@ -184,10 +186,9 @@ const CreateDonationRequest = () => {
                 required: "Hospital name is required",
               })}
               placeholder="Hospital Name"
-              className="input"
             />
             {errors.hospital && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.hospital.message}
               </span>
             )}
@@ -199,10 +200,9 @@ const CreateDonationRequest = () => {
               type="text"
               {...register("address", { required: "Address is required" })}
               placeholder="Full Address"
-              className="input"
             />
             {errors.address && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.address.message}
               </span>
             )}
@@ -214,7 +214,6 @@ const CreateDonationRequest = () => {
               {...register("bloodGroup", {
                 required: "Blood group is required",
               })}
-              className="input"
             >
               <option value="">Blood Group</option>
               {bloodGroups.map((bg) => (
@@ -224,7 +223,7 @@ const CreateDonationRequest = () => {
               ))}
             </select>
             {errors.bloodGroup && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.bloodGroup.message}
               </span>
             )}
@@ -239,10 +238,10 @@ const CreateDonationRequest = () => {
                 validate: (value) =>
                   value >= today || "Cannot select past date",
               })}
-              className="input"
+              style={{ colorScheme: isDark ? "dark" : "light" }}
             />
             {errors.donationDate && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.donationDate.message}
               </span>
             )}
@@ -264,10 +263,10 @@ const CreateDonationRequest = () => {
                   return true;
                 },
               })}
-              className="input"
+              style={{ colorScheme: isDark ? "dark" : "light" }}
             />
             {errors.donationTime && (
-              <span className="text-red-500 text-sm">
+              <span className="text-red-500 text-sm mt-1">
                 {errors.donationTime.message}
               </span>
             )}
@@ -280,10 +279,9 @@ const CreateDonationRequest = () => {
             {...register("message", { required: "Message is required" })}
             rows="3"
             placeholder="Write request message..."
-            className="input w-full"
           ></textarea>
           {errors.message && (
-            <span className="text-red-500 text-sm">
+            <span className="text-red-500 text-sm mt-1">
               {errors.message.message}
             </span>
           )}
@@ -293,7 +291,7 @@ const CreateDonationRequest = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-[#f87898] text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 w-full md:w-auto"
+            className="bg-[#f87898] hover:bg-[#f87898]/90 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02] w-full md:w-auto"
           >
             Submit Request
           </button>

@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
 @import "tailwindcss";
 
 body {
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   background-color: rgb(240, 240, 240);
   transition: background-color 0.3s ease;
 }
 
 .dark body {
-  font-family: "Manrope", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
   background-color: #151515;
   color: rgb(243, 244, 246);
 }
@@ -89,22 +89,29 @@ nav .active {
   color: white;
 }
 
-.input {
-  @apply w-full border border-gray-300 px-4 py-2 rounded focus:border-none focus:ring-1 focus:ring-[#f87898] outline-none h-fit bg-white text-gray-900;
-  transition: all 0.3s ease;
+input,
+select,
+textarea {
+  @apply w-full border-none rounded-lg px-4 py-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#f87898]
+    bg-black/8 text-gray-900 placeholder-gray-600;
+  transition: all 0.2s ease;
 }
 
-.dark .input {
-  @apply border-[#f87898]/20 bg-black text-gray-200;
-  border-width: 1px;
+.dark input,
+.dark select,
+.dark textarea {
+  @apply bg-white/10 text-white placeholder-gray-400;
 }
 
-.dark .input::placeholder {
-  color: rgb(156, 163, 175);
+input:disabled,
+input:read-only {
+  @apply bg-[#f87898]/20 border border-[#f87898]/30;
 }
 
-.dark .input:focus {
-  @apply ring-[#f87898] border-[#f87898]/40;
+input:focus,
+select:focus,
+textarea:focus {
+  @apply outline-none ring ring-[#f87898] border-none;
 }
 
 /* loader animation */
@@ -292,4 +299,74 @@ nav .active {
 
 .feature-card:nth-child(6).animate-out {
   transition-delay: 0ms;
+}
+/* Date and Time Input Styling */
+input[type="date"],
+input[type="time"] {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Dark mode date/time inputs */
+.dark input[type="date"],
+.dark input[type="time"] {
+  color-scheme: dark;
+}
+
+/* Light mode date/time inputs */
+input[type="date"]:not(.dark input[type="date"]),
+input[type="time"]:not(.dark input[type="time"]) {
+  color-scheme: light;
+}
+
+/* Ensure date/time picker icons are visible - Light mode */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23374151'%3e%3cpath fill-rule='evenodd' d='M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  filter: none;
+}
+
+/* Dark mode picker icons - Force visibility with white color */
+.dark input[type="date"]::-webkit-calendar-picker-indicator,
+.dark input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  filter: none;
+}
+
+/* Time picker specific icon */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23374151'%3e%3cpath fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+
+.dark input[type="time"]::-webkit-calendar-picker-indicator {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z' clip-rule='evenodd'/%3e%3c/svg%3e");
+}
+
+/* Firefox date/time inputs */
+input[type="date"]::-moz-calendar-picker-indicator,
+input[type="time"]::-moz-time-picker-indicator {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Hover effects for better UX */
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
 }

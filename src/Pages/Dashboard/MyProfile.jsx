@@ -5,7 +5,7 @@ import useAxios from "../../Hooks/useAxios";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
-motion
+motion;
 
 const MyProfile = () => {
   const { user, setUser, loading } = useContext(AuthContext);

@@ -11,7 +11,6 @@ motion;
 const DonorDashboard = () => {
   const { user } = useContext(AuthContext);
   const axiosInstance = useAxios();
-  const navigate = useNavigate();
   const location = useLocation();
   const [requests, setRequests] = useState([]);
   const [loader, setLoader] = useState(true);
