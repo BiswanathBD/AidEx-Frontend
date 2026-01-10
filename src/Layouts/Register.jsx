@@ -73,6 +73,7 @@ const Register = () => {
     data.status = "Active";
     data.role = "Donor";
     data.avatar = avatarUrl;
+    data.registrationDate = new Date().toISOString();
 
     const { password, ...userData } = data;
 
@@ -130,6 +131,7 @@ const Register = () => {
           bloodGroup: "",
           district: "",
           upazila: "",
+          registrationDate: new Date().toISOString(),
         };
 
         const createResponse = await axiosInstance.post("/user", newUserData);
