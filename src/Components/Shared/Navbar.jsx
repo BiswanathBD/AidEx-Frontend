@@ -30,15 +30,12 @@ const Navbar = () => {
   // Handle click outside to close popups
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Close user dropdown if clicking outside
       if (
         userDropdownRef.current &&
         !userDropdownRef.current.contains(event.target)
       ) {
         setShow(false);
       }
-
-      // Close mobile menu if clicking outside
       if (
         mobileMenuRef.current &&
         !mobileMenuRef.current.contains(event.target)
@@ -46,17 +43,12 @@ const Navbar = () => {
         setMobileMenuOpen(false);
       }
     };
-
-    // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  // Close popups on escape key
   useEffect(() => {
     const handleEscapeKey = (event) => {
       if (event.key === "Escape") {

@@ -28,7 +28,7 @@ const Hero = () => {
         />
         <div className="w-5/6">
           <h1
-            className={`text-4xl xl:text-6xl font-bold mx-auto md:mt-8 ${
+            className={`text-4xl xl:text-6xl font-extrabold mx-auto md:mt-8 ${
               isDark ? "text-neutral-300" : "text-neutral-600"
             }`}
           >
