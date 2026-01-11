@@ -7,6 +7,7 @@ import { AuthContext } from "../../Auth/AuthContext";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
 import { useTheme } from "../../Context/ThemeContext";
+import { FaEdit } from "react-icons/fa";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
@@ -122,113 +123,118 @@ const EditDonationRequest = () => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-      className={`p-4 sm:p-6 lg:p-8 mt-4 rounded-xl ${
-        isDark ? "bg-black" : "bg-white"
-      }`}
-    >
-      <h2
-        className={`text-2xl font-bold mb-6 ${
-          isDark ? "text-white" : "text-gray-900"
-        }`}
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 flex items-center gap-3">
+          <FaEdit className="text-[#f87898]" />
+          <span className="text-[#f87898]">Edit</span> Donation Request
+        </h1>
+        <p className={`text-lg ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+          Update your blood donation request details
+        </p>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+        className={`p-4 sm:p-6 lg:p-8 rounded-xl ${
+          isDark ? "bg-black" : "bg-white"
+        } shadow-2xl`}
       >
-        <span className="text-[#f87898]">Edit</span> Donation Request
-      </h2>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* name */}
-          <input
-            placeholder="Recipient Name"
-            {...register("recipientName", { required: true })}
-          />
-
-          {/* district */}
-          <select {...register("district", { required: true })}>
-            <option value="">Select District</option>
-            {districts.map((d) => (
-              <option key={d.id} value={d.name}>
-                {d.name}
-              </option>
-            ))}
-          </select>
-
-          {/* upazila */}
-          <select {...register("upazila")}>
-            <option value="">Select Upazila</option>
-            {filteredUpazilas.map((u) => (
-              <option key={u.id} value={u.name}>
-                {u.name}
-              </option>
-            ))}
-          </select>
-
-          {/* hospital */}
-          <input
-            placeholder="Hospital Name"
-            {...register("hospital", { required: true })}
-          />
-
-          {/* address */}
-          <input
-            className="md:col-span-2"
-            placeholder="Full Address"
-            {...register("address", { required: true })}
-          />
-
-          {/* blood group */}
-          <select {...register("bloodGroup", { required: true })}>
-            <option value="">Select Blood Group</option>
-            {bloodGroups.map((bg) => (
-              <option key={bg}>{bg}</option>
-            ))}
-          </select>
-
-          {/* date */}
-          <div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* name */}
             <input
-              type="date"
-              style={{ colorScheme: isDark ? "dark" : "light" }}
-              {...register("donationDate", {
-                required: "Donation date is required",
-                validate: (value) =>
-                  value >= today || "You cannot select a past date",
-              })}
+              placeholder="Recipient Name"
+              {...register("recipientName", { required: true })}
             />
 
-            {errors.donationDate && (
-              <span className="text-red-500 text-sm mt-1">
-                {errors.donationDate.message}
-              </span>
-            )}
+            {/* district */}
+            <select {...register("district", { required: true })}>
+              <option value="">Select District</option>
+              {districts.map((d) => (
+                <option key={d.id} value={d.name}>
+                  {d.name}
+                </option>
+              ))}
+            </select>
+
+            {/* upazila */}
+            <select {...register("upazila")}>
+              <option value="">Select Upazila</option>
+              {filteredUpazilas.map((u) => (
+                <option key={u.id} value={u.name}>
+                  {u.name}
+                </option>
+              ))}
+            </select>
+
+            {/* hospital */}
+            <input
+              placeholder="Hospital Name"
+              {...register("hospital", { required: true })}
+            />
+
+            {/* address */}
+            <input
+              className="md:col-span-2"
+              placeholder="Full Address"
+              {...register("address", { required: true })}
+            />
+
+            {/* blood group */}
+            <select {...register("bloodGroup", { required: true })}>
+              <option value="">Select Blood Group</option>
+              {bloodGroups.map((bg) => (
+                <option key={bg}>{bg}</option>
+              ))}
+            </select>
+
+            {/* date */}
+            <div>
+              <input
+                type="date"
+                style={{ colorScheme: isDark ? "dark" : "light" }}
+                {...register("donationDate", {
+                  required: "Donation date is required",
+                  validate: (value) =>
+                    value >= today || "You cannot select a past date",
+                })}
+              />
+
+              {errors.donationDate && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.donationDate.message}
+                </span>
+              )}
+            </div>
+
+            {/* time */}
+            <input
+              type="time"
+              style={{ colorScheme: isDark ? "dark" : "light" }}
+              {...register("donationTime", { required: true })}
+            />
           </div>
 
-          {/* time */}
-          <input
-            type="time"
-            style={{ colorScheme: isDark ? "dark" : "light" }}
-            {...register("donationTime", { required: true })}
+          {/* msg */}
+          <textarea
+            rows="3"
+            placeholder="Write request message..."
+            {...register("message", { required: true })}
           />
-        </div>
 
-        {/* msg */}
-        <textarea
-          rows="3"
-          placeholder="Write request message..."
-          {...register("message", { required: true })}
-        />
-
-        <div className="flex justify-end">
-          <button className="bg-[#f87898] hover:bg-[#f87898]/90 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]">
-            Update Request
-          </button>
-        </div>
-      </form>
-    </motion.div>
+          <div className="flex justify-end">
+            <button className="bg-[#f87898] hover:bg-[#f87898]/90 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02]">
+              Update Request
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
   );
 };
 

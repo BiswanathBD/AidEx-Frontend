@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Container from "../Components/Shared/Container";
 import Logo from "../Components/Shared/Logo";
+import ThemeToggle from "../Components/Shared/ThemeToggle";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import loginImg from "../assets/login-banner.png";
@@ -185,11 +186,14 @@ const Register = () => {
     <Container>
       <div className={`min-h-screen transition-colors duration-300 `}>
         <div className="py-8">
-          <Logo />
+          <div className="flex items-center justify-between">
+            <Logo />
+            <ThemeToggle />
+          </div>
 
           <div
-            className={`grid lg:grid-cols-2 items-center mt-8 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 ${
-              isDark ? "bg-black border border-white/10" : "bg-white shadow-lg"
+            className={`grid lg:grid-cols-2 items-center mt-8 rounded-2xl overflow-hidden transition-all duration-300 ${
+              isDark ? "bg-black" : "bg-white"
             }`}
           >
             {/* Banner */}

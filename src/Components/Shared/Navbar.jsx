@@ -12,6 +12,7 @@ import {
   FaSearch,
   FaDonate,
   FaMoneyBillWave,
+  FaInfoCircle,
 } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line
@@ -190,6 +191,26 @@ const Navbar = () => {
                     </NavLink>
                   </motion.div>
 
+                  <div className="w-px h-6 bg-[#f87898]/20"></div>
+
+                  <motion.div
+                    variants={{
+                      hidden: { opacity: 0, y: 10 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                  >
+                    <NavLink
+                      to="/about"
+                      className={({ isActive }) => getNavLinkClasses(isActive)}
+                    >
+                      <FaInfoCircle
+                        size={16}
+                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
+                      />
+                      <span>About</span>
+                    </NavLink>
+                  </motion.div>
+
                   {user && (
                     <>
                       <div className="w-px h-6 bg-[#f87898]/20"></div>
@@ -354,6 +375,16 @@ const Navbar = () => {
                 >
                   <FaSearch size={18} />
                   <span>Find Donor</span>
+                </NavLink>
+                <NavLink
+                  to="/about"
+                  className={({ isActive }) =>
+                    getMobileNavLinkClasses(isActive)
+                  }
+                  onClick={closeMobileMenu}
+                >
+                  <FaInfoCircle size={18} />
+                  <span>About</span>
                 </NavLink>
                 {user && (
                   <>

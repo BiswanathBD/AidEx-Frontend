@@ -4,6 +4,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import Container from "../Components/Shared/Container";
 import Logo from "../Components/Shared/Logo";
+import ThemeToggle from "../Components/Shared/ThemeToggle";
 import loginImg from "../assets/login-banner.png";
 import { AuthContext } from "../Auth/AuthContext";
 import { Link, Navigate, useLocation } from "react-router";
@@ -116,11 +117,13 @@ const Login = () => {
     <Container>
       <div className={`min-h-screen transition-colors duration-300`}>
         <div className="py-8">
-          <Logo />
-
+          <div className="flex items-center justify-between">
+            <Logo />
+            <ThemeToggle />
+          </div>
           <div
-            className={`grid lg:grid-cols-2 mt-8 items-center rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
-              isDark ? "bg-black border border-white/10" : "bg-white shadow-lg"
+            className={`grid lg:grid-cols-2 mt-8 items-center rounded-2xl overflow-hidden transition-all duration-300 ${
+              isDark ? "bg-black" : "bg-white"
             }`}
           >
             <div className="hidden lg:block">

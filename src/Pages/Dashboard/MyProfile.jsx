@@ -110,6 +110,15 @@ const MyProfile = () => {
   }, [user, districtData, upazilaData, reset]);
 
   const onSubmit = async (data) => {
+    if (
+      user.email === "demo.user@gmail.com" ||
+      user.email === "demo.volunteer@gmail.com" ||
+      user.email === "demo.admin@gmail.com"
+    ) {
+      setIsEditing(false);
+      return toast.error("Action not allowed for demo account");
+    }
+
     const toastId = toast.loading("Updating profile...");
     try {
       const res = await axiosInstance.put(`/user/${user.email}`, data);
