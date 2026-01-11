@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router";
 import useAxios from "../Hooks/useAxios";
 import { BsClockFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
-import Loader from "../Components/Shared/Loader";
+import DonationRequestSkeleton from "../Components/Shared/DonationRequestSkeleton";
 import { motion } from "framer-motion";
 import { useTheme } from "../Context/ThemeContext";
 motion;
@@ -86,7 +86,14 @@ const DonationRequests = () => {
         </p>
       </div>
 
-      {loader && <Loader />}
+      {loader && (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 lg:gap-8 mt-20">
+          {/* Show 8 skeleton loaders */}
+          {Array.from({ length: 8 }).map((_, index) => (
+            <DonationRequestSkeleton key={index} />
+          ))}
+        </div>
+      )}
 
       {!loader && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 lg:gap-8 mt-20">
@@ -105,14 +112,13 @@ const DonationRequests = () => {
               </p>
             </div>
           ) : (
-            currentRequests.map((req, index) => (
+            currentRequests.map((req) => (
               <motion.div
                 key={req._id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{
-                  duration: 0.4,
-                  delay: index * 0.2,
+                  duration: 1,
                   ease: "easeOut",
                 }}
                 className={`relative rounded-3xl p-8 transition-all duration-300 group text-center my-12 hover:scale-105 hover:-translate-y-2 ${
