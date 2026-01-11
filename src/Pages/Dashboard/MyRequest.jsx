@@ -184,13 +184,50 @@ const MyRequest = () => {
                 </tr>
               ) : currentRequests.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={8}
-                    className={`py-10 text-center ${
-                      isDark ? "text-white/60" : "text-gray-500"
-                    }`}
-                  >
-                    No donation requests found.
+                  <td colSpan={8} className="p-0">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="flex flex-col items-center justify-center py-12"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-[#f87898]/10 flex items-center justify-center mb-4">
+                        <FaClipboardList className="text-3xl text-[#f87898]" />
+                      </div>
+                      <h3
+                        className={`text-xl font-semibold mb-2 ${
+                          isDark ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        No Donation Requests Found
+                      </h3>
+                      <p
+                        className={`text-center mb-6 max-w-md ${
+                          isDark ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        {filter === "All"
+                          ? "You haven't created any donation requests yet. Start by creating your first request to help save lives."
+                          : `No ${filter.toLowerCase()} requests found. Try changing the filter or create a new request.`}
+                      </p>
+                      <Link
+                        to="/dashboard/create-donation-request"
+                        className="btn-primary flex items-center gap-2"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Create New Request
+                      </Link>
+                    </motion.div>
                   </td>
                 </tr>
               ) : (
