@@ -153,8 +153,10 @@ const MyProfile = () => {
 
       {/* Main Profile Card */}
       <div
-        className={`relative overflow-hidden rounded-2xl ${
-          isDark ? "bg-black" : "bg-white"
+        className={`relative overflow-hidden rounded-2xl group hover:scale-101 transition-all duration-300 ${
+          isDark
+            ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+            : "bg-white"
         }`}
       >
         {/* Background Pattern */}
@@ -263,11 +265,11 @@ const MyProfile = () => {
               <div className="space-y-6">
                 {/* Personal Information Card */}
                 <div
-                  className={`p-6 rounded-xl ${
+                  className={`p-6 rounded-xl group hover:scale-101 transition-all duration-300 ${
                     isDark
-                      ? "bg-white/5 hover:bg-white/10"
+                      ? "bg-white/5 hover:bg-linear-to-tl from-[#f87898]/10"
                       : "bg-gray-50 hover:bg-gray-100"
-                  } backdrop-blur-sm transition-all duration-300`}
+                  } backdrop-blur-sm`}
                 >
                   <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                     <FaUser className="text-[#f87898]" />
@@ -319,11 +321,11 @@ const MyProfile = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Activity Status Card */}
                   <div
-                    className={`p-4 rounded-xl ${
+                    className={`p-4 rounded-xl group hover:scale-101 transition-all duration-300 cursor-pointer ${
                       isDark
-                        ? "bg-white/5 hover:bg-white/10"
+                        ? "bg-white/5 hover:bg-linear-to-tl from-[#f87898]/10"
                         : "bg-gray-50 hover:bg-gray-100"
-                    } backdrop-blur-sm transition-all duration-300 cursor-pointer`}
+                    } backdrop-blur-sm`}
                   >
                     <div className="text-center">
                       <div
@@ -352,11 +354,11 @@ const MyProfile = () => {
 
                   {/* Member Since Card */}
                   <div
-                    className={`p-4 rounded-xl ${
+                    className={`p-4 rounded-xl group hover:scale-101 transition-all duration-300 cursor-pointer ${
                       isDark
-                        ? "bg-white/5 hover:bg-white/10"
+                        ? "bg-white/5 hover:bg-linear-to-tl from-[#f87898]/10"
                         : "bg-gray-50 hover:bg-gray-100"
-                    } backdrop-blur-sm transition-all duration-300 cursor-pointer`}
+                    } backdrop-blur-sm`}
                   >
                     <div className="text-center">
                       <div className="w-12 h-12 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -384,11 +386,11 @@ const MyProfile = () => {
               {/* Right Side - Location Information */}
               <div className="space-y-6">
                 <div
-                  className={`p-6 rounded-xl h-full ${
+                  className={`p-6 rounded-xl h-full group hover:scale-101 transition-all duration-300 ${
                     isDark
-                      ? "bg-white/5 hover:bg-white/10"
+                      ? "bg-white/5 hover:bg-linear-to-tl from-[#f87898]/10"
                       : "bg-gray-50 hover:bg-gray-100"
-                  } backdrop-blur-sm transition-all duration-300`}
+                  } backdrop-blur-sm`}
                 >
                   <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                     <FaMapMarkerAlt className="text-[#f87898]" />

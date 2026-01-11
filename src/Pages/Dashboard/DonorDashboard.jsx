@@ -109,9 +109,11 @@ const DonorDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-        className={`p-4 sm:p-6 lg:p-8 rounded-xl ${
-          isDark ? "bg-black" : "bg-white"
-        } shadow-2xl`}
+        className={`p-4 sm:p-6 lg:p-8 rounded-xl group hover:scale-101 transition-all duration-300 ${
+          isDark
+            ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+            : "bg-white"
+        }`}
       >
         {loader ? (
           <Loader />

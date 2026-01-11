@@ -100,9 +100,11 @@ const CreateDonationRequest = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-        className={`p-4 sm:p-6 lg:p-8 rounded-xl ${
-          isDark ? "bg-black" : "bg-white"
-        } shadow-2xl`}
+        className={`p-4 sm:p-6 lg:p-8 rounded-xl group hover:scale-101 transition-all duration-300 ${
+          isDark
+            ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+            : "bg-white"
+        }`}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

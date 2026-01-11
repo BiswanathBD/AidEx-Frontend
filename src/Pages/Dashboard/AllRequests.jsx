@@ -130,9 +130,11 @@ const AllRequests = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-        className={`p-4 sm:p-6 lg:p-8 rounded-xl ${
-          isDark ? "bg-black" : "bg-white"
-        } shadow-2xl`}
+        className={`p-4 sm:p-6 lg:p-8 rounded-xl group hover:scale-101 transition-all duration-300 ${
+          isDark
+            ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+            : "bg-white"
+        }`}
       >
         <div className="flex gap-2 mb-4 flex-wrap">
           {["All", "Pending", "Inprogress", "Done", "Canceled"].map((s) => (
@@ -297,7 +299,7 @@ const AllRequests = () => {
                     : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
                   : isDark
                   ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                  : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                  : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898]"
               }`}
             >
               ‹
@@ -336,7 +338,7 @@ const AllRequests = () => {
                       ? "bg-linear-to-r from-[#f87898] to-[#f45f7b] text-white shadow-lg shadow-[#f87898]/30"
                       : isDark
                       ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                      : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                      : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898]"
                   }`}
                 >
                   {currentPage === page && (
@@ -360,7 +362,7 @@ const AllRequests = () => {
                     : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
                   : isDark
                   ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                  : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                  : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898]"
               }`}
             >
               ›
