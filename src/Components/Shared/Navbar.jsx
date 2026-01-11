@@ -13,6 +13,7 @@ import {
   FaDonate,
   FaMoneyBillWave,
   FaInfoCircle,
+  FaShieldAlt,
 } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line
@@ -207,7 +208,27 @@ const Navbar = () => {
                         size={16}
                         className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
                       />
-                      <span>About</span>
+                      <span>About Us</span>
+                    </NavLink>
+                  </motion.div>
+
+                  <div className="w-px h-6 bg-[#f87898]/20"></div>
+
+                  <motion.div
+                    variants={{
+                      hidden: { opacity: 0, y: 10 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                  >
+                    <NavLink
+                      to="/privacy"
+                      className={({ isActive }) => getNavLinkClasses(isActive)}
+                    >
+                      <FaShieldAlt
+                        size={16}
+                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
+                      />
+                      <span>Privacy</span>
                     </NavLink>
                   </motion.div>
 
@@ -384,7 +405,17 @@ const Navbar = () => {
                   onClick={closeMobileMenu}
                 >
                   <FaInfoCircle size={18} />
-                  <span>About</span>
+                  <span>About Us</span>
+                </NavLink>
+                <NavLink
+                  to="/privacy"
+                  className={({ isActive }) =>
+                    getMobileNavLinkClasses(isActive)
+                  }
+                  onClick={closeMobileMenu}
+                >
+                  <FaShieldAlt size={18} />
+                  <span>Privacy</span>
                 </NavLink>
                 {user && (
                   <>

@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import Root from "../Layouts/Root";
 import Homepage from "../Pages/Homepage";
 import About from "../Pages/About";
+import Privacy from "../Pages/Privacy";
 import Login from "../Layouts/Login";
 import Register from "../Layouts/Register";
 import Dashboard from "../Layouts/Dashboard/Dashboard";
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/privacy",
+        element: <Privacy />,
       },
       {
         path: "/funding",

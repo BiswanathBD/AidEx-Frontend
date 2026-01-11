@@ -96,9 +96,9 @@ const Register = () => {
     });
 
     toast.promise(registerPromise, {
-      loading: "Processing...",
-      success: "Register successfully!",
-      error: "Failed to register.",
+      loading: "Creating account...",
+      success: "Registration Successful!",
+      error: "Registration Failed",
     });
   };
 

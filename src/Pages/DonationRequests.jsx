@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router";
 import useAxios from "../Hooks/useAxios";
 import { BsClockFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaRegSadTear } from "react-icons/fa";
 import DonationRequestSkeleton from "../Components/Shared/DonationRequestSkeleton";
 import { motion } from "framer-motion";
 import { useTheme } from "../Context/ThemeContext";
@@ -397,30 +397,72 @@ const DonationRequests = () => {
       {!loader && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 lg:gap-8 mt-20">
           {currentRequests.length === 0 ? (
-            <div
-              className={`col-span-full text-center py-12 ${
-                isDark ? "text-gray-400" : "text-gray-500"
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className={`col-span-full flex flex-col items-center justify-center py-12 rounded-2xl ${
+                isDark ? "bg-black" : "bg-white"
               }`}
             >
-              <div className="mb-4 text-4xl">🩸</div>
+              <div className="w-16 h-16 rounded-full bg-[#f87898]/10 flex items-center justify-center mb-4">
+                <FaRegSadTear className="text-3xl text-[#f87898]" />
+              </div>
               {filteredRequests.length === 0 && pendingRequests.length > 0 ? (
                 <>
-                  <p className="text-lg font-semibold mb-2">
-                    No requests match your filters
+                  <h3
+                    className={`text-xl font-semibold mb-2 ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    No Requests Match Your Filters
+                  </h3>
+                  <p
+                    className={`text-center mb-6 max-w-md ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    We couldn't find any donation requests matching your search
+                    criteria. Try adjusting your filters or search terms.
                   </p>
-                  <p className="text-sm">Try adjusting your search criteria</p>
+                  <button
+                    onClick={clearFilters}
+                    className="btn-primary flex items-center gap-2"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Clear All Filters
+                  </button>
                 </>
               ) : (
                 <>
-                  <p className="text-lg font-semibold mb-2">
-                    No pending donation requests
-                  </p>
-                  <p className="text-sm">
-                    Check back later for new requests in your area
+                  <h3
+                    className={`text-xl font-semibold mb-2 ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    No Pending Donation Requests
+                  </h3>
+                  <p
+                    className={`text-center max-w-md ${
+                      isDark ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    There are currently no pending blood donation requests.
+                    Check back later for new requests in your area.
                   </p>
                 </>
               )}
-            </div>
+            </motion.div>
           ) : (
             currentRequests.map((req) => (
               <motion.div

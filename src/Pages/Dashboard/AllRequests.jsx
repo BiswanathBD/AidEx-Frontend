@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Auth/AuthContext";
 import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
-import { FaClipboardList } from "react-icons/fa";
+import { FaClipboardList, FaRegSadTear } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { Link, Navigate, useLocation } from "react-router";
 import Loader from "../../Components/Shared/Loader";
@@ -178,109 +178,139 @@ const AllRequests = () => {
               </tr>
             </thead>
 
-            {loader && (
-              <tbody>
+            <tbody>
+              {loader ? (
                 <tr>
                   <td colSpan={8}>
                     <Loader />
                   </td>
                 </tr>
-              </tbody>
-            )}
-
-            <tbody>
-              {currentRequests.map((req, index) => (
-                <motion.tr
-                  key={req._id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: index * 0.1,
-                    ease: "easeOut",
-                  }}
-                  className={`text-sm border-b transition-colors duration-300 ${
-                    isDark
-                      ? "text-white/90 border-white/10 hover:bg-white/5"
-                      : "text-gray-700 border-gray-100 hover:bg-gray-50"
-                  }`}
-                >
-                  <td className="p-4">{req.recipientName}</td>
-                  <td className="p-4">{req.district}</td>
-                  <td className="p-4">{req.upazila}</td>
-                  <td className="p-4">
-                    <span className="px-2 py-1 bg-[#f87898]/20 text-[#f87898] rounded-full text-xs font-medium">
-                      {req.bloodGroup}
-                    </span>
-                  </td>
-                  <td className="p-4">{req.donationDate}</td>
-                  <td className="p-4">{formatTime(req.donationTime)}</td>
-
-                  <td className="p-4 text-center">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        req.status === "Pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : req.status === "Inprogress"
-                          ? "bg-green-100 text-green-700"
-                          : req.status === "Done"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
+              ) : currentRequests.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="p-0">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="flex flex-col items-center justify-center py-12"
                     >
-                      {req.status}
-                    </span>
-                  </td>
-
-                  <td className="p-4 flex justify-end gap-2">
-                    <Link
-                      to={`/dashboard/donation-request/view/${req._id}`}
-                      state={location.pathname}
-                      className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-xs transition-colors duration-300"
-                    >
-                      View
-                    </Link>
-
-                    {req.status === "Pending" && user.role !== "Volunteer" && (
-                      <Link
-                        to={`/dashboard/donation-request/edit/${req._id}`}
-                        state={location.pathname}
-                        className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs transition-colors duration-300"
+                      <div className="w-16 h-16 rounded-full bg-[#f87898]/10 flex items-center justify-center mb-4">
+                        <FaRegSadTear className="text-3xl text-[#f87898]" />
+                      </div>
+                      <h3
+                        className={`text-xl font-semibold mb-2 ${
+                          isDark ? "text-white" : "text-gray-900"
+                        }`}
                       >
-                        Edit
-                      </Link>
-                    )}
+                        No Requests Found
+                      </h3>
+                      <p
+                        className={`text-center max-w-md ${
+                          isDark ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        {filter === "All"
+                          ? "No donation requests have been submitted yet."
+                          : `No ${filter.toLowerCase()} requests found. Try changing the filter to see other requests.`}
+                      </p>
+                    </motion.div>
+                  </td>
+                </tr>
+              ) : (
+                currentRequests.map((req, index) => (
+                  <motion.tr
+                    key={req._id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: "easeOut",
+                    }}
+                    className={`text-sm border-b transition-colors duration-300 ${
+                      isDark
+                        ? "text-white/90 border-white/10 hover:bg-white/5"
+                        : "text-gray-700 border-gray-100 hover:bg-gray-50"
+                    }`}
+                  >
+                    <td className="p-4">{req.recipientName}</td>
+                    <td className="p-4">{req.district}</td>
+                    <td className="p-4">{req.upazila}</td>
+                    <td className="p-4">
+                      <span className="px-2 py-1 bg-[#f87898]/20 text-[#f87898] rounded-full text-xs font-medium">
+                        {req.bloodGroup}
+                      </span>
+                    </td>
+                    <td className="p-4">{req.donationDate}</td>
+                    <td className="p-4">{formatTime(req.donationTime)}</td>
 
-                    {req.status === "Inprogress" && (
-                      <>
+                    <td className="p-4 text-center">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          req.status === "Pending"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : req.status === "Inprogress"
+                            ? "bg-green-100 text-green-700"
+                            : req.status === "Done"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {req.status}
+                      </span>
+                    </td>
+
+                    <td className="p-4 flex justify-end gap-2">
+                      <Link
+                        to={`/dashboard/donation-request/view/${req._id}`}
+                        state={location.pathname}
+                        className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-xs transition-colors duration-300"
+                      >
+                        View
+                      </Link>
+
+                      {req.status === "Pending" &&
+                        user.role !== "Volunteer" && (
+                          <Link
+                            to={`/dashboard/donation-request/edit/${req._id}`}
+                            state={location.pathname}
+                            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs transition-colors duration-300"
+                          >
+                            Edit
+                          </Link>
+                        )}
+
+                      {req.status === "Inprogress" && (
+                        <>
+                          <button
+                            onClick={() => handleStatusChange(req._id, "Done")}
+                            className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs transition-colors duration-300"
+                          >
+                            Done
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleStatusChange(req._id, "Canceled")
+                            }
+                            className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs transition-colors duration-300"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+
+                      {user.role === "Admin" && (
                         <button
-                          onClick={() => handleStatusChange(req._id, "Done")}
-                          className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs transition-colors duration-300"
-                        >
-                          Done
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleStatusChange(req._id, "Canceled")
-                          }
+                          onClick={() => handleDelete(req._id)}
                           className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs transition-colors duration-300"
                         >
-                          Cancel
+                          <GoTrash size={16} />
                         </button>
-                      </>
-                    )}
-
-                    {user.role === "Admin" && (
-                      <button
-                        onClick={() => handleDelete(req._id)}
-                        className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs transition-colors duration-300"
-                      >
-                        <GoTrash size={16} />
-                      </button>
-                    )}
-                  </td>
-                </motion.tr>
-              ))}
+                      )}
+                    </td>
+                  </motion.tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

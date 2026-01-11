@@ -3,7 +3,7 @@ import useAxios from "../Hooks/useAxios";
 import Loader from "../Components/Shared/Loader";
 import { AuthContext } from "../Auth/AuthContext";
 import { motion } from "framer-motion";
-import { FaDollarSign } from "react-icons/fa";
+import { FaDollarSign, FaHandHoldingUsd } from "react-icons/fa";
 import { useTheme } from "../Context/ThemeContext";
 motion;
 
@@ -252,13 +252,40 @@ const Funding = () => {
           )}
         </motion.div>
       ) : (
-        <div
-          className={`text-center py-12 ${
-            isDark ? "text-gray-400" : "text-gray-500"
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className={`flex flex-col items-center justify-center py-12 rounded-xl mt-6 ${
+            isDark ? "bg-black" : "bg-white"
           }`}
         >
-          No funding history found.
-        </div>
+          <div className="w-16 h-16 rounded-full bg-[#f87898]/10 flex items-center justify-center mb-4">
+            <FaHandHoldingUsd className="text-3xl text-[#f87898]" />
+          </div>
+          <h3
+            className={`text-xl font-semibold mb-2 ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+          >
+            No Funding History Yet
+          </h3>
+          <p
+            className={`text-center mb-6 max-w-md ${
+              isDark ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
+            No funding contributions have been made yet. Be the first to make a
+            difference by contributing to help save lives.
+          </p>
+          <button
+            onClick={() => setShowModal(true)}
+            className="btn-primary flex items-center gap-2"
+          >
+            <FaDollarSign className="text-sm" />
+            Make Your First Contribution
+          </button>
+        </motion.div>
       )}
 
       {/* Modal */}

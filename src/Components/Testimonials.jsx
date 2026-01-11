@@ -1,73 +1,123 @@
 import { useTheme } from "../Context/ThemeContext";
-import { FaQuoteLeft, FaStar, FaHeart } from "react-icons/fa";
-import useScrollAnimation from "../Hooks/useScrollAnimation";
+import {
+  FaQuoteLeft,
+  FaStar,
+  FaHeart,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const testimonialsData = [
   {
     name: "Sarah Ahmed",
     role: "Blood Recipient",
     location: "Dhaka",
-    image: "/src/assets/default-profile.png",
+    image:
+      "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     testimonial:
-      "AidEx saved my life during a critical surgery. Within 30 minutes, I found a compatible donor. The platform is incredibly efficient and the donors are true heroes.",
+      "AidEx saved my life during a critical surgery. Within 30 minutes, I found a compatible donor.",
     bloodType: "O-",
   },
   {
     name: "Dr. Rahman Khan",
     role: "Emergency Physician",
     location: "Chittagong Medical College",
-    image: "/src/assets/default-profile.png",
+    image:
+      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     testimonial:
-      "As a doctor, I've seen how AidEx transforms emergency care. The quick response time and verified donors make it an invaluable resource for our hospital.",
+      "As a doctor, I've seen how AidEx transforms emergency care. The quick response time is invaluable.",
     bloodType: "A+",
   },
   {
     name: "Fatima Begum",
     role: "Regular Donor",
     location: "Sylhet",
-    image: "/src/assets/default-profile.png",
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     testimonial:
-      "I've donated blood 15 times through AidEx. The platform makes it so easy to help others, and knowing I've saved lives gives me immense satisfaction.",
+      "I've donated blood 15 times through AidEx. The platform makes it so easy to help others.",
     bloodType: "B+",
   },
   {
     name: "Mohammad Hassan",
     role: "Patient's Father",
     location: "Rajshahi",
-    image: "/src/assets/default-profile.png",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     testimonial:
-      "When my son needed emergency blood transfusion, AidEx connected us with donors immediately. The support team was incredibly helpful throughout the process.",
+      "When my son needed emergency blood transfusion, AidEx connected us with donors immediately.",
     bloodType: "AB+",
   },
   {
     name: "Dr. Nasreen Akter",
     role: "Hematologist",
     location: "DMCH",
-    image: "/src/assets/default-profile.png",
+    image:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     testimonial:
-      "AidEx has revolutionized how we handle blood shortages. The platform's reliability and donor verification process ensures safe transfusions for our patients.",
+      "AidEx has revolutionized how we handle blood shortages. The platform's reliability ensures safe transfusions.",
     bloodType: "O+",
   },
   {
     name: "Karim Uddin",
     role: "Volunteer Donor",
     location: "Khulna",
-    image: "/src/assets/default-profile.png",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     testimonial:
-      "Being part of the AidEx community means being part of something bigger. Every donation notification is an opportunity to save a life.",
+      "Being part of the AidEx community means being part of something bigger. Every donation saves a life.",
     bloodType: "A-",
   },
 ];
 
 const Testimonials = () => {
   const { isDark } = useTheme();
-  const cardsRef = useScrollAnimation("scroll-animate-card");
+  const [currentIndex, setCurrentIndex] = useState(1); // Start with middle card featured
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === testimonialsData.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const nextTestimonial = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === testimonialsData.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevTestimonial = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? testimonialsData.length - 1 : prevIndex - 1
+    );
+  };
+
+  const getVisibleTestimonials = () => {
+    const visible = [];
+    for (let i = -1; i <= 1; i++) {
+      let index = currentIndex + i;
+      if (index < 0) index = testimonialsData.length - 1;
+      if (index >= testimonialsData.length) index = 0;
+      visible.push({ ...testimonialsData[index], position: i });
+    }
+    return visible;
+  };
 
   return (
     <section className="py-16">
@@ -85,14 +135,14 @@ const Testimonials = () => {
           </div>
           <h2
             className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 ${
-              isDark ? "text-gray-200" : "text-gray-800"
+              isDark ? "text-white" : "text-black"
             }`}
           >
             Stories of <span className="text-[#f87898]">Hope</span> & Healing
           </h2>
           <p
             className={`max-w-3xl mx-auto text-sm sm:text-base ${
-              isDark ? "text-gray-400" : "text-gray-600"
+              isDark ? "text-white/70" : "text-black/70"
             }`}
           >
             Real stories from donors, patients, and medical professionals who
@@ -100,82 +150,220 @@ const Testimonials = () => {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-          {testimonialsData.map((testimonial, index) => (
-            <div
-              key={index}
-              ref={(el) => (cardsRef.current[index] = el)}
-              className={`scroll-animate-card p-4 sm:p-6 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
-                isDark
-                  ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                  : "bg-white"
-              }`}
-            >
-              {/* Quote Icon */}
-              <div className="flex justify-between items-start mb-4">
-                <FaQuoteLeft className="text-[#f87898] text-lg sm:text-2xl opacity-50" />
-                <div className="flex gap-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className="text-[#f87898] text-xs sm:text-sm"
-                    />
-                  ))}
-                </div>
-              </div>
+        {/* Carousel Container */}
+        <div
+          className="relative max-w-7xl mx-auto px-4"
+          onMouseEnter={() => setIsAutoPlaying(false)}
+          onMouseLeave={() => setIsAutoPlaying(true)}
+        >
+          {/* Cards Container */}
+          <div className="flex items-center justify-center gap-4 lg:gap-8 min-h-[400px]">
+            {getVisibleTestimonials().map((testimonial, index) => {
+              const isFeatured = testimonial.position === 0;
+              const isLeft = testimonial.position === -1;
+              const isRight = testimonial.position === 1;
 
-              {/* Testimonial Text */}
-              <p
-                className={`text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 ${
-                  isDark ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                "{testimonial.testimonial}"
-              </p>
-
-              {/* User Info */}
-              <div className="flex items-center gap-3 sm:gap-4">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-[#f87898]/20"
-                />
-                <div className="flex-1">
-                  <h4
-                    className={`text-sm sm:text-base font-semibold ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    {testimonial.name}
-                  </h4>
-                  <p
-                    className={`text-xs sm:text-sm ${
-                      isDark ? "text-gray-400" : "text-gray-600"
-                    }`}
-                  >
-                    {testimonial.role}
-                  </p>
-                  <p
-                    className={`text-xs ${
-                      isDark ? "text-gray-500" : "text-gray-500"
-                    }`}
-                  >
-                    {testimonial.location}
-                  </p>
-                </div>
-                <div
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    isDark
-                      ? "bg-[#f87898]/20 text-[#f87898]"
-                      : "bg-[#f87898]/10 text-[#f87898]"
-                  }`}
+              return (
+                <motion.div
+                  key={`${testimonial.name}-${currentIndex}`}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    opacity: isFeatured ? 1 : 0.6,
+                    scale: isFeatured ? 1 : 0.85,
+                    zIndex: isFeatured ? 10 : 1,
+                  }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className={`relative rounded-2xl p-6 lg:p-8 w-80 lg:w-96 ${
+                    isFeatured
+                      ? isDark
+                        ? "bg-black border-2 border-[#f87898]/50 shadow-2xl shadow-[#f87898]/20"
+                        : "bg-white border-2 border-[#f87898]/30 shadow-2xl shadow-[#f87898]/10"
+                      : isDark
+                      ? "bg-black/50 border border-white/20"
+                      : "bg-white/50 border border-black/20"
+                  } ${isLeft ? "lg:-mr-8" : ""} ${isRight ? "lg:-ml-8" : ""}`}
                 >
-                  {testimonial.bloodType}
-                </div>
-              </div>
-            </div>
-          ))}
+                  {/* Featured Badge */}
+                  {isFeatured && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <div className="bg-[#f87898] text-white px-4 py-1 rounded-full text-xs font-semibold">
+                        Featured Story
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Quote Icon */}
+                  <div className="flex justify-center mb-4">
+                    <div
+                      className={`p-3 rounded-full ${
+                        isFeatured
+                          ? "bg-[#f87898]/20"
+                          : isDark
+                          ? "bg-white/10"
+                          : "bg-black/10"
+                      }`}
+                    >
+                      <FaQuoteLeft
+                        className={`text-xl ${
+                          isFeatured
+                            ? "text-[#f87898]"
+                            : isDark
+                            ? "text-white/60"
+                            : "text-black/60"
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Testimonial Text */}
+                  <p
+                    className={`text-center text-sm lg:text-base leading-relaxed mb-6 ${
+                      isFeatured
+                        ? isDark
+                          ? "text-white"
+                          : "text-black"
+                        : isDark
+                        ? "text-white/70"
+                        : "text-black/70"
+                    }`}
+                  >
+                    "{testimonial.testimonial}"
+                  </p>
+
+                  {/* Rating */}
+                  <div className="flex justify-center gap-1 mb-6">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={`text-sm ${
+                          isFeatured
+                            ? "text-[#f87898]"
+                            : isDark
+                            ? "text-white/50"
+                            : "text-black/50"
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* User Info */}
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="relative">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className={`w-12 h-12 lg:w-16 lg:h-16 rounded-full object-cover ${
+                          isFeatured
+                            ? "border-3 border-[#f87898]/50"
+                            : "border-2 border-white/30"
+                        }`}
+                        onError={(e) => {
+                          e.target.src = "/src/assets/default-profile.png";
+                        }}
+                      />
+                      {isFeatured && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-black"></div>
+                      )}
+                    </div>
+
+                    <div className="text-center">
+                      <h4
+                        className={`text-sm lg:text-base font-bold mb-1 ${
+                          isFeatured
+                            ? isDark
+                              ? "text-white"
+                              : "text-black"
+                            : isDark
+                            ? "text-white/80"
+                            : "text-black/80"
+                        }`}
+                      >
+                        {testimonial.name}
+                      </h4>
+                      <p
+                        className={`text-xs lg:text-sm mb-1 ${
+                          isFeatured
+                            ? isDark
+                              ? "text-white/70"
+                              : "text-black/70"
+                            : isDark
+                            ? "text-white/60"
+                            : "text-black/60"
+                        }`}
+                      >
+                        {testimonial.role}
+                      </p>
+                      <p
+                        className={`text-xs ${
+                          isFeatured
+                            ? isDark
+                              ? "text-white/60"
+                              : "text-black/60"
+                            : isDark
+                            ? "text-white/50"
+                            : "text-black/50"
+                        }`}
+                      >
+                        {testimonial.location}
+                      </p>
+                    </div>
+
+                    <div
+                      className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        isFeatured
+                          ? "bg-[#f87898]/20 text-[#f87898] border border-[#f87898]/30"
+                          : isDark
+                          ? "bg-white/10 text-white/80"
+                          : "bg-black/10 text-black/80"
+                      }`}
+                    >
+                      {testimonial.bloodType}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevTestimonial}
+            className={`absolute left-0 top-1/2 transform -translate-y-1/2 p-3 rounded-full transition-all duration-300 ${
+              isDark
+                ? "bg-black/80 hover:bg-black text-white/80 hover:text-white"
+                : "bg-white hover:bg-white/90 text-black/80 hover:text-black shadow-lg"
+            }`}
+          >
+            <FaChevronLeft className="text-lg" />
+          </button>
+
+          <button
+            onClick={nextTestimonial}
+            className={`absolute right-0 top-1/2 transform -translate-y-1/2 p-3 rounded-full transition-all duration-300 ${
+              isDark
+                ? "bg-black/80 hover:bg-black text-white/80 hover:text-white"
+                : "bg-white hover:bg-white/90 text-black/80 hover:text-black shadow-lg"
+            }`}
+          >
+            <FaChevronRight className="text-lg" />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonialsData.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2 h-2 lg:w-3 lg:h-3 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? "bg-[#f87898] scale-125"
+                    : isDark
+                    ? "bg-white/40 hover:bg-white/60"
+                    : "bg-black/40 hover:bg-black/60"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

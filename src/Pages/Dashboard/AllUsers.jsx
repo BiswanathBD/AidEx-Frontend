@@ -4,7 +4,7 @@ import { useTheme } from "../../Context/ThemeContext";
 import useAxios from "../../Hooks/useAxios";
 import { Navigate } from "react-router";
 import { FiMoreVertical } from "react-icons/fi";
-import { FaUsers } from "react-icons/fa";
+import { FaUsers, FaUserSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
@@ -142,8 +142,33 @@ const AllUsers = () => {
                 </tr>
               ) : currentUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-gray-500">
-                    No users found.
+                  <td colSpan={6} className="p-0">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="flex flex-col items-center justify-center py-12"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-[#f87898]/10 flex items-center justify-center mb-4">
+                        <FaUserSlash className="text-3xl text-[#f87898]" />
+                      </div>
+                      <h3
+                        className={`text-xl font-semibold mb-2 ${
+                          isDark ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        No Users Found
+                      </h3>
+                      <p
+                        className={`text-center max-w-md ${
+                          isDark ? "text-gray-400" : "text-gray-600"
+                        }`}
+                      >
+                        {filter === "all"
+                          ? "No users are registered in the system yet."
+                          : `No ${filter} users found. Try changing the filter to see other users.`}
+                      </p>
+                    </motion.div>
                   </td>
                 </tr>
               ) : (
