@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router";
 import useAxios from "../Hooks/useAxios";
 import { BsClockFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
+import { FaSearch } from "react-icons/fa";
 import DonationRequestSkeleton from "../Components/Shared/DonationRequestSkeleton";
 import { motion } from "framer-motion";
 import { useTheme } from "../Context/ThemeContext";
@@ -14,11 +15,30 @@ const DonationRequests = () => {
   const location = useLocation();
   const { isDark } = useTheme();
 
+  // Search and Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBloodGroup, setSelectedBloodGroup] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
+
+  // Applied filter states (only updated when buttons are clicked)
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
+  const [appliedBloodGroup, setAppliedBloodGroup] = useState("");
+  const [appliedDistrict, setAppliedDistrict] = useState("");
+
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const requestsPerPage = 12;
 
   const axiosInstance = useAxios();
+
+  // Get unique values for filter options
+  const bloodGroups = [...new Set(pendingRequests.map((req) => req.bloodGroup))]
+    .filter(Boolean)
+    .sort();
+  const districts = [...new Set(pendingRequests.map((req) => req.district))]
+    .filter(Boolean)
+    .sort();
 
   useEffect(() => {
     axiosInstance
@@ -30,10 +50,95 @@ const DonationRequests = () => {
       .catch(() => setLoader(false));
   }, [axiosInstance]);
 
-  const totalPages = Math.ceil(pendingRequests.length / requestsPerPage);
+  // Filter and search functionality using useMemo for better performance
+  const filteredRequests = React.useMemo(() => {
+    let filtered = [...pendingRequests];
+
+    // Search by recipient name only (using applied search term)
+    if (appliedSearchTerm) {
+      filtered = filtered.filter((req) =>
+        req.recipientName
+          ?.toLowerCase()
+          .includes(appliedSearchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by blood group (using applied blood group)
+    if (appliedBloodGroup) {
+      filtered = filtered.filter((req) => req.bloodGroup === appliedBloodGroup);
+    }
+
+    // Filter by district (using applied district)
+    if (appliedDistrict) {
+      filtered = filtered.filter((req) => req.district === appliedDistrict);
+    }
+
+    // Sort functionality
+    switch (sortBy) {
+      case "newest":
+        filtered.sort(
+          (a, b) => new Date(b.donationDate) - new Date(a.donationDate)
+        );
+        break;
+      case "oldest":
+        filtered.sort(
+          (a, b) => new Date(a.donationDate) - new Date(b.donationDate)
+        );
+        break;
+      case "bloodGroup":
+        filtered.sort((a, b) =>
+          (a.bloodGroup || "").localeCompare(b.bloodGroup || "")
+        );
+        break;
+      case "location":
+        filtered.sort((a, b) =>
+          (a.district || "").localeCompare(b.district || "")
+        );
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
+  }, [
+    pendingRequests,
+    appliedSearchTerm,
+    appliedBloodGroup,
+    appliedDistrict,
+    sortBy,
+  ]);
+
+  // Reset to first page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [appliedSearchTerm, appliedBloodGroup, appliedDistrict, sortBy]);
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedBloodGroup("");
+    setSelectedDistrict("");
+    setSortBy("newest");
+    setAppliedSearchTerm("");
+    setAppliedBloodGroup("");
+    setAppliedDistrict("");
+  };
+
+  // Handle search button click
+  const handleSearch = () => {
+    setAppliedSearchTerm(searchTerm);
+  };
+
+  // Handle filter button click
+  const handleFilter = () => {
+    setAppliedBloodGroup(selectedBloodGroup);
+    setAppliedDistrict(selectedDistrict);
+  };
+
+  const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
   const indexOfLast = currentPage * requestsPerPage;
   const indexOfFirst = indexOfLast - requestsPerPage;
-  const currentRequests = pendingRequests.slice(indexOfFirst, indexOfLast);
+  const currentRequests = filteredRequests.slice(indexOfFirst, indexOfLast);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -86,6 +191,200 @@ const DonationRequests = () => {
         </p>
       </div>
 
+      {/* Search, Filter, and Sort Section */}
+      <div className="mb-8 space-y-6">
+        {/* Clear Filters - Top Right */}
+        {(appliedSearchTerm ||
+          appliedBloodGroup ||
+          appliedDistrict ||
+          sortBy !== "newest") && (
+          <div className="flex justify-end">
+            <button
+              onClick={clearFilters}
+              className={`text-xs font-semibold px-3 py-1 rounded-md transition-all duration-300 bg-[#e91e63] hover:bg-[#e91e63]/80 mx-2 -mb-2`}
+            >
+              ✕ Clear All
+            </button>
+          </div>
+        )}
+        {/* Large screens: All in one line */}
+        <div className="hidden xl:block">
+          <div className="grid grid-cols-5 gap-6">
+            {/* Search Card - 2 columns */}
+            <div
+              className={`col-span-2 p-6 rounded-2xl ${
+                isDark ? "bg-black" : "bg-white"
+              }`}
+            >
+              <div className="flex gap-3 items-center">
+                <div className="flex-1 relative">
+                  <FaSearch
+                    className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Enter recipient name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-12!"
+                  />
+                </div>
+                <button className="btn-primary" onClick={handleSearch}>
+                  Search
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Card - 2 columns */}
+            <div
+              className={`col-span-2 p-6 rounded-2xl ${
+                isDark ? "bg-black" : "bg-white"
+              }`}
+            >
+              <div className="flex gap-3 items-center">
+                <div className="flex-1">
+                  <select
+                    value={selectedBloodGroup}
+                    onChange={(e) => setSelectedBloodGroup(e.target.value)}
+                  >
+                    <option value="">All Blood Groups</option>
+                    {bloodGroups.map((group) => (
+                      <option key={group} value={group}>
+                        {group}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <select
+                    value={selectedDistrict}
+                    onChange={(e) => setSelectedDistrict(e.target.value)}
+                  >
+                    <option value="">All Districts</option>
+                    {districts.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button className="btn-primary" onClick={handleFilter}>
+                  Filter
+                </button>
+              </div>
+            </div>
+
+            {/* Sort Card - 1 column */}
+            <div
+              className={`col-span-1 p-6 rounded-2xl ${
+                isDark ? "bg-black" : "bg-white"
+              }`}
+            >
+              <div>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="bloodGroup">Blood Group</option>
+                  <option value="location">Location</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Medium and small screens: Search + Sort on top, Filter below */}
+        <div className="xl:hidden space-y-6">
+          {/* Search and Sort Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Search Card */}
+            <div
+              className={`p-6 rounded-2xl ${isDark ? "bg-black" : "bg-white"}`}
+            >
+              <div className="flex gap-3 items-center">
+                <div className="flex-1 relative">
+                  <FaSearch
+                    className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Enter recipient name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-12!"
+                  />
+                </div>
+                <button className="btn-primary" onClick={handleSearch}>
+                  Search
+                </button>
+              </div>
+            </div>
+
+            {/* Sort Card */}
+            <div
+              className={`p-6 rounded-2xl ${isDark ? "bg-black" : "bg-white"}`}
+            >
+              <div>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="bloodGroup">Blood Group</option>
+                  <option value="location">Location</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Filter Row */}
+          <div>
+            <div
+              className={`p-6 rounded-2xl ${isDark ? "bg-black" : "bg-white"}`}
+            >
+              <div className="flex gap-3 items-center">
+                <div className="flex-1">
+                  <select
+                    value={selectedBloodGroup}
+                    onChange={(e) => setSelectedBloodGroup(e.target.value)}
+                  >
+                    <option value="">All Blood Groups</option>
+                    {bloodGroups.map((group) => (
+                      <option key={group} value={group}>
+                        {group}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <select
+                    value={selectedDistrict}
+                    onChange={(e) => setSelectedDistrict(e.target.value)}
+                  >
+                    <option value="">All Districts</option>
+                    {districts.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button className="btn-primary" onClick={handleFilter}>
+                  Filter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {loader && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 lg:gap-8 mt-20">
           {/* Show 8 skeleton loaders */}
@@ -104,12 +403,23 @@ const DonationRequests = () => {
               }`}
             >
               <div className="mb-4 text-4xl">🩸</div>
-              <p className="text-lg font-semibold mb-2">
-                No pending donation requests
-              </p>
-              <p className="text-sm">
-                Check back later for new requests in your area
-              </p>
+              {filteredRequests.length === 0 && pendingRequests.length > 0 ? (
+                <>
+                  <p className="text-lg font-semibold mb-2">
+                    No requests match your filters
+                  </p>
+                  <p className="text-sm">Try adjusting your search criteria</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-lg font-semibold mb-2">
+                    No pending donation requests
+                  </p>
+                  <p className="text-sm">
+                    Check back later for new requests in your area
+                  </p>
+                </>
+              )}
             </div>
           ) : (
             currentRequests.map((req) => (
@@ -123,8 +433,8 @@ const DonationRequests = () => {
                 }}
                 className={`relative rounded-3xl p-8 transition-all duration-300 group text-center my-12 hover:scale-105 hover:-translate-y-2 ${
                   isDark
-                    ? "bg-linear-to-t from-black to-[#f87898]/5 shadow-2xl shadow-black/50"
-                    : "bg-white shadow-2xl shadow-gray-200/50"
+                    ? "bg-linear-to-t from-black to-[#f87898]/5"
+                    : "bg-white"
                 }`}
               >
                 {/* Large circular blood group - positioned outside card */}
@@ -132,8 +442,8 @@ const DonationRequests = () => {
                   <div
                     className={`w-42 h-42 rounded-full flex items-center justify-center text-5xl font-black transition-all duration-300 group-hover:scale-105 ${
                       isDark
-                        ? "bg-gradient-to-br from-[#f87898] via-[#f45f7b] to-[#e91e63] text-white shadow-2xl shadow-[#f87898]/30"
-                        : "bg-gradient-to-br from-[#f87898] via-[#f45f7b] to-[#e91e63] text-white shadow-2xl shadow-[#f87898]/30"
+                        ? "bg-linear-to-br from-[#f87898] via-[#f45f7b] to-[#e91e63] text-white shadow-2xl shadow-[#f87898]/30"
+                        : "bg-linear-to-br from-[#f87898] via-[#f45f7b] to-[#e91e63] text-white shadow-2xl shadow-[#f87898]/30"
                     }`}
                   >
                     {/* Glow effect */}
@@ -222,11 +532,11 @@ const DonationRequests = () => {
             className={`w-10 h-10 rounded-lg text-lg font-bold transition-all duration-300 flex items-center justify-center ${
               currentPage === 1
                 ? isDark
-                  ? "bg-black/50 text-gray-600 border border-gray-700 cursor-not-allowed"
-                  : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                  ? "bg-black/50 text-gray-600 cursor-not-allowed"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 : isDark
-                ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                ? "bg-black text-gray-300 hover:bg-[#f87898]/10 hover:text-white"
+                : "bg-white text-gray-600 hover:bg-[#f87898]/5 hover:text-[#f87898]"
             }`}
           >
             ‹
@@ -266,8 +576,8 @@ const DonationRequests = () => {
                   currentPage === page
                     ? "bg-linear-to-r from-[#f87898] to-[#f45f7b] text-white shadow-lg shadow-[#f87898]/30"
                     : isDark
-                    ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                    : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                    ? "bg-black text-gray-300 hover:bg-[#f87898]/10 hover:text-white"
+                    : "bg-white text-gray-600 hover:bg-[#f87898]/5 hover:text-[#f87898]"
                 }`}
               >
                 {currentPage === page && (
@@ -289,11 +599,11 @@ const DonationRequests = () => {
             className={`w-10 h-10 rounded-lg text-lg font-bold transition-all duration-300 flex items-center justify-center ${
               currentPage === totalPages
                 ? isDark
-                  ? "bg-black/50 text-gray-600 border border-gray-700 cursor-not-allowed"
-                  : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                  ? "bg-black/50 text-gray-600 cursor-not-allowed"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
                 : isDark
-                ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                ? "bg-black text-gray-300 hover:bg-[#f87898]/10 hover:text-white"
+                : "bg-white text-gray-600 hover:bg-[#f87898]/5 hover:text-[#f87898]"
             }`}
           >
             ›

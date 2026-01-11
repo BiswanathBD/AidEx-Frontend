@@ -91,7 +91,7 @@ const Statistics = () => {
               className={`scroll-animate-card p-6 sm:p-8 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                  : "bg-white hover:shadow-lg"
+                  : "bg-white"
               }`}
             >
               <div className="flex justify-center mb-4">

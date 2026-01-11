@@ -185,11 +185,11 @@ const Funding = () => {
                 className={`w-10 h-10 rounded-lg text-lg font-bold flex items-center justify-center transition-all duration-300 ${
                   currentPage === 1
                     ? isDark
-                      ? "bg-black/50 text-gray-600 border border-gray-700 cursor-not-allowed"
-                      : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                      ? "bg-black/50 text-gray-600 cursor-not-allowed"
+                      : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : isDark
-                    ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                    : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                    ? "bg-black text-gray-300 hover:bg-[#f87898]/10 hover:text-white"
+                    : "bg-white text-gray-600 hover:bg-[#f87898]/5 hover:text-[#f87898]"
                 }`}
               >
                 ‹
@@ -219,8 +219,8 @@ const Funding = () => {
                       currentPage === page
                         ? "bg-linear-to-r from-[#f87898] to-[#f45f7b] text-white shadow-lg shadow-[#f87898]/30"
                         : isDark
-                        ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                        : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                        ? "bg-black text-gray-300 hover:bg-[#f87898]/10 hover:text-white"
+                        : "bg-white text-gray-600 hover:bg-[#f87898]/5 hover:text-[#f87898]"
                     }`}
                   >
                     {page}
@@ -239,11 +239,11 @@ const Funding = () => {
                 className={`w-10 h-10 rounded-lg text-lg font-bold flex items-center justify-center transition-all duration-300 ${
                   currentPage === totalPages
                     ? isDark
-                      ? "bg-black/50 text-gray-600 border border-gray-700 cursor-not-allowed"
-                      : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                      ? "bg-black/50 text-gray-600 cursor-not-allowed"
+                      : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : isDark
-                    ? "bg-black text-gray-300 border border-[#f87898]/20 hover:bg-[#f87898]/10 hover:border-[#f87898]/40 hover:text-white"
-                    : "bg-white text-gray-600 border border-gray-200 hover:bg-[#f87898]/5 hover:border-[#f87898]/30 hover:text-[#f87898] shadow-sm hover:shadow-md"
+                    ? "bg-black text-gray-300 hover:bg-[#f87898]/10 hover:text-white"
+                    : "bg-white text-gray-600 hover:bg-[#f87898]/5 hover:text-[#f87898]"
                 }`}
               >
                 ›

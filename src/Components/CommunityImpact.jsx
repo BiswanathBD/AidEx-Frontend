@@ -146,7 +146,7 @@ const CommunityImpact = () => {
               className={`scroll-animate-card p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                  : "bg-white hover:shadow-lg"
+                  : "bg-white"
               }`}
             >
               <div className="flex justify-center mb-4">
@@ -202,7 +202,7 @@ const CommunityImpact = () => {
                 className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                   isDark
                     ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                    : "bg-white hover:shadow-lg"
+                    : "bg-white"
                 }`}
               >
                 <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -261,7 +261,7 @@ const CommunityImpact = () => {
           className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
             isDark
               ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-              : "bg-white hover:shadow-lg"
+              : "bg-white"
           } transition-all duration-300`}
         >
           <div className="text-center mb-6 sm:mb-8">

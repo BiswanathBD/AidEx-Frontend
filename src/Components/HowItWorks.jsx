@@ -201,7 +201,7 @@ const HowItWorks = () => {
                 className={`group w-full max-w-3xl p-6 rounded-xl transition-all duration-500 hover:scale-[1.02] ${
                   isDark
                     ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                    : "bg-white hover:shadow-xl"
+                    : "bg-white"
                 }`}
               >
                 {/* Card Header */}

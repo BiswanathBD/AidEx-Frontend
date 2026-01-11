@@ -116,7 +116,7 @@ const TrustSafety = () => {
               className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                  : "bg-white hover:shadow-lg"
+                  : "bg-white"
               }`}
             >
               <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -174,7 +174,7 @@ const TrustSafety = () => {
           className={`p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl mb-12 sm:mb-16 ${
             isDark
               ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-              : "bg-white hover:shadow-lg"
+              : "bg-white"
           } transition-all duration-300`}
         >
           <div className="text-center mb-6 sm:mb-8">
@@ -275,7 +275,7 @@ const TrustSafety = () => {
               <div
                 key={index}
                 ref={(el) => (certCardsRef.current[index] = el)}
-                className="scroll-animate-card p-4 sm:p-6 rounded-lg sm:rounded-xl group hover:scale-101 transition-all duration-300 bg-[#f87898] hover:bg-[#f87898]/90 hover:shadow-md"
+                className="scroll-animate-card p-4 sm:p-6 rounded-lg sm:rounded-xl group hover:scale-101 transition-all duration-300 bg-[#f87898] hover:bg-[#f87898]/90"
               >
                 <div className="flex justify-center mb-3">
                   <FaCertificate className="text-white text-xl sm:text-2xl" />

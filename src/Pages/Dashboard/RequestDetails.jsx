@@ -180,9 +180,8 @@ const RequestDetails = () => {
                   >
                     <motion.button
                       onClick={() => setIsModalOpen(true)}
-                      whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full py-3! btn-primary rounded-xl! sm:text-xl!"
+                      className="w-full btn-primary rounded-xl! sm:text-xl!"
                     >
                       Accept Donation Request
                     </motion.button>
@@ -260,23 +259,6 @@ const RequestDetails = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:col-span-2 flex flex-col h-full"
             >
-              <div className="mb-8">
-                <h1
-                  className={`text-4xl font-bold mb-2 transition-colors duration-300 ${
-                    isDark ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  Donation <span className="text-[#f87898]">Request</span>
-                </h1>
-                <p
-                  className={`text-lg transition-colors duration-300 ${
-                    isDark ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  Complete details for this blood donation request
-                </p>
-              </div>
-
               <div className="flex flex-col lg:flex-row gap-6 grow">
                 {/* Left Side - Personal Information and Schedule Information */}
                 <div className="flex-1 space-y-6 flex flex-col">
@@ -285,8 +267,10 @@ const RequestDetails = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
-                    className={`p-4 rounded-xl transition-all duration-300 grow ${
-                      isDark ? "bg-black" : "bg-white"
+                    className={`p-4 rounded-xl group hover:scale-101 transition-all duration-300 grow ${
+                      isDark
+                        ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                        : "bg-white"
                     }`}
                   >
                     <h3
@@ -357,8 +341,10 @@ const RequestDetails = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
-                    className={`p-4 rounded-xl transition-all duration-300 ${
-                      isDark ? "bg-black" : "bg-white"
+                    className={`p-4 rounded-xl group hover:scale-101 transition-all duration-300 ${
+                      isDark
+                        ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                        : "bg-white"
                     }`}
                   >
                     <h3
@@ -424,8 +410,10 @@ const RequestDetails = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className={`p-4 rounded-xl transition-all duration-300 h-full flex flex-col ${
-                      isDark ? "bg-black" : "bg-white"
+                    className={`p-4 rounded-xl group hover:scale-101 transition-all duration-300 h-full flex flex-col ${
+                      isDark
+                        ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                        : "bg-white"
                     }`}
                   >
                     <h3
@@ -559,10 +547,10 @@ const RequestDetails = () => {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 transition={{ duration: 0.3 }}
-                className={`p-8 rounded-3xl h-fit w-full max-w-md overflow-hidden transition-all duration-300 ${
+                className={`p-8 rounded-3xl h-fit w-full max-w-md overflow-hidden transition-all duration-300 group hover:scale-101 ${
                   isDark
-                    ? "bg-linear-to-t from-black to-white/20 border border-[#f87898]/20"
-                    : "bg-white shadow-2xl"
+                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                    : "bg-white"
                 }`}
               >
                 <div className="text-center mb-6">

@@ -191,7 +191,7 @@ const FAQ = () => {
               className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl sticky top-8 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                  : "bg-white hover:shadow-lg"
+                  : "bg-white"
               } transition-all duration-300`}
             >
               <h3
@@ -208,7 +208,7 @@ const FAQ = () => {
                     onClick={() => setActiveCategory(category.category)}
                     className={`w-full flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg text-left transition-all duration-200 ${
                       activeCategory === category.category
-                        ? "bg-[#f87898] text-white shadow-md"
+                        ? "bg-[#f87898] text-white"
                         : isDark
                         ? "text-gray-300 hover:bg-white/5"
                         : "text-gray-600 hover:bg-gray-50"
@@ -256,8 +256,8 @@ const FAQ = () => {
                           className={`rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 ${
                             isDark
                               ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                              : "bg-white hover:shadow-lg"
-                          } ${isOpen ? "shadow-lg" : ""}`}
+                              : "bg-white"
+                          }`}
                         >
                           <motion.button
                             onClick={() =>

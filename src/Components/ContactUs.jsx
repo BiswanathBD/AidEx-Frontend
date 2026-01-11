@@ -43,7 +43,7 @@ const ContactUs = () => {
             className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
               isDark
                 ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                : "bg-white hover:shadow-lg"
+                : "bg-white"
             } transition-all duration-300`}
           >
             <h3 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-[#f87898]">
@@ -137,7 +137,7 @@ const ContactUs = () => {
             className={`scroll-animate-card p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl ${
               isDark
                 ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                : "bg-white hover:shadow-lg"
+                : "bg-white"
             } transition-all duration-300`}
           >
             <h3 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-[#f87898]">
@@ -166,10 +166,7 @@ const ContactUs = () => {
                 className="input w-full resize-none"
               />
 
-              <button
-                type="submit"
-                className="btn-primary w-full"
-              >
+              <button type="submit" className="btn-primary w-full">
                 Send Message
               </button>
             </form>

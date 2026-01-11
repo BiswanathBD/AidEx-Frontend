@@ -122,8 +122,8 @@ const About = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className={`rounded-2xl p-8 sm:p-12 mb-16 group hover:scale-101 transition-all duration-300 ${
             isDark
-              ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10 border border-white/10"
-              : "bg-white hover:shadow-lg shadow-md"
+              ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+              : "bg-white"
           }`}
         >
           <div className="text-center">
@@ -171,8 +171,8 @@ const About = () => {
                 transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
                 className={`text-center p-6 rounded-xl group hover:scale-101 transition-all duration-300 ${
                   isDark
-                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10 border border-white/10"
-                    : "bg-white hover:shadow-lg shadow-md"
+                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                    : "bg-white"
                 }`}
               >
                 <div
@@ -218,8 +218,8 @@ const About = () => {
                 transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
                 className={`p-6 sm:p-8 rounded-xl group hover:scale-101 transition-all duration-300 ${
                   isDark
-                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10 border border-white/10"
-                    : "bg-white hover:shadow-lg shadow-md"
+                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                    : "bg-white"
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -267,8 +267,8 @@ const About = () => {
                 transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
                 className={`text-center p-6 sm:p-8 rounded-xl group hover:scale-101 transition-all duration-300 ${
                   isDark
-                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10 border border-white/10"
-                    : "bg-white hover:shadow-lg shadow-md"
+                    ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
+                    : "bg-white"
                 }`}
               >
                 <div
@@ -303,8 +303,8 @@ const About = () => {
           transition={{ duration: 0.8, delay: 1.0 }}
           className={`text-center p-8 sm:p-12 rounded-2xl ${
             isDark
-              ? "bg-linear-to-r from-[#f87898]/10 to-[#f87898]/5 border border-[#f87898]/20"
-              : "bg-linear-to-r from-[#f87898]/5 to-white border border-[#f87898]/10"
+              ? "bg-linear-to-r from-[#f87898]/10 to-[#f87898]/5"
+              : "bg-linear-to-r from-[#f87898]/5 to-white"
           }`}
         >
           <h2 className="text-3xl sm:text-4xl font-bold mb-6">

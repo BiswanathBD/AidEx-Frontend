@@ -93,7 +93,7 @@ const Features = () => {
               className={`scroll-animate-card p-6 rounded-2xl group hover:scale-101 transition-all duration-300 ${
                 isDark
                   ? "bg-black hover:bg-linear-to-tl from-[#f87898]/10"
-                  : "bg-white hover:shadow-lg"
+                  : "bg-white"
               }`}
             >
               <div
