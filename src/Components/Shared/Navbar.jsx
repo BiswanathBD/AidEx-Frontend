@@ -1,27 +1,28 @@
 import { useContext, useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router";
 import Logo from "./Logo";
 import Container from "./Container";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../Auth/AuthContext";
 import { useTheme } from "../../Context/ThemeContext";
 import toast from "react-hot-toast";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { TbLayoutDashboard } from "react-icons/tb";
 import {
-  FaBars,
-  FaTimes,
-  FaHome,
-  FaSearch,
-  FaDonate,
-  FaMoneyBillWave,
-  FaInfoCircle,
-  FaShieldAlt,
-} from "react-icons/fa";
-import { MdBloodtype } from "react-icons/md";
+  HiOutlineHome,
+  HiOutlineSearch,
+  HiOutlineInformationCircle,
+  HiOutlineShieldCheck,
+  HiOutlineCurrencyDollar,
+} from "react-icons/hi";
+import { MdOutlineBloodtype } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const { user, setUser, loading, userSignOut } = useContext(AuthContext);
   const { isDark } = useTheme();
+  const location = useLocation();
   const [show, setShow] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -68,14 +69,14 @@ const Navbar = () => {
 
   const getNavLinkClasses = (isActive) => {
     const baseClasses =
-      "flex items-center gap-2 px-2 sm:px-3 py-2 sm:py-3 transition-all duration-300 font-medium group text-sm sm:text-base";
+      "flex items-center px-3 py-1 transition-all duration-200 ease-in-out font-medium group text-sm rounded-lg";
     if (isActive) {
-      return `${baseClasses} text-[#f87898]`;
+      return `${baseClasses} text-white bg-[#f87898]`;
     }
     return `${baseClasses} ${
       isDark
-        ? "text-gray-300 hover:text-white"
-        : "text-gray-600 hover:text-black"
+        ? "text-white/60 hover:text-white hover:bg-white/10"
+        : "text-black/60 hover:text-black hover:bg-black/5"
     }`;
   };
 
@@ -107,8 +108,21 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   };
 
+  // Helper function to determine if a dot should be pink
+  const getDotColor = (leftRoute, rightRoute) => {
+    const currentPath = location.pathname;
+    if (currentPath === leftRoute || currentPath === rightRoute) {
+      return "bg-[#f87898]";
+    }
+    return isDark ? "bg-white/30" : "bg-black/30";
+  };
+
   return (
-    <div className="navbar bg-white dark:bg-black transition-colors duration-300 sticky top-0 z-50">
+    <div
+      className={`navbar transition-colors duration-300 sticky top-0 z-50 ${
+        isDark ? "bg-black" : "bg-white"
+      }`}
+    >
       <Container>
         <div className="flex justify-between items-center py-2 sm:py-3 px-2 sm:px-4">
           {/* Logo */}
@@ -123,17 +137,22 @@ const Navbar = () => {
                 className="hidden lg:flex gap-4 xl:gap-8 items-center"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
               >
                 <motion.nav
-                  className="flex items-center gap-1 text-sm"
+                  className="flex items-center gap-1 text-xs"
                   initial="hidden"
                   animate="visible"
                   variants={{
                     hidden: {},
-                    visible: { transition: { staggerChildren: 0.1 } },
+                    visible: { transition: { staggerChildren: 0.05 } },
                   }}
                 >
+                  {/* Start dot */}
+                  <div
+                    className={`w-1 h-1 rounded-full ${getDotColor(null, "/")}`}
+                  ></div>
+
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, y: 10 },
@@ -144,15 +163,18 @@ const Navbar = () => {
                       to="/"
                       className={({ isActive }) => getNavLinkClasses(isActive)}
                     >
-                      <FaHome
-                        size={16}
-                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
-                      />
-                      <span>Home</span>
+                      <span className="transition-all duration-200 ease-in-out whitespace-nowrap">
+                        Home
+                      </span>
                     </NavLink>
                   </motion.div>
 
-                  <div className="w-px h-6 bg-[#f87898]/20"></div>
+                  <div
+                    className={`w-1 h-1 rounded-full ${getDotColor(
+                      "/",
+                      "/requests"
+                    )}`}
+                  ></div>
 
                   <motion.div
                     variants={{
@@ -164,15 +186,18 @@ const Navbar = () => {
                       to="/requests"
                       className={({ isActive }) => getNavLinkClasses(isActive)}
                     >
-                      <MdBloodtype
-                        size={16}
-                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
-                      />
-                      <span>Requests</span>
+                      <span className="transition-all duration-200 ease-in-out whitespace-nowrap">
+                        Requests
+                      </span>
                     </NavLink>
                   </motion.div>
 
-                  <div className="w-px h-6 bg-[#f87898]/20"></div>
+                  <div
+                    className={`w-1 h-1 rounded-full ${getDotColor(
+                      "/requests",
+                      "/search"
+                    )}`}
+                  ></div>
 
                   <motion.div
                     variants={{
@@ -184,15 +209,18 @@ const Navbar = () => {
                       to="/search"
                       className={({ isActive }) => getNavLinkClasses(isActive)}
                     >
-                      <FaSearch
-                        size={16}
-                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
-                      />
-                      <span>Find Donor</span>
+                      <span className="transition-all duration-200 ease-in-out whitespace-nowrap">
+                        Find Donor
+                      </span>
                     </NavLink>
                   </motion.div>
 
-                  <div className="w-px h-6 bg-[#f87898]/20"></div>
+                  <div
+                    className={`w-1 h-1 rounded-full ${getDotColor(
+                      "/search",
+                      "/about"
+                    )}`}
+                  ></div>
 
                   <motion.div
                     variants={{
@@ -204,15 +232,18 @@ const Navbar = () => {
                       to="/about"
                       className={({ isActive }) => getNavLinkClasses(isActive)}
                     >
-                      <FaInfoCircle
-                        size={16}
-                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
-                      />
-                      <span>About Us</span>
+                      <span className="transition-all duration-200 ease-in-out whitespace-nowrap">
+                        About Us
+                      </span>
                     </NavLink>
                   </motion.div>
 
-                  <div className="w-px h-6 bg-[#f87898]/20"></div>
+                  <div
+                    className={`w-1 h-1 rounded-full ${getDotColor(
+                      "/about",
+                      "/privacy"
+                    )}`}
+                  ></div>
 
                   <motion.div
                     variants={{
@@ -224,17 +255,20 @@ const Navbar = () => {
                       to="/privacy"
                       className={({ isActive }) => getNavLinkClasses(isActive)}
                     >
-                      <FaShieldAlt
-                        size={16}
-                        className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
-                      />
-                      <span>Privacy</span>
+                      <span className="transition-all duration-200 ease-in-out whitespace-nowrap">
+                        Privacy
+                      </span>
                     </NavLink>
                   </motion.div>
 
                   {user && (
                     <>
-                      <div className="w-px h-6 bg-[#f87898]/20"></div>
+                      <div
+                        className={`w-1 h-1 rounded-full ${getDotColor(
+                          "/privacy",
+                          "/funding"
+                        )}`}
+                      ></div>
                       <motion.div
                         variants={{
                           hidden: { opacity: 0, y: 10 },
@@ -247,15 +281,21 @@ const Navbar = () => {
                             getNavLinkClasses(isActive)
                           }
                         >
-                          <FaMoneyBillWave
-                            size={16}
-                            className="transition-all duration-300 group-hover:scale-110 group-hover:text-[#f87898]"
-                          />
-                          <span>Funding</span>
+                          <span className="transition-all duration-200 ease-in-out whitespace-nowrap">
+                            Funding
+                          </span>
                         </NavLink>
                       </motion.div>
                     </>
                   )}
+
+                  {/* End dot */}
+                  <div
+                    className={`w-1 h-1 rounded-full ${getDotColor(
+                      user ? "/funding" : "/privacy",
+                      null
+                    )}`}
+                  ></div>
                 </motion.nav>
 
                 {/* Desktop User Section */}
@@ -269,8 +309,8 @@ const Navbar = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
-                        delay: 0.3,
-                        duration: 0.4,
+                        delay: 0.1,
+                        duration: 0.2,
                         ease: "easeOut",
                       }}
                     >
@@ -291,15 +331,16 @@ const Navbar = () => {
                             initial={{ opacity: 0, scale: 0.95, y: -10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                            transition={{ duration: 0.2 }}
+                            transition={{ duration: 0.15 }}
                             className="absolute top-12 right-0 bg-[#f87898] rounded-xl p-4 min-w-[200px] shadow-lg"
                           >
                             <Link
-                              className="block border-b px-2 pb-2 font-semibold mb-4 text-white border-white/20 hover:text-gray-200 transition-colors"
+                              className="flex items-center gap-1 border-b px-2 pb-2 font-semibold mb-4 text-white border-white/20 hover:text-gray-200 transition-colors"
                               to="/dashboard"
                               onClick={() => setShow(false)}
                             >
-                              Dashboard
+                              <TbLayoutDashboard size={20} />
+                              <span>Dashboard</span>
                             </Link>
                             <button
                               onClick={handleSignOut}
@@ -317,7 +358,7 @@ const Navbar = () => {
                     className="flex gap-2 items-center"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.4, ease: "easeOut" }}
+                    transition={{ delay: 0.1, duration: 0.2, ease: "easeOut" }}
                   >
                     <ThemeToggle />
                     <Link to="/login">
@@ -363,7 +404,7 @@ const Navbar = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
               className="lg:hidden bg-[#f87898] rounded-b-xl mx-2 sm:mx-4 mb-2 overflow-hidden"
             >
               <nav className="py-2">
@@ -374,7 +415,7 @@ const Navbar = () => {
                   }
                   onClick={closeMobileMenu}
                 >
-                  <FaHome size={18} />
+                  <HiOutlineHome size={18} />
                   <span>Home</span>
                 </NavLink>
                 <NavLink
@@ -384,7 +425,7 @@ const Navbar = () => {
                   }
                   onClick={closeMobileMenu}
                 >
-                  <MdBloodtype size={18} />
+                  <MdOutlineBloodtype size={18} />
                   <span>Requests</span>
                 </NavLink>
                 <NavLink
@@ -394,7 +435,7 @@ const Navbar = () => {
                   }
                   onClick={closeMobileMenu}
                 >
-                  <FaSearch size={18} />
+                  <HiOutlineSearch size={18} />
                   <span>Find Donor</span>
                 </NavLink>
                 <NavLink
@@ -404,7 +445,7 @@ const Navbar = () => {
                   }
                   onClick={closeMobileMenu}
                 >
-                  <FaInfoCircle size={18} />
+                  <HiOutlineInformationCircle size={18} />
                   <span>About Us</span>
                 </NavLink>
                 <NavLink
@@ -414,7 +455,7 @@ const Navbar = () => {
                   }
                   onClick={closeMobileMenu}
                 >
-                  <FaShieldAlt size={18} />
+                  <HiOutlineShieldCheck size={18} />
                   <span>Privacy</span>
                 </NavLink>
                 {user && (
@@ -426,7 +467,7 @@ const Navbar = () => {
                       }
                       onClick={closeMobileMenu}
                     >
-                      <FaMoneyBillWave size={18} />
+                      <HiOutlineCurrencyDollar size={18} />
                       <span>Funding</span>
                     </NavLink>
                     <NavLink
@@ -436,7 +477,7 @@ const Navbar = () => {
                       }
                       onClick={closeMobileMenu}
                     >
-                      <FaDonate size={18} />
+                      <TbLayoutDashboard size={18} />
                       <span>Dashboard</span>
                     </NavLink>
                   </>

@@ -55,23 +55,13 @@ button {
   background: #f8789830 !important;
 }
 
-nav a {
-  transition: all 0.3s ease;
-}
-
-nav .active {
-  color: #f87898;
-}
-
 .navbar {
   box-shadow: 0 0px 20px rgb(230, 230, 230);
-  background: white;
   transition: all 0.3s ease;
 }
 
 .dark .navbar {
   box-shadow: 0 0px 20px rgb(0, 0, 0, 0.3);
-  background: #000000;
 }
 
 .dashboard .active {
