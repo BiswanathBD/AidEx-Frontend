@@ -103,6 +103,10 @@ const EditDonationRequest = () => {
 
   // submit
   const onSubmit = (data) => {
+    if (user.email === "demo.admin@gmail.com") {
+      return toast.error("Action not allowed for demo account");
+    }
+
     toast
       .promise(axiosInstance.put(`/edit-donation-request/${id}`, data), {
         loading: "Updating request...",

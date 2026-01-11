@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Auth/AuthContext";
 import { useTheme } from "../../Context/ThemeContext";
 import useAxios from "../../Hooks/useAxios";
@@ -47,6 +47,15 @@ const AllUsers = () => {
     if (id === user._id) {
       setOpenMenu({ id: null, index: null });
       return toast.error("Self update not allowed");
+    }
+
+    // Block demo account actions
+    if (
+      user.email === "demo.admin@gmail.com" ||
+      user.email === "demo.volunteer@gmail.com"
+    ) {
+      setOpenMenu({ id: null, index: null });
+      return toast.error("Action not allowed for demo account");
     }
 
     if (action === "block") updateData = { status: "Blocked" };

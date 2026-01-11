@@ -4,6 +4,7 @@ import useAxios from "../../Hooks/useAxios";
 import { GoTrash } from "react-icons/go";
 import { FaClipboardList, FaRegSadTear } from "react-icons/fa";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 import { Link, Navigate, useLocation } from "react-router";
 import Loader from "../../Components/Shared/Loader";
 import { motion } from "framer-motion";
@@ -55,6 +56,14 @@ const AllRequests = () => {
   };
 
   const handleDelete = async (id) => {
+    // Block demo account actions
+    if (
+      user.email === "demo.admin@gmail.com" ||
+      user.email === "demo.volunteer@gmail.com"
+    ) {
+      return toast.error("Action not allowed for demo account");
+    }
+
     const result = await Swal.fire({
       title: "Are you sure?",
       icon: "warning",
@@ -80,6 +89,14 @@ const AllRequests = () => {
   };
 
   const handleStatusChange = async (id, newStatus) => {
+    // Block demo account actions
+    if (
+      user.email === "demo.admin@gmail.com" ||
+      user.email === "demo.volunteer@gmail.com"
+    ) {
+      return toast.error("Action not allowed for demo account");
+    }
+
     const confirm = await Swal.fire({
       title: `Mark as ${newStatus}?`,
       icon: "question",
