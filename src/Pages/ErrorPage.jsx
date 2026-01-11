@@ -1,16 +1,14 @@
 import React from "react";
 import { Link } from "react-router";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 import { useTheme } from "../Context/ThemeContext";
-import { FaHome } from "react-icons/fa";
+import { HiOutlineHome } from "react-icons/hi";
 
 const NotFound = () => {
   const { isDark } = useTheme();
 
   return (
-    <div
-      className="min-h-screen flex justify-center items-center px-4"
-    >
+    <div className="min-h-screen flex justify-center items-center px-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -42,8 +40,11 @@ const NotFound = () => {
           <p className={`mt-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
             Sorry, the page you are looking for doesn’t exist or has been moved.
           </p>
-          <Link to="/" className="mt-6 btn-primary flex! w-fit items-center justify-center gap-2">
-            <FaHome /> <span>Back to Home</span>
+          <Link
+            to="/"
+            className="mt-6 btn-primary flex! w-fit items-center justify-center gap-2 mx-auto lg:mx-0"
+          >
+            <HiOutlineHome size={20} /> <span>Go to Home</span>
           </Link>
         </div>
       </motion.div>

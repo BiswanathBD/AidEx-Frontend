@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaSackXmark } from "react-icons/fa6";
 import { Link } from "react-router";
+import { HiOutlineHome, HiOutlineCurrencyDollar } from "react-icons/hi";
 motion;
 
 const PaymentError = () => {
@@ -18,12 +19,12 @@ const PaymentError = () => {
         </div>
         <h2 className="text-3xl font-bold">Payment Failed</h2>
 
-        <div className="mt-8 mb-2 flex gap-4 justify-center">
-          <Link to={"/funding"} className="btn-secondary">
-            Funding
+        <div className="mt-8 mb-2 flex flex-wrap gap-4 justify-center">
+          <Link to={"/funding"} className="btn-secondary items-center gap-2">
+            <HiOutlineCurrencyDollar size={20} /> <span>Funding</span>
           </Link>
           <Link to={"/"} className="btn-primary">
-            Back to Home
+            <HiOutlineHome size={20} />
           </Link>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router";
 import Loader from "../Components/Shared/Loader";
 import useAxios from "../Hooks/useAxios";
 import { PiSealCheckDuotone } from "react-icons/pi";
+import { HiOutlineHome, HiOutlineCurrencyDollar } from "react-icons/hi";
 import { motion } from "framer-motion";
 motion;
 
@@ -54,12 +55,12 @@ const PaymentSuccess = () => {
         </div>
         <h2 className="text-3xl font-bold">Payment Successful</h2>
 
-        <div className="mt-8 mb-2 flex gap-4 justify-center">
-          <Link to={"/funding"} className="btn-secondary">
-            Funding
+        <div className="mt-8 mb-2 flex flex-wrap gap-4 justify-center">
+          <Link to={"/funding"} className="btn-secondary items-center gap-2">
+            <HiOutlineCurrencyDollar size={20} /> <span>Funding</span>
           </Link>
           <Link to={"/"} className="btn-primary">
-            Back to Home
+            <HiOutlineHome size={20} />
           </Link>
         </div>
       </div>
