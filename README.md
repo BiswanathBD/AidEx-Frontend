@@ -7,7 +7,31 @@
 ---
 
 ## 🚀 Live Website
+
 🔗 **Frontend (Live):** https://aidex-by-biswanath.netlify.app/
+
+---
+
+## 🔑 Demo Credentials
+
+For testing purposes, you can use these demo accounts:
+
+### 👤 Demo User (Donor)
+
+- **Email:** `demo.user@gmail.com`
+- **Password:** `user@gmail.com`
+
+### 🤝 Demo Volunteer
+
+- **Email:** `demo.volunteer@gmail.com`
+- **Password:** `volunteer@gmail.com`
+
+### 👨‍💼 Demo Admin
+
+- **Email:** `demo.admin@gmail.com`
+- **Password:** `admin@gmail.com`
+
+> **Note:** Demo accounts have restricted database actions to prevent data corruption during testing.
 
 ---
 
@@ -27,18 +51,21 @@
 ## ✨ Key Features
 
 ### 🩸 Blood Donation System
+
 - Create blood donation requests
 - Search donors by **blood group, district & upazila**
 - Donors can accept requests
 - Track request status (Pending → In Progress → Done)
 
 ### 💰 Funding & Donation
+
 - Secure **Stripe prebuilt checkout** integration
 - Donors can give funds easily
 - Payment success & error handling pages
 - Funding history with pagination
 
 ### 🔐 Authentication & Security
+
 - Firebase Authentication
 - JWT protected API routes
 - Role‑based access control
@@ -47,6 +74,7 @@
   - Donor
 
 ### 🧑‍💼 Admin & Volunteer Panel
+
 - Manage users (role & status)
 - View all donation requests
 - View statistics:
@@ -59,6 +87,7 @@
 ## 🛠️ Technologies Used
 
 ### Frontend
+
 - ⚛️ React
 - 🧭 React Router
 - 🎨 Tailwind CSS
@@ -67,6 +96,7 @@
 - 🌐 Axios (Custom hook with token)
 
 ### Backend
+
 - 🟢 Node.js
 - 🚀 Express.js
 - 🍃 MongoDB
@@ -74,12 +104,14 @@
 - 💳 Stripe Checkout API
 
 ### Deployment
+
 - 🌐 Netlify (Frontend)
 - ☁️ Vercel / Render (Backend)
 
 ---
 
 ## 📂 Project Structure (Frontend)
+
 ```
 src/
 ├── Components
@@ -93,6 +125,7 @@ src/
 ---
 
 ## 🧪 Payment Flow (Stripe)
+
 1. User enters donation amount
 2. Redirects to Stripe Checkout
 3. Payment success → `PaymentSuccess` page
@@ -102,6 +135,7 @@ src/
 ---
 
 ## 📸 Screens & UI Highlights
+
 - Clean & responsive design
 - Smooth animations using Framer Motion
 - Mobile & desktop friendly layout
@@ -109,6 +143,7 @@ src/
 ---
 
 ## 🎯 Future Improvements
+
 - Email notifications
 - Donor leaderboard
 - Campaign‑based fundraising
@@ -126,17 +161,7 @@ Web Developer (MERN Stack)
 ---
 
 ## ⭐ Support
+
 If you like this project, don’t forget to **star ⭐ the repository** and share it!
 
-> *“Small acts of kindness can save lives.”* 💖
-
-
-
-<!-- demo.user@gmail.com
-pass: user@gmail.com
-
-demo.volunteer@gmail.com
-pass: volunteer@gmail.com
-
-demo.admin@gmail.com
-pass: admin@gmail.com -->
+> _“Small acts of kindness can save lives.”_ 💖
