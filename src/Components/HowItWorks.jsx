@@ -10,7 +10,6 @@ import {
 } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 
-// Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const stepsData = [

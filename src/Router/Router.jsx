@@ -39,11 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/request/view/:id",
-        element: (
-          <Private>
-            <RequestDetails />
-          </Private>
-        ),
+        element: <RequestDetails />,
       },
       {
         path: "/search",

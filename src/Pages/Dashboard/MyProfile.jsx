@@ -141,12 +141,18 @@ const MyProfile = () => {
       <Toaster position="top-center" reverseOrder={false} />
 
       {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2 flex items-center gap-3">
-          <FaUser className="text-[#f87898]" />
-          <span className="text-[#f87898]">My</span> Profile
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+          <FaUser className="text-[#f87898] text-xl sm:text-2xl lg:text-3xl" />
+          <span>
+            <span className="text-[#f87898]">My</span> Profile
+          </span>
         </h1>
-        <p className={`text-lg ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+        <p
+          className={`text-base sm:text-lg ${
+            isDark ? "text-gray-300" : "text-gray-600"
+          }`}
+        >
           Manage your personal information and preferences
         </p>
       </div>

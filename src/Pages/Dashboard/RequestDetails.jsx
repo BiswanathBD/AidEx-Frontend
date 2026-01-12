@@ -55,6 +55,11 @@ const RequestDetails = () => {
   };
 
   const handleAcceptDonate = async () => {
+    if (!user) {
+      toast.error("Please login to accept donation requests");
+      return;
+    }
+
     const updatedRequest = {
       ...request,
       status: "Inprogress",
@@ -84,13 +89,17 @@ const RequestDetails = () => {
     request && (
       <div className="min-h-screen p-4 sm:p-6 lg:p-8">
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2 flex items-center gap-3">
-            <FaEye className="text-[#f87898]" />
-            <span className="text-[#f87898]">Request</span> Details
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+            <FaEye className="text-[#f87898] text-xl sm:text-2xl lg:text-3xl" />
+            <span>
+              <span className="text-[#f87898]">Request</span> Details
+            </span>
           </h1>
           <p
-            className={`text-lg ${isDark ? "text-gray-300" : "text-gray-600"}`}
+            className={`text-base sm:text-lg ${
+              isDark ? "text-gray-300" : "text-gray-600"
+            }`}
           >
             Complete information about this donation request
           </p>
@@ -170,6 +179,7 @@ const RequestDetails = () => {
 
               {/* Action Button */}
               {request.status === "Pending" &&
+                user &&
                 user.role === "Donor" &&
                 user.email !== request.requesterEmail && (
                   <motion.div
@@ -580,28 +590,30 @@ const RequestDetails = () => {
                 </div>
 
                 {/* Donor info */}
-                <div
-                  className={`p-4 rounded-2xl mb-6 transition-colors duration-300 ${
-                    isDark ? "bg-black" : "bg-white"
-                  }`}
-                >
+                {user && (
                   <div
-                    className={`flex items-center gap-3 mb-3 transition-colors duration-300 ${
-                      isDark ? "text-white" : "text-gray-900"
+                    className={`p-4 rounded-2xl mb-6 transition-colors duration-300 ${
+                      isDark ? "bg-black" : "bg-white"
                     }`}
                   >
-                    <FaUser className="text-[#f87898]" />
-                    <span className="font-semibold">{user.name}</span>
+                    <div
+                      className={`flex items-center gap-3 mb-3 transition-colors duration-300 ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      <FaUser className="text-[#f87898]" />
+                      <span className="font-semibold">{user.name}</span>
+                    </div>
+                    <div
+                      className={`flex items-center gap-3 transition-colors duration-300 ${
+                        isDark ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
+                      <MdEmail className="text-[#f87898]" />
+                      <span>{user.email}</span>
+                    </div>
                   </div>
-                  <div
-                    className={`flex items-center gap-3 transition-colors duration-300 ${
-                      isDark ? "text-gray-300" : "text-gray-700"
-                    }`}
-                  >
-                    <MdEmail className="text-[#f87898]" />
-                    <span>{user.email}</span>
-                  </div>
-                </div>
+                )}
 
                 <div className="flex gap-3">
                   <motion.button
